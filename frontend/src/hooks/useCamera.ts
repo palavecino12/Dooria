@@ -14,7 +14,6 @@ export function useCamera() {
         console.error("No se pudo acceder a la cámara:", err)
       }
     }
-
     startVideo()
 
     return () => {
