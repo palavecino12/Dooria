@@ -1,6 +1,8 @@
 import { Request, Response } from "express"
 import { User, IUser } from "../models/User"
 
+//Funciones que quizas usamos en un futuro
+//POST/usuarios/
 export async function crearUsuario(req: Request, res: Response) {
   try {
     const user = new User(req.body)
@@ -10,7 +12,7 @@ export async function crearUsuario(req: Request, res: Response) {
     res.status(400).json({ error: "Error al crear usuario" })
   }
 }
-
+//GET/usuarios/
 export async function obtenerUsuarios(req: Request, res: Response) {
   try {
     const users = await User.find()
@@ -21,7 +23,7 @@ export async function obtenerUsuarios(req: Request, res: Response) {
 }
 
 
-// distancia euclidiana entre dos arrays numéricos (calculo para encontrar similitudes en rostros)
+//Distancia euclidiana entre dos arrays numéricos (calculo para encontrar similitudes en rostros)
 function distanciaEuclidiana(a: number[], b: number[]): number {
   let sum = 0;
   for (let i = 0; i < a.length; i++) {
@@ -31,7 +33,7 @@ function distanciaEuclidiana(a: number[], b: number[]): number {
   return Math.sqrt(sum);
 }
 
-// POST /usuarios/buscar-rostro
+//POST/usuarios/buscar-rostro
 export async function buscarRostro(req: Request, res: Response) {
   try {
     const { descriptor } = req.body as { descriptor: number[] };
@@ -39,6 +41,7 @@ export async function buscarRostro(req: Request, res: Response) {
       return res.status(400).json({ error: "Descriptor inválido" });
     }
 
+    //Traemos a todos los usuarios de la coleccion que tengan descriptor para buscar similitudes
     const usuarios = await User.find({ descriptor: { $exists: true } }).lean<IUser[]>();
 
     if (!usuarios.length) return res.json({ match: false });
@@ -46,21 +49,23 @@ export async function buscarRostro(req: Request, res: Response) {
     let mejorUsuario: IUser | null = null;
     let menorDistancia = Infinity;
 
-    for (const u of usuarios) {
-      if (!u.descriptor) continue;
-      const d = distanciaEuclidiana(descriptor, u.descriptor);
-      if (d < menorDistancia) {
-        menorDistancia = d;
-        mejorUsuario = u as IUser;
+    //Con cada usuario almacenado, mide la distancia euclidiana entre el descriptor actual y el descriptor del usuario almacenado
+    //El usuario almacenado que tenga menor distancia euclidiana lo almacenamos como mejor usuario
+    //descriptor actual=usuario que esta colocando el rostro en este momento
+    for (const usuario of usuarios) {
+      if (!usuario.descriptor) continue;
+      const distancia = distanciaEuclidiana(descriptor, usuario.descriptor);
+      if (distancia < menorDistancia) {
+        menorDistancia = distancia;
+        mejorUsuario = usuario as IUser;
       }
     }
 
-    // umbral típico: 0.4 - 0.6. Ajustalo según pruebas.
+    //Si la distancia del mejor usuario es menor a 0.5 quiere decir que es el mismo que el descriptor actual
     const UMBRAL = 0.5;
     if (menorDistancia < UMBRAL && mejorUsuario) {
       return res.json({ match: true, usuario: mejorUsuario, distancia: menorDistancia });
     }
-
 
     return res.json({ match: false });
   } catch (err) {
@@ -69,7 +74,7 @@ export async function buscarRostro(req: Request, res: Response) {
   }
 }
 
-// POST /usuarios/registrar-rostro
+//POST/usuarios/registrar-rostro
 export async function registrarRostro(req: Request, res: Response) {
   try {
     const { nombre, email, edad, descriptor } = req.body as {
@@ -83,7 +88,6 @@ export async function registrarRostro(req: Request, res: Response) {
       return res.status(400).json({ error: "Descriptor inválido" });
     }
 
-    // crear nuevo usuario (podés exigir nombre/email según tu UX)
     const nuevo = new User({ nombre, email, edad, descriptor });
     const saved = await nuevo.save();
     return res.json({ ok: true, usuario: saved });

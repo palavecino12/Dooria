@@ -7,12 +7,13 @@ export function useFaceDetection(videoRef: RefObject<HTMLVideoElement | null>) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [estadoRostro, setEstadoRostro] = useState<EstadoRostro>("ninguno");
 
-  // refs
+  //refs
   const estadoRostroRef = useRef<EstadoRostro>("ninguno");
-  const intentosRef = useRef<number>(0);
-  const processingRef = useRef<boolean>(false);
-  const detenerBackendRef = useRef<boolean>(false);
-  const latestDescriptorRef = useRef<number[] | null>(null);
+  const intentosRef = useRef<number>(0); //Cantidad de veces que no coincidio
+  const processingRef = useRef<boolean>(false); //Si un loop esta procesando un frame, no permite que otro loop empiece
+  const detenerBackendRef = useRef<boolean>(false); //Bloqueo temporal de request al backend (es true si reconocemos a alguien o los intentos superan el limite)
+  const latestDescriptorRef = useRef<number[] | null>(null); //Ultimo descriptor detectado
+  const intervalRef = useRef<number | null>(null); //Ref para almacenar el id del intervalo
 
   const MAX_INTENTOS = 3;
   const BACKEND_URL = "http://localhost:3000";
@@ -22,21 +23,22 @@ export function useFaceDetection(videoRef: RefObject<HTMLVideoElement | null>) {
   }, [estadoRostro]);
 
   useEffect(() => {
-    let intervalId: number | null = null;
     const video = videoRef.current;
     const canvas = canvasRef.current;
 
     if (!video || !canvas) return;
-
+    
+    //Carga de modelos
     const loadModels = async () => {
       await Promise.all([
-        faceapi.nets.tinyFaceDetector.loadFromUri("/models/tiny_face_detector"),
-        faceapi.nets.faceLandmark68Net.loadFromUri("/models/face_landmark_68"),
-        faceapi.nets.faceRecognitionNet.loadFromUri("/models/face_recognition"),
+        faceapi.nets.tinyFaceDetector.loadFromUri("/models/tiny_face_detector"), //Detecta la cara
+        faceapi.nets.faceLandmark68Net.loadFromUri("/models/face_landmark_68"), //Encuentra ojos, cejas, nariz, boca
+        faceapi.nets.faceRecognitionNet.loadFromUri("/models/face_recognition"), //Genera el descriptor
       ]);
       console.log("Modelos cargados");
     };
 
+    //Funcion donde le mandamos un descriptor y lo busca en la base de datos
     const reconocerRostro = async (descriptor: number[]) => {
       try {
         const resp = await fetch(`${BACKEND_URL}/usuarios/buscar-rostro`, {
@@ -51,42 +53,42 @@ export function useFaceDetection(videoRef: RefObject<HTMLVideoElement | null>) {
       }
     };
 
+    //Funcion donde comienza la reproduccion del video
     const handlePlay = () => {
+      //Ajustamos el canvas al mismo tamaño que el video
       canvas.width = video.videoWidth || 640;
       canvas.height = video.videoHeight || 480;
 
       const displaySize = { width: canvas.width, height: canvas.height };
-      faceapi.matchDimensions(canvas, displaySize);
+      faceapi.matchDimensions(canvas, displaySize);//Adaptamos las detecciones al tamaño real del canvas
 
-      intervalId = window.setInterval(async () => {
+      //Cerebro del hook
+      if (intervalRef.current != null) return; //Si ya existe un intervalo, no creamos otro
+      intervalRef.current = window.setInterval(async () => {
         if (video.paused || video.ended) return;
 
-        if (processingRef.current) return;
-        processingRef.current = true;
+        if (processingRef.current) return; //Si hay una deteccion en curso no interferimos
+        processingRef.current = true; //Si no hay una deteccion en curso, colocamos true para indicar que comenzamos una
 
         if (estadoRostroRef.current === "ninguno") {
           setEstadoRostro("procesando");
         }
 
         try {
+          //Detectamos la cara usando los modelos
+          //Detections se convierte en un array con info del rostro
           const detections = await faceapi
-            .detectAllFaces(
-              video,
-              new faceapi.TinyFaceDetectorOptions({
-                inputSize: 160,
-                scoreThreshold: 0.5,
-              })
-            )
+            .detectAllFaces(video, new faceapi.TinyFaceDetectorOptions({inputSize: 160, scoreThreshold: 0.5,}))
             .withFaceLandmarks()
             .withFaceDescriptors();
 
-          const resized = faceapi.resizeResults(detections, displaySize);
-          const ctx = canvas.getContext("2d");
+          const resized = faceapi.resizeResults(detections, displaySize);//Escalamos la deteccion de la cara al tamaño del canvas para dibujarlas bien
+          const ctx = canvas.getContext("2d"); //Contexto 2d del canvas para poder dibujar
           if (!ctx) return;
 
-          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          ctx.clearRect(0, 0, canvas.width, canvas.height);//Limpiamos el canvas en cada frame (sino cada cuadro se pintaria encima del anterior)
 
-          // SI NO HAY CARA → RESET TOTAL
+          //Si no se detecto ninguna cara, resetea todo
           if (!detections || detections.length === 0) {
             intentosRef.current = 0;
             latestDescriptorRef.current = null;
@@ -100,16 +102,17 @@ export function useFaceDetection(videoRef: RefObject<HTMLVideoElement | null>) {
             return;
           }
 
-          // descriptor
+          //En caso de que si detecte un rostro, almacena el descriptor actual en el ref
           const descriptor = detections[0].descriptor;
           const descriptorArray = Array.from(descriptor) as number[];
           latestDescriptorRef.current = descriptorArray;
 
-          // ➤ SOLO CONSULTAMOS AL BACKEND SI NO ESTÁ PAUSADO
+          //Si el backend no esta pausado, consultamos si existe el rostro en la base de datos
           if (!detenerBackendRef.current) {
             const resultado = await reconocerRostro(descriptorArray);
             console.log("resultado backend:", resultado);
 
+            //Si hubo march frenamos todo y colocamos como reconocido el rostro
             if (resultado.match) {
               setEstadoRostro("reconocido");
               estadoRostroRef.current = "reconocido";
@@ -117,13 +120,14 @@ export function useFaceDetection(videoRef: RefObject<HTMLVideoElement | null>) {
               detenerBackendRef.current = true;
               intentosRef.current = 0;
 
-              // se vuelve a habilitar el backend a los 1500ms
+              //Se vuelve a habilitar el backend a los 1500ms
               setTimeout(() => {
                 detenerBackendRef.current = false;
               }, 1500);
             } else {
+              //Si no hubo match incrementamos los intentos
               intentosRef.current++;
-
+              //Si los intentos llegan a 3, marcamos el rostro como desconocido y frenamos backend por 1.5s
               if (intentosRef.current >= MAX_INTENTOS) {
                 setEstadoRostro("desconocido");
                 estadoRostroRef.current = "desconocido";
@@ -137,35 +141,37 @@ export function useFaceDetection(videoRef: RefObject<HTMLVideoElement | null>) {
             }
           }
 
-          // DIBUJAR bounding box SIEMPRE
+          //Dibujamos el bounding box siempre
           const box = resized[0].detection.box;
-          ctx.lineWidth = 3;
-          ctx.strokeStyle = estadoColor(estadoRostroRef.current);
-          ctx.strokeRect(box.x, box.y, box.width, box.height);
+          ctx.lineWidth = 3;//Grosor de la linea
+          ctx.strokeStyle = estadoColor(estadoRostroRef.current);//Colocamos el color de la caja dependiendo del estado del rostro
+          ctx.strokeRect(box.x, box.y, box.width, box.height);//Dibujamos el rectangulo en la cara
 
-          faceapi.draw.drawFaceLandmarks(canvas, resized);
+          faceapi.draw.drawFaceLandmarks(canvas, resized);//Dibujamos los parametros de la cara (lo hace automatico)
 
         } catch (err) {
           console.error("Error en loop detección:", err);
         } finally {
+          //Final del loop, permitimos que la proxima deteccion corra
           processingRef.current = false;
         }
       }, 150);
     };
 
-    loadModels()
+    loadModels() //Cargamos los modelos antes de empezar la deteccion sobre el video
       .then(() => {
         video.addEventListener("play", handlePlay);
-        if (!video.paused && !video.ended) handlePlay();
+        if (!video.paused && !video.ended) handlePlay(); //Llamammos a la funcion en caso de que el video ya este corriendo y los modelos hayan cargado tarde
       })
       .catch((err) => console.error("Error cargando modelos:", err));
 
     return () => {
-      if (intervalId) window.clearInterval(intervalId);
+      if (intervalRef.current) window.clearInterval(intervalRef.current);
       video.removeEventListener("play", handlePlay);
     };
-  }, [videoRef]);
+  }, [videoRef]); //Colocamos VideoRef como dependencia ya que a veces el componente se monta antes que el DOM, por lo tanto VideoRef no tiene ninguna referencia
 
+  //Funcion para colocar color a la caja dependiendo del estado del rostro
   function estadoColor(estado: EstadoRostro) {
     if (estado === "reconocido") return "green";
     if (estado === "desconocido") return "red";
@@ -173,6 +179,7 @@ export function useFaceDetection(videoRef: RefObject<HTMLVideoElement | null>) {
     return "rgba(255,255,255,0.2)";
   }
 
+  //Funcion para almacenar un rostro
   async function registrarRostro(payload?: { nombre?: string; email?: string; edad?: number }) {
     const descriptor = latestDescriptorRef.current;
     if (!descriptor) throw new Error("No hay descriptor disponible para registrar");
