@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, type RefObject } from "react";
 import * as faceapi from "face-api.js";
+import {type FormValues } from "../schemas/schemaForm";
 
 type EstadoRostro = "ninguno" | "procesando" | "reconocido" | "desconocido";
 
@@ -180,11 +181,20 @@ export function useFaceDetection(videoRef: RefObject<HTMLVideoElement | null>) {
   }
 
   //Funcion para almacenar un rostro
-  async function registrarRostro(payload?: { nombre?: string; email?: string; edad?: number }) {
+  async function registrarRostro({name,lastName,dni,number,address,rol}:FormValues) {
     const descriptor = latestDescriptorRef.current;
     if (!descriptor) throw new Error("No hay descriptor disponible para registrar");
 
-    const body = { ...payload, descriptor };
+    const body = {
+      name,
+      lastName,
+      dni,
+      number,
+      address,
+      rol,
+      descriptor
+    };
+
     const resp = await fetch(`${BACKEND_URL}/usuarios/registrar-rostro`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },

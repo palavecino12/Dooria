@@ -1,5 +1,7 @@
 //Componente especifico para crear un usuario usando el formulario reutilizable
+import { useState } from "react"
 import { FormUser } from "../components/FormUser/FormUser"
+import CameraRegister from "./CameraRegister"
 import {type FormValues } from "../schemas/schemaForm"
 
 interface props{
@@ -8,17 +10,28 @@ interface props{
 
 export const FormUserCreate=({closeForm}:props)=>{
 
-    //Data es lo que coloca el usuario en el formulario, por lo tanto aca tendriamos que tener la funcion que crea el usuario en la base de datos
-    //Lo ideal seria crear service->hook->componente(este)
-    const hola = async (data: FormValues): Promise<void> => {
-        //Esta funcion quizas tendria que ir al componente camera con los parametros (data)
-        console.log("datos del formulario:", data);
+    const [dataUser,setDataUser]=useState<FormValues|null>(null)
+    const [showCameraRegister, setShowCameraRegister]=useState(false)
 
+    //Funcion para tomar los valores del usuario y mandarlos al componente de camara, tambien pasamos a el
+    const handleSubmitUser =(data: FormValues):void => {
+        setDataUser(data)
+        setShowCameraRegister(true)
     };
+
+    //Funcion para abrir el componente de camara o volver al componente de formulario
+    const toggleCameraRegister=()=>{
+        setShowCameraRegister(!showCameraRegister)
+    }
+
 
     return(
         <>
-        <FormUser initialValues={{}} onSubmit={hola} buttonText="Crear" title="Añadir Usuario" closeForm={closeForm}/>
+        {showCameraRegister && dataUser
+            ? <CameraRegister data={dataUser} backToForm={toggleCameraRegister} />
+            : <FormUser initialValues={dataUser ?? {}} onSubmit={handleSubmitUser} buttonText="Siguiente" title="Añadir Usuario" closeForm={closeForm}/>
+        }
+
         </>
     )
 }

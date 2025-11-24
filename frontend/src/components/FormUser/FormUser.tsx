@@ -8,7 +8,7 @@ import InputForm from "./InputFormUser"
 interface props{
     title:string
     initialValues?:Partial<FormValues>//Si esta variable llega vacia, se crea un usuario con los datos que ingrese. Si llega con datos, es para editar 
-    onSubmit:(data:FormValues)=>Promise<void>//onSubumit va a ser la funcion de crear el usuario o editarlo
+    onSubmit:(data:FormValues)=>void//onSubumit va a ser la funcion de crear el usuario o editarlo
     buttonText:string
     closeForm:()=>void
 }
@@ -45,8 +45,6 @@ export const FormUser=({title,initialValues,buttonText,onSubmit,closeForm}:props
             <InputForm name='number' label='Number Phone' control={control} type='text' error={errors.number} />
             <InputForm name='address' label='Address' control={control} type='text' error={errors.address} />
             <InputForm name='rol' label='Rol' control={control} type='select' options={["local","visitante"]} error={errors.address} />
-            //Aca tengo que colocar un boton donde llame al componente para almacenar el rostro
-
 
             <div className="flex flex-row-reverse gap-30">
             <button className="bg-gray-900/20 w-28 h-11 text-black/70 rounded-xl shadow-lg transition-all duration-200 cursor-pointer
