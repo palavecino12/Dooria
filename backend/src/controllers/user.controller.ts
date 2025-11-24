@@ -1,17 +1,6 @@
 import { Request, Response } from "express"
 import { User, IUser } from "../models/User"
 
-//Funciones que quizas usamos en un futuro
-//POST/usuarios/
-export async function crearUsuario(req: Request, res: Response) {
-  try {
-    const user = new User(req.body)
-    const savedUser = await user.save()
-    res.json(savedUser)
-  } catch (error) {
-    res.status(400).json({ error: "Error al crear usuario" })
-  }
-}
 //GET/usuarios/
 export async function obtenerUsuarios(req: Request, res: Response) {
   try {
@@ -21,7 +10,6 @@ export async function obtenerUsuarios(req: Request, res: Response) {
     res.status(500).json({ error: "Error al obtener usuarios" })
   }
 }
-
 
 //Distancia euclidiana entre dos arrays numéricos (calculo para encontrar similitudes en rostros)
 function distanciaEuclidiana(a: number[], b: number[]): number {
@@ -77,18 +65,13 @@ export async function buscarRostro(req: Request, res: Response) {
 //POST/usuarios/registrar-rostro
 export async function registrarRostro(req: Request, res: Response) {
   try {
-    const { nombre, email, edad, descriptor } = req.body as {
-      nombre?: string;
-      email?: string;
-      edad?: number;
-      descriptor: number[];
-    };
+    const { name, lastName, dni, number, address, rol, descriptor } = req.body as IUser 
 
     if (!descriptor || !Array.isArray(descriptor)) {
       return res.status(400).json({ error: "Descriptor inválido" });
     }
 
-    const nuevo = new User({ nombre, email, edad, descriptor });
+    const nuevo = new User({ name, lastName, dni, number, address, rol, descriptor });
     const saved = await nuevo.save();
     return res.json({ ok: true, usuario: saved });
   } catch (err: any) {

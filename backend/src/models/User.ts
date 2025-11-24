@@ -1,16 +1,22 @@
-import mongoose, { Schema, Document } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
-export interface IUser extends Document {
-    nombre: string;
-    email: string;
-    edad: number;
+export interface IUser {
+    name: string;
+    lastName: string;
+    dni: string;
+    number:string;
+    address:string;
+    rol:string;
     descriptor?: number[];
 }
 
 const userSchema = new Schema<IUser>({
-    nombre: { type: String, required: true },
-    email:  { type: String, required: true, unique: true },
-    edad:   { type: Number, required: true },
+    name: { type: String, required: true },
+    lastName: { type: String, required: true},
+    dni: { type: String, required: true, unique: true  },
+    number: { type: String, required: true },
+    address: { type: String, required: true },
+    rol: {type: String,required:true},
     descriptor: { type: [Number] }
 }, {
     timestamps: true
