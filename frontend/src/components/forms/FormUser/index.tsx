@@ -1,7 +1,7 @@
 //Formulario reutilizable para que se pueda usar al editar un usuario y al crearlo
 //Aqui solo vamos a renderizar los componentes y validar los datos, la logica de ejecucion(crear o editar usuario) se lo dejamos a "onSubmit"
 import { useForm, type SubmitHandler } from "react-hook-form"
-import { type FormValues,schema } from "../../schemas/schemaForm"
+import { type FormValues,schema } from "../../../schemas/schemaForm"
 import { zodResolver } from "@hookform/resolvers/zod"
 import InputForm from "./InputFormUser"
 

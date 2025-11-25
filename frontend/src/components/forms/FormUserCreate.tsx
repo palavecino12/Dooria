@@ -1,8 +1,8 @@
 //Componente especifico para crear un usuario usando el formulario reutilizable
 import { useState } from "react"
-import { FormUser } from "../components/FormUser/FormUser"
-import { CameraRegister } from "./CameraRegister"
-import { type FormValues } from "../schemas/schemaForm"
+import { FormUser } from "./FormUser"
+import { CameraRegister } from "../cameras/CameraRegister"
+import { type FormValues } from "../../schemas/schemaForm"
 import { useNavigate } from "react-router-dom"
 
 export const FormUserCreate=()=>{

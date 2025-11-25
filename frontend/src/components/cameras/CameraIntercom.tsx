@@ -1,5 +1,5 @@
-import { useCamera } from "../hooks/useCamera";
-import { useFaceDetection } from "../hooks/useFaceDetection";
+import { useCamera } from "../../hooks/useCamera";
+import { useFaceDetection } from "../../hooks/useFaceDetection";
 
 export const CameraIntercom=() => {
     const videoRef = useCamera();

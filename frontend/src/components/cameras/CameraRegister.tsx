@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { useCamera } from "../hooks/useCamera";
-import { useFaceDetection } from "../hooks/useFaceDetection";
-import type { FormValues } from "../schemas/schemaForm";
+import { useCamera } from "../../hooks/useCamera";
+import { useFaceDetection } from "../../hooks/useFaceDetection";
+import type { FormValues } from "../../schemas/schemaForm";
 import { useNavigate } from "react-router-dom";
-import { Success } from "./Success";
+import { Success } from "../feedback/Success";
 
 interface props{
     data:FormValues
