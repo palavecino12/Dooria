@@ -4,7 +4,12 @@ import {type FormValues } from "../schemas/schemaForm";
 
 type EstadoRostro = "ninguno" | "procesando" | "reconocido" | "desconocido";
 
-export function useFaceDetection(videoRef: RefObject<HTMLVideoElement | null>) {
+interface props{
+  videoRef: RefObject<HTMLVideoElement | null>,
+  component:"register"|"intercom"//Pasamos por parametro que componente estamos usando para colocar diferentes colores 
+}
+
+export function useFaceDetection({videoRef,component}:props) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [estadoRostro, setEstadoRostro] = useState<EstadoRostro>("ninguno");
 
@@ -145,7 +150,7 @@ export function useFaceDetection(videoRef: RefObject<HTMLVideoElement | null>) {
           //Dibujamos el bounding box siempre
           const box = resized[0].detection.box;
           ctx.lineWidth = 3;//Grosor de la linea
-          ctx.strokeStyle = estadoColor(estadoRostroRef.current);//Colocamos el color de la caja dependiendo del estado del rostro
+          ctx.strokeStyle = estadoColor(estadoRostroRef.current, component);//Colocamos el color de la caja dependiendo del estado del rostro
           ctx.strokeRect(box.x, box.y, box.width, box.height);//Dibujamos el rectangulo en la cara
 
           faceapi.draw.drawFaceLandmarks(canvas, resized);//Dibujamos los parametros de la cara (lo hace automatico)
@@ -170,15 +175,23 @@ export function useFaceDetection(videoRef: RefObject<HTMLVideoElement | null>) {
       if (intervalRef.current) window.clearInterval(intervalRef.current);
       video.removeEventListener("play", handlePlay);
     };
-  }, [videoRef]); //Colocamos VideoRef como dependencia ya que a veces el componente se monta antes que el DOM, por lo tanto VideoRef no tiene ninguna referencia
+  }, [videoRef,component]); //Colocamos VideoRef como dependencia ya que a veces el componente se monta antes que el DOM, por lo tanto VideoRef no tiene ninguna referencia
 
-  //Funcion para colocar color a la caja dependiendo del estado del rostro
-  function estadoColor(estado: EstadoRostro) {
+  //Funcion para colocar color a la caja dependiendo del estado del rostro (dependiendo si se usa en register o intercom)
+  function estadoColor(estado: EstadoRostro, component: "intercom" | "register") {
+  if (component === "intercom") {
     if (estado === "reconocido") return "green";
     if (estado === "desconocido") return "red";
     if (estado === "procesando") return "yellow";
     return "rgba(255,255,255,0.2)";
+  } else {
+    if (estado === "reconocido") return "red";      
+    if (estado === "desconocido") return "green"; 
+    if (estado === "procesando") return "yellow";  
+    return "rgba(255,255,255,0.1)";                 
   }
+}
+
 
   //Funcion para almacenar un rostro
   async function registrarRostro({name,lastName,dni,number,address,rol}:FormValues) {

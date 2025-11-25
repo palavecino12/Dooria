@@ -1,15 +1,13 @@
 //Componente especifico para crear un usuario usando el formulario reutilizable
 import { useState } from "react"
 import { FormUser } from "../components/FormUser/FormUser"
-import CameraRegister from "./CameraRegister"
-import {type FormValues } from "../schemas/schemaForm"
+import { CameraRegister } from "./CameraRegister"
+import { type FormValues } from "../schemas/schemaForm"
+import { useNavigate } from "react-router-dom"
 
-interface props{
-    closeForm:()=>void
-}
+export const FormUserCreate=()=>{
 
-export const FormUserCreate=({closeForm}:props)=>{
-
+    const navigate=useNavigate()
     const [dataUser,setDataUser]=useState<FormValues|null>(null)
     const [showCameraRegister, setShowCameraRegister]=useState(false)
 
@@ -24,14 +22,12 @@ export const FormUserCreate=({closeForm}:props)=>{
         setShowCameraRegister(!showCameraRegister)
     }
 
-
     return(
         <>
         {showCameraRegister && dataUser
             ? <CameraRegister data={dataUser} backToForm={toggleCameraRegister} />
-            : <FormUser initialValues={dataUser ?? {}} onSubmit={handleSubmitUser} buttonText="Siguiente" title="Añadir Usuario" closeForm={closeForm}/>
+            : <FormUser initialValues={dataUser ?? {}} onSubmit={handleSubmitUser} buttonText="Siguiente" title="Añadir Usuario" closeForm={()=>navigate("/mobile")}/>
         }
-
         </>
     )
 }
