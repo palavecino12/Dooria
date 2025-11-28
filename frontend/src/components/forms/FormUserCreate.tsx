@@ -4,6 +4,7 @@ import { FormUser } from "./FormUser"
 import { CameraRegister } from "../cameras/CameraRegister"
 import { type FormValues } from "../../schemas/schemaForm"
 import { useNavigate } from "react-router-dom"
+import { FormUserAccess } from "./FormUserAccess"
 
 export const FormUserCreate=()=>{
 
@@ -24,9 +25,11 @@ export const FormUserCreate=()=>{
 
     return(
         <>
-        {showCameraRegister && dataUser
+        {showCameraRegister && dataUser?.rol==="local"//Si el usuario es local, lo redirigimos a la camara ya que tendria acceso siempre
             ? <CameraRegister data={dataUser} backToForm={toggleCameraRegister} />
-            : <FormUser initialValues={dataUser ?? {}} onSubmit={handleSubmitUser} buttonText="Siguiente" title="Añadir Usuario" closeForm={()=>navigate("/mobile")}/>
+                : showCameraRegister && dataUser?.rol==="visitante"//Si el usuario es visitante lo redirigimos al formulario de acceso
+                ? <FormUserAccess backToForm={toggleCameraRegister}/> 
+                    :<FormUser initialValues={dataUser ?? {}} onSubmit={handleSubmitUser} buttonText="Siguiente" title="Añadir Usuario" closeForm={()=>navigate("/mobile")}/>
         }
         </>
     )

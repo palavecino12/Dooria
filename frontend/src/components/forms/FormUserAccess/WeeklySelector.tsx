@@ -1,13 +1,12 @@
 //Lo que tengo que hacer aca es recibir la data del usuario que obtenemos en el formUserCreate y sumarle la data de acceso que obtenemos aca
 //Luego mandamos esa data a CamaraRegister para que junto al descriptor cree el usuario
 import { useRef } from "react";
-import type { FormValues } from "../../../schemas/schemaForm";
 
 interface props{
-    data:FormValues
+    backToOptions:()=>void
 }
 
-export const WeeklySelector=()=>{
+export const WeeklySelector=({backToOptions}:props)=>{
 
     const containerRef=useRef<HTMLDivElement>(null)
 
@@ -26,7 +25,7 @@ export const WeeklySelector=()=>{
     }
 
     return(
-        <div className="h-screen flex flex-col justify-center items-center gap-20">
+        <div className="h-screen flex flex-col justify-center items-center gap-30">
             <h1 className="text-3xl font-medium">Semanal</h1>
 
             {/* Dias */}
@@ -105,7 +104,9 @@ export const WeeklySelector=()=>{
                     onClick={handleSubmitUser}
                     className="bg-gray-900/20 p-3 text-black/70 rounded-xl shadow-lg transition-all duration-200
                             active:bg-gray-200 active:shadow-inner">Siguiente</button>
-                <button className="bg-white border border-black/20 w-28 h-11 text-black rounded-xl shadow-lg transition-all duration-200 
+                <button
+                onClick={backToOptions} 
+                className="bg-white border border-black/20 w-28 h-11 text-black rounded-xl shadow-lg transition-all duration-200 
                             active:bg-gray-200 active:shadow-inner">Volver</button>
             </div>
             

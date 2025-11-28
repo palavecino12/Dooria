@@ -2,7 +2,11 @@ import { useState } from "react";
 import { DayPicker } from "react-day-picker";
 import { es } from "react-day-picker/locale";
 
-export const MonthlySelector=()=>{
+interface props{
+    backToOptions:()=>void
+}
+
+export const MonthlySelector=({backToOptions}:props)=>{
 
     const [selectedDays, setSelectedDays] = useState<Date[]>([]);
 
@@ -12,7 +16,11 @@ export const MonthlySelector=()=>{
     }
 
     return(
-        <div className="h-screen flex flex-col justify-center items-center gap-20">
+        <div className="h-screen flex flex-col justify-center items-center gap-30">
+            
+            <div>
+                <h1 className="text-3xl font-medium">Mensual</h1>
+            </div>
 
             {/* Calendario */}
             <div>
@@ -21,13 +29,13 @@ export const MonthlySelector=()=>{
                         root: "h-120 rounded-2xl p-5 bg-white shadow-xl border border-gray-200",
                         month: "relative space-y-15",
                         caption: "grid grid-cols-3 items-center px-5",
-                        caption_label: "text-xl font-bold m-25",
+                        caption_label: "text-xl font-bold m-22",
                         nav: "flex items-center justify-between col-span-3",
                         nav_button_previous: "pointer-events-auto justify-self-start text-gray-600",
                         nav_button_next: "pointer-events-auto justify-self-end text-gray-600",
-                        weekdays: "grid grid-cols-7 text-sm font-medium text-gray-500",
+                        weekdays: "grid grid-cols-7 text-xl font-medium text-gray-500",
                         week: "grid grid-cols-7",
-                        day: "w-11 h-11 flex items-center justify-center rounded-xl m-1",
+                        day: "text-xl w-11 h-11 flex items-center justify-center rounded-xl m-0.5",
                         selected: "bg-gray-600 text-white",
                         day_today: "border border-gray-200",
                         day_outside: "text-gray-300"}}/>
@@ -39,7 +47,9 @@ export const MonthlySelector=()=>{
                     onClick={handleSubmitUser}
                     className="bg-gray-900/20 p-3 text-black/70 rounded-xl shadow-lg transition-all duration-200
                             active:bg-gray-200 active:shadow-inner">Siguiente</button>
-                <button className="bg-white border border-black/20 w-28 h-11 text-black rounded-xl shadow-lg transition-all duration-200 
+                <button
+                onClick={backToOptions} 
+                className="bg-white border border-black/20 w-28 h-11 text-black rounded-xl shadow-lg transition-all duration-200 
                             active:bg-gray-200 active:shadow-inner">Volver</button>
             </div>
 
