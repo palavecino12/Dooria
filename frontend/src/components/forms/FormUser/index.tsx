@@ -28,7 +28,7 @@ export const FormUser=({title,initialValues,buttonText,onSubmit,closeForm}:props
     const handleFormSubmit:SubmitHandler<FormValues>= async (data)=>{
 
         try {
-            await onSubmit(data)//Ejecutamos la funcion de crear o editar usuario
+            await onSubmit(data)//Ejecutamos la funcion que recibimos por parametro (en este caso manda data a otro componente)
         } catch (error) {
             //Error general al crear un usuario
             setError("root",{type:"network",message:"Error al crear el usuario"})

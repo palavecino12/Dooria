@@ -1,3 +1,4 @@
+//Componente final del registro de usario, obtiene todos los datos de los formularios, crea el descriptor y almacena el usuario
 import { useState } from "react";
 import { useCamera } from "../../hooks/useCamera";
 import { useFaceDetection } from "../../hooks/useFaceDetection";
@@ -26,6 +27,7 @@ export const CameraRegister=({data,backToForm}:props)=> {
                 number: data.number,
                 address:data.address,
                 rol: data.rol
+                //Agregar los atributos de acceso opcionales
             });
             console.log("Respuesta registro:", resp);
 

@@ -1,24 +1,114 @@
-//Lo que tengo que hacer aca es recibir la data del usuario que obtenemos en el formUserCreate y sumarle la data de acceso
+//Lo que tengo que hacer aca es recibir la data del usuario que obtenemos en el formUserCreate y sumarle la data de acceso que obtenemos aca
 //Luego mandamos esa data a CamaraRegister para que junto al descriptor cree el usuario
+import { useRef } from "react";
+import type { FormValues } from "../../../schemas/schemaForm";
+
+interface props{
+    data:FormValues
+}
+
 export const WeeklySelector=()=>{
+
+    const containerRef=useRef<HTMLDivElement>(null)
+
+    const handleSubmitUser=()=>{
+
+        if(!containerRef.current)return;
+        const checkedInputs = containerRef.current.querySelectorAll(
+            'input[type="checkbox"]:checked'
+        );
+
+        const selectedDays = Array.from(checkedInputs).map(
+            (input) => Number((input as HTMLInputElement).value)
+        );
+
+        console.log(selectedDays);
+    }
+
     return(
-        <div>
-            <div className="flex flex-col">
-                <label><input type="checkbox" value="1"/> Lunes</label>
-                <label><input type="checkbox" value="2"/> Martes</label>
-                <label><input type="checkbox" value="3"/> Miércoles</label>
-                <label><input type="checkbox" value="4"/> Jueves</label>
-                <label><input type="checkbox" value="5"/> Viernes</label>
-                <label><input type="checkbox" value="6"/> Sábado</label>
-                <label><input type="checkbox" value="7"/> Domingo</label>
+        <div className="h-screen flex flex-col justify-center items-center gap-20">
+            <h1 className="text-3xl font-medium">Semanal</h1>
+
+            {/* Dias */}
+            <div ref={containerRef} className="flex flex-col gap-6">
+
+                <label>
+                    <input type="checkbox" value="1" className="hidden peer" />
+                    <div className="bg-white border border-black/20 w-50 h-11 text-black rounded-xl shadow-lg 
+                        transition-all duration-200 flex justify-center items-center peer-checked:bg-gray-600 
+                        peer-checked:shadow-inner peer-checked:text-white">
+                        Lunes
+                    </div>
+                </label>
+
+                <label>
+                    <input type="checkbox" value="2" className="hidden peer" />
+                    <div className="bg-white border border-black/20 w-50 h-11 text-black rounded-xl shadow-lg 
+                        transition-all duration-200 flex justify-center items-center peer-checked:bg-gray-600 
+                        peer-checked:shadow-inner peer-checked:text-white">
+                        Martes
+                    </div>
+                </label>
+
+                <label>
+                    <input type="checkbox" value="3" className="hidden peer" />
+                    <div className="bg-white border border-black/20 w-50 h-11 text-black rounded-xl shadow-lg 
+                        transition-all duration-200 flex justify-center items-center peer-checked:bg-gray-600 
+                        peer-checked:shadow-inner peer-checked:text-white">
+                        Miercoles
+                    </div>
+                </label>
+
+                <label>
+                    <input type="checkbox" value="4" className="hidden peer" />
+                    <div className="bg-white border border-black/20 w-50 h-11 text-black rounded-xl shadow-lg 
+                        transition-all duration-200 flex justify-center items-center peer-checked:bg-gray-600 
+                        peer-checked:shadow-inner peer-checked:text-white">
+                        Jueves
+                    </div>
+                </label>
+
+                <label>
+                    <input type="checkbox" value="5" className="hidden peer" />
+                    <div className="bg-white border border-black/20 w-50 h-11 text-black rounded-xl shadow-lg 
+                        transition-all duration-200 flex justify-center items-center peer-checked:bg-gray-600 
+                        peer-checked:shadow-inner peer-checked:text-white">
+                        Viernes
+                    </div>
+                </label>
+
+                <label>
+                    <input type="checkbox" value="6" className="hidden peer" />
+                    <div className="bg-white border border-black/20 w-50 h-11 text-black rounded-xl shadow-lg 
+                        transition-all duration-200 flex justify-center items-center peer-checked:bg-gray-600 
+                        peer-checked:shadow-inner peer-checked:text-white">
+                        Sabado
+                    </div>
+                </label>
+
+                <label>
+                    <input type="checkbox" value="7" className="hidden peer" />
+                    <div className="bg-white border border-black/20 w-50 h-11 text-black rounded-xl shadow-lg 
+                        transition-all duration-200 flex justify-center items-center peer-checked:bg-gray-600 
+                        peer-checked:shadow-inner peer-checked:text-white">
+                        Domingo
+                    </div>
+                </label>
+
+
+                
             </div>
+
             {/* Botones */}
             <div className="flex flex-row-reverse gap-20">
-                <button className="bg-gray-900/20 p-3 text-black/70 rounded-xl shadow-lg transition-all duration-200 cursor-pointer
-                            hover:shadow-2xl hover:-translate-y-1 active:bg-gray-200 active:shadow-inner">Siguiente</button>
-                <button className="bg-white border border-black/20 w-28 h-11 text-black rounded-xl shadow-lg transition-all duration-200 cursor-pointer
-                        hover:shadow-2xl hover:-translate-y-1 active:bg-gray-200 active:shadow-inner">Volver</button>
+                <button
+                    onClick={handleSubmitUser}
+                    className="bg-gray-900/20 p-3 text-black/70 rounded-xl shadow-lg transition-all duration-200
+                            active:bg-gray-200 active:shadow-inner">Siguiente</button>
+                <button className="bg-white border border-black/20 w-28 h-11 text-black rounded-xl shadow-lg transition-all duration-200 
+                            active:bg-gray-200 active:shadow-inner">Volver</button>
             </div>
+            
         </div>
     )
 }

@@ -2,10 +2,10 @@
 //import Mobile from "./pages/mobile"
 //import Register from "./pages/mobile/Register"
 //import Intercom from "./pages/Intercom"
-import { WeeklySelector } from "./components/forms/FormUserAccess/WeeklySelector"
+import { MonthlySelector } from "./components/forms/FormUserAccess/MonthlySelector"
 function App() {
   return (
-    <WeeklySelector/>
+    <MonthlySelector/>
     //<BrowserRouter>
     //  <Routes>
     //    <Route path="/mobile" element={<Mobile/>}/>
