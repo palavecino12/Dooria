@@ -42,7 +42,7 @@ export const WeeklySelector=({backToOptions,data}:props)=>{
             <div ref={containerRef} className="flex flex-col gap-6">
 
                 <label>
-                    <input type="checkbox" value="1" className="hidden peer" />
+                    <input type="checkbox" value="0" className="hidden peer" />
                     <div className="bg-white border border-black/20 w-50 h-11 text-black rounded-xl shadow-lg 
                         transition-all duration-200 flex justify-center items-center peer-checked:bg-gray-600 
                         peer-checked:shadow-inner peer-checked:text-white">
@@ -51,7 +51,7 @@ export const WeeklySelector=({backToOptions,data}:props)=>{
                 </label>
 
                 <label>
-                    <input type="checkbox" value="2" className="hidden peer" />
+                    <input type="checkbox" value="1" className="hidden peer" />
                     <div className="bg-white border border-black/20 w-50 h-11 text-black rounded-xl shadow-lg 
                         transition-all duration-200 flex justify-center items-center peer-checked:bg-gray-600 
                         peer-checked:shadow-inner peer-checked:text-white">
@@ -60,7 +60,7 @@ export const WeeklySelector=({backToOptions,data}:props)=>{
                 </label>
 
                 <label>
-                    <input type="checkbox" value="3" className="hidden peer" />
+                    <input type="checkbox" value="2" className="hidden peer" />
                     <div className="bg-white border border-black/20 w-50 h-11 text-black rounded-xl shadow-lg 
                         transition-all duration-200 flex justify-center items-center peer-checked:bg-gray-600 
                         peer-checked:shadow-inner peer-checked:text-white">
@@ -69,7 +69,7 @@ export const WeeklySelector=({backToOptions,data}:props)=>{
                 </label>
 
                 <label>
-                    <input type="checkbox" value="4" className="hidden peer" />
+                    <input type="checkbox" value="3" className="hidden peer" />
                     <div className="bg-white border border-black/20 w-50 h-11 text-black rounded-xl shadow-lg 
                         transition-all duration-200 flex justify-center items-center peer-checked:bg-gray-600 
                         peer-checked:shadow-inner peer-checked:text-white">
@@ -78,7 +78,7 @@ export const WeeklySelector=({backToOptions,data}:props)=>{
                 </label>
 
                 <label>
-                    <input type="checkbox" value="5" className="hidden peer" />
+                    <input type="checkbox" value="4" className="hidden peer" />
                     <div className="bg-white border border-black/20 w-50 h-11 text-black rounded-xl shadow-lg 
                         transition-all duration-200 flex justify-center items-center peer-checked:bg-gray-600 
                         peer-checked:shadow-inner peer-checked:text-white">
@@ -87,7 +87,7 @@ export const WeeklySelector=({backToOptions,data}:props)=>{
                 </label>
 
                 <label>
-                    <input type="checkbox" value="6" className="hidden peer" />
+                    <input type="checkbox" value="5" className="hidden peer" />
                     <div className="bg-white border border-black/20 w-50 h-11 text-black rounded-xl shadow-lg 
                         transition-all duration-200 flex justify-center items-center peer-checked:bg-gray-600 
                         peer-checked:shadow-inner peer-checked:text-white">
@@ -96,7 +96,7 @@ export const WeeklySelector=({backToOptions,data}:props)=>{
                 </label>
 
                 <label>
-                    <input type="checkbox" value="7" className="hidden peer" />
+                    <input type="checkbox" value="6" className="hidden peer" />
                     <div className="bg-white border border-black/20 w-50 h-11 text-black rounded-xl shadow-lg 
                         transition-all duration-200 flex justify-center items-center peer-checked:bg-gray-600 
                         peer-checked:shadow-inner peer-checked:text-white">
@@ -104,8 +104,6 @@ export const WeeklySelector=({backToOptions,data}:props)=>{
                     </div>
                 </label>
 
-
-                
             </div>
 
             {/* Botones */}

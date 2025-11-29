@@ -52,7 +52,52 @@ export async function buscarRostro(req: Request, res: Response) {
     //Si la distancia del mejor usuario es menor a 0.5 quiere decir que es el mismo que el descriptor actual
     const UMBRAL = 0.5;
     if (menorDistancia < UMBRAL && mejorUsuario) {
-      return res.json({ match: true, usuario: mejorUsuario, distancia: menorDistancia });
+
+      const now = new Date();
+      const currentDay = now.getDay(); //Retorna el dia de la semana indicada del 0 al 6
+
+      //Almacenamos la fecha actual tipo 20251129
+      const currentDate = `${now.getFullYear()}${(now.getMonth() + 1).toString().padStart(2, "0")}${now.getDate().toString().padStart(2, "0")}`;
+
+      let tieneAcceso = false;
+
+      //Si el rol es local, tiene acceso siempre
+      if (mejorUsuario.rol === "local") {
+        tieneAcceso = true;
+      }
+
+      //Si el rol es visitante, validamos validamos el tipo de acceso
+      if (mejorUsuario.rol === "visitante") {
+        const type = mejorUsuario.accessType;
+
+        if (type === "Semanal") {
+          //Validación de días (0-6)
+          if (Array.isArray(mejorUsuario.allowedDays) && mejorUsuario.allowedDays.includes(currentDay)) {
+            tieneAcceso = true;
+          }
+        }
+
+      if (type === "Mensual") {
+        //Validación de fechas YYYYMMDD
+        if (Array.isArray(mejorUsuario.allowedDates) && mejorUsuario.allowedDates.includes(currentDate)) {
+          tieneAcceso = true;
+        }
+      }
+}
+      //Respondemos según acceso
+      if (!tieneAcceso) {
+        return res.json({
+          match: true,
+          acceso: false,
+          usuario: mejorUsuario
+        });
+      }
+
+      return res.json({
+        match: true,
+        acceso: true,
+        usuario: mejorUsuario
+      });
     }
 
     return res.json({ match: false });
