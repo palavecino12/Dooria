@@ -1,28 +1,38 @@
 //Lo que tengo que hacer aca es recibir la data del usuario que obtenemos en el formUserCreate y sumarle la data de acceso que obtenemos aca
 //Luego mandamos esa data a CamaraRegister para que junto al descriptor cree el usuario
-import { useRef } from "react";
+import { useRef, useState } from "react";
+import type { FormValues } from "../../../schemas/schemaForm";
+import { CameraRegister } from "../../cameras/CameraRegister";
 
 interface props{
     backToOptions:()=>void
+    data:FormValues
 }
 
-export const WeeklySelector=({backToOptions}:props)=>{
+export const WeeklySelector=({backToOptions,data}:props)=>{
 
-    const containerRef=useRef<HTMLDivElement>(null)
+    const containerRef=useRef<HTMLDivElement>(null);
+    const [selectedDays, setSelectedDays] = useState<number[]>([]);
+    const [showCameraRegister,setShowCameraRegister]=useState(false);
+
 
     const handleSubmitUser=()=>{
-
         if(!containerRef.current)return;
+        //Obtenemos los dias seleccionados
         const checkedInputs = containerRef.current.querySelectorAll(
             'input[type="checkbox"]:checked'
         );
-
-        const selectedDays = Array.from(checkedInputs).map(
+        //Los almacenamos en un array de tipo number
+        const days = Array.from(checkedInputs).map(
             (input) => Number((input as HTMLInputElement).value)
         );
-
-        console.log(selectedDays);
+        setSelectedDays(days)
+        //Renderizamos el componente CameraRegister
+        setShowCameraRegister(true);
     }
+
+    //Agregamos a date los dias que selecciono el usuario
+    if(showCameraRegister)return<CameraRegister data={{...data,allowedDays:selectedDays}} backToForm={()=>setShowCameraRegister(false)}/>
 
     return(
         <div className="h-screen flex flex-col justify-center items-center gap-30">

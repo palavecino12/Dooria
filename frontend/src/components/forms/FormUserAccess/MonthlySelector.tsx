@@ -12,16 +12,10 @@ interface props{
 export const MonthlySelector=({backToOptions,data}:props)=>{
 
     const [selectedDays, setSelectedDays] = useState<Date[]>([]);
-    const [showCamera,setShowCamera]=useState(false)
-
-    //Funcion para enviar las fechas seleccionadas por el usuario y abrir el componente CameraRegister
-    const handleSubmitUser=()=>{
-        setShowCamera(!showCamera)
-        console.log(selectedDays)
-    }
+    const [showCameraRegister,setShowCameraRegister]=useState(false);
 
     //Agregamos a date los dias que selecciono el usuario (convertimos selectDays en un array de string) 
-    if(showCamera)return <CameraRegister data={{...data,allowedDates:selectedDays.map(d => d.toISOString())}} backToForm={()=>setShowCamera(false)}/>
+    if(showCameraRegister)return <CameraRegister data={{...data,allowedDates:selectedDays.map(d => d.toISOString())}} backToForm={()=>setShowCameraRegister(false)}/>
 
     return(
         <div className="h-screen flex flex-col justify-center items-center gap-30">
@@ -52,7 +46,7 @@ export const MonthlySelector=({backToOptions,data}:props)=>{
             {/* Botones */}
             <div className="flex flex-row-reverse gap-20">
                 <button
-                    onClick={handleSubmitUser}
+                    onClick={()=>setShowCameraRegister(true)}//Abrimos el componente CameraRegister
                     className="bg-gray-900/20 p-3 text-black/70 rounded-xl shadow-lg transition-all duration-200
                             active:bg-gray-200 active:shadow-inner">Siguiente</button>
                 <button

@@ -12,6 +12,7 @@ interface props{
 }
 
 export const CameraRegister=({data,backToForm}:props)=> {
+
     const [success, setSuccess]=useState(false)
     const videoRef = useCamera();
     const component="register"
@@ -19,6 +20,7 @@ export const CameraRegister=({data,backToForm}:props)=> {
     const navigate = useNavigate()
     console.log(data)
 
+    //Funcion para almacenar el usuario
     const handleRegistrar = async () => {
         try {
             const resp = await registrarRostro({
@@ -27,11 +29,15 @@ export const CameraRegister=({data,backToForm}:props)=> {
                 dni: data.dni,
                 number: data.number,
                 address:data.address,
-                rol: data.rol
+                rol: data.rol,
+                accessType:data.accessType,
+                allowedDays:data.allowedDays,
+                allowedDates:data.allowedDates                
                 //Agregar los atributos de acceso opcionales
             });
             console.log("Respuesta registro:", resp);
 
+            //En caso de exito mostramos una pantalla de success, luego redirigimos al inicio
             setSuccess(true);
             setTimeout(() => {
                 navigate("/mobile")
@@ -41,7 +47,6 @@ export const CameraRegister=({data,backToForm}:props)=> {
             console.error("Error al registrar rostro:", err);
         }
     };
-
     //Mostramos pantalla de exito si todo sale bien
     if(success) return <Success/>;
 
