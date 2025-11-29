@@ -65,13 +65,13 @@ export async function buscarRostro(req: Request, res: Response) {
 //POST/usuarios/registrar-rostro
 export async function registrarRostro(req: Request, res: Response) {
   try {
-    const { name, lastName, dni, number, address, rol, descriptor } = req.body as IUser 
+    const data = req.body as IUser 
 
-    if (!descriptor || !Array.isArray(descriptor)) {
+    if (!data.descriptor || !Array.isArray(data.descriptor)) {
       return res.status(400).json({ error: "Descriptor inválido" });
     }
 
-    const nuevo = new User({ name, lastName, dni, number, address, rol, descriptor });
+    const nuevo = new User(data);
     const saved = await nuevo.save();
     return res.json({ ok: true, usuario: saved });
   } catch (err: any) {
