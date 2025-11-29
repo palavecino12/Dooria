@@ -1,23 +1,31 @@
 import { useState } from "react";
 import { DayPicker } from "react-day-picker";
 import { es } from "react-day-picker/locale";
+import { CameraRegister } from "../../cameras/CameraRegister";
+import type { FormValues } from "../../../schemas/schemaForm";
 
 interface props{
     backToOptions:()=>void
+    data:FormValues
 }
 
-export const MonthlySelector=({backToOptions}:props)=>{
+export const MonthlySelector=({backToOptions,data}:props)=>{
 
     const [selectedDays, setSelectedDays] = useState<Date[]>([]);
+    const [showCamera,setShowCamera]=useState(false)
 
+    //Funcion para enviar las fechas seleccionadas por el usuario y abrir el componente CameraRegister
     const handleSubmitUser=()=>{
-
+        setShowCamera(!showCamera)
         console.log(selectedDays)
     }
 
+    //Agregamos a date los dias que selecciono el usuario (convertimos selectDays en un array de string) 
+    if(showCamera)return <CameraRegister data={{...data,allowedDates:selectedDays.map(d => d.toISOString())}} backToForm={()=>setShowCamera(false)}/>
+
     return(
         <div className="h-screen flex flex-col justify-center items-center gap-30">
-            
+            {/* Titulo */}
             <div>
                 <h1 className="text-3xl font-medium">Mensual</h1>
             </div>

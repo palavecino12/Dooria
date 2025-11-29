@@ -17,6 +17,7 @@ export const CameraRegister=({data,backToForm}:props)=> {
     const component="register"
     const { canvasRef, estadoRostro, registrarRostro } = useFaceDetection({videoRef,component});
     const navigate = useNavigate()
+    console.log(data)
 
     const handleRegistrar = async () => {
         try {
