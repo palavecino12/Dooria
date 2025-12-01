@@ -18,7 +18,6 @@ export const CameraRegister=({data,backToForm}:props)=> {
     const component="register"
     const { canvasRef, estadoRostro, registrarRostro } = useFaceDetection({videoRef,component});
     const navigate = useNavigate()
-    console.log(data)
 
     //Funcion para almacenar el usuario
     const handleRegistrar = async () => {
@@ -51,7 +50,7 @@ export const CameraRegister=({data,backToForm}:props)=> {
     if(success) return <Success/>;
 
     return (
-        <div className="w-full bg-white text-white flex flex-col items-center justify-center p-6 gap-6">
+        <div className="w-full h-screen bg-white text-white flex flex-col items-center justify-center p-6 gap-6">
 
             {/* Contenedor del video y el canvas superpuestos */}
             <div className="relative w-full aspect-video rounded-xl overflow-hidden shadow-xl">
@@ -77,12 +76,12 @@ export const CameraRegister=({data,backToForm}:props)=> {
             <div className="flex flex-row-reverse gap-20">
                 <button
                     onClick={handleRegistrar}
-                    className="bg-gray-900/20 p-3 text-black/70 rounded-xl shadow-lg transition-all duration-200 cursor-pointer
-                            hover:shadow-2xl hover:-translate-y-1 active:bg-gray-200 active:shadow-inner">Registrar rostro</button>
+                    className="bg-gray-900/20 p-3 text-black/70 rounded-xl shadow-lg transition-all duration-200 
+                            active:bg-gray-200 active:shadow-inner">Registrar rostro</button>
                 <button
                     onClick={backToForm}
-                    className="bg-white border border-black/20 w-28 h-11 text-black rounded-xl shadow-lg transition-all duration-200 cursor-pointer
-                        hover:shadow-2xl hover:-translate-y-1 active:bg-gray-200 active:shadow-inner">Volver</button>
+                    className="bg-white border border-black/20 w-28 h-11 text-black rounded-xl shadow-lg transition-all duration-200 
+                        active:bg-gray-200 active:shadow-inner">Volver</button>
             </div>
         </div>
     );

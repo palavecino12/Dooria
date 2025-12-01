@@ -19,6 +19,7 @@ export const MonthlySelector=({backToOptions,data}:props)=>{
 
     return(
         <div className="h-screen flex flex-col justify-center items-center gap-30">
+            
             {/* Titulo */}
             <div>
                 <h1 className="text-3xl font-medium">Mensual</h1>

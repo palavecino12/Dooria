@@ -1,17 +1,29 @@
+//GOD HOOK (Fucnional pero falta modularizar y mejorar)
 import { useEffect, useRef, useState, type RefObject } from "react";
 import * as faceapi from "face-api.js";
 import {type FormValues } from "../schemas/schemaForm";
 
 type EstadoRostro = "ninguno" | "procesando" | "reconocido" | "desconocido";
+type EstadoAcceso = "permitido" | "denegado"; 
 
 interface props{
   videoRef: RefObject<HTMLVideoElement | null>,
   component:"register"|"intercom"//Pasamos por parametro que componente estamos usando para colocar diferentes colores 
 }
 
+interface FaceMatchResult{
+    match:boolean,
+    access:boolean,
+    user?:FormValues
+}
+
 export function useFaceDetection({videoRef,component}:props) {
+
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [estadoRostro, setEstadoRostro] = useState<EstadoRostro>("ninguno");
+  const [estadoAcceso, setEstadoAcceso] = useState<EstadoAcceso>("denegado");
+  const [user, setUser] = useState<FormValues|null>(null);
+  
 
   //refs
   const estadoRostroRef = useRef<EstadoRostro>("ninguno");
@@ -94,17 +106,15 @@ export function useFaceDetection({videoRef,component}:props) {
 
           ctx.clearRect(0, 0, canvas.width, canvas.height);//Limpiamos el canvas en cada frame (sino cada cuadro se pintaria encima del anterior)
 
-          //Si no se detecto ninguna cara, resetea todo
+          //Si no se detecto ninguna cara, resetea todos los datos
           if (!detections || detections.length === 0) {
             intentosRef.current = 0;
             latestDescriptorRef.current = null;
-
             setEstadoRostro("ninguno");
-            estadoRostroRef.current = "ninguno";
-
             detenerBackendRef.current = false;
-
             processingRef.current = false;
+            setEstadoAcceso("denegado");
+            setUser(null);
             return;
           }
 
@@ -115,14 +125,23 @@ export function useFaceDetection({videoRef,component}:props) {
 
           //Si el backend no esta pausado, consultamos si existe el rostro en la base de datos
           if (!detenerBackendRef.current) {
-            const resultado = await reconocerRostro(descriptorArray);
+            const resultado:FaceMatchResult = await reconocerRostro(descriptorArray);
             console.log("resultado backend:", resultado);
 
-            //Si hubo march frenamos todo y colocamos como reconocido el rostro
+            //Si hubo march frenamos todo, colocamos como reconocido el rostro y guardamos el usuario
             if (resultado.match) {
-              setEstadoRostro("reconocido");
-              estadoRostroRef.current = "reconocido";
 
+              //Almacenamos el ususario que se encontro
+              if(resultado.user)setUser(resultado.user)
+              setEstadoRostro("reconocido");
+
+              if(resultado.access){
+                setEstadoAcceso("permitido")
+              }else{
+                setEstadoAcceso("denegado")
+              }
+              
+              //Frenamos el back
               detenerBackendRef.current = true;
               intentosRef.current = 0;
 
@@ -135,9 +154,9 @@ export function useFaceDetection({videoRef,component}:props) {
               intentosRef.current++;
               //Si los intentos llegan a 3, marcamos el rostro como desconocido y frenamos backend por 1.5s
               if (intentosRef.current >= MAX_INTENTOS) {
-                setEstadoRostro("desconocido");
-                estadoRostroRef.current = "desconocido";
 
+                setEstadoAcceso("denegado")
+                setEstadoRostro("desconocido");
                 detenerBackendRef.current = true;
 
                 setTimeout(() => {
@@ -219,5 +238,5 @@ export function useFaceDetection({videoRef,component}:props) {
     return resp.json();
   }
 
-  return { canvasRef, estadoRostro, registrarRostro };
+  return { canvasRef, estadoRostro, estadoAcceso, user, registrarRostro };
 }

@@ -37,7 +37,7 @@ export const FormUser=({title,initialValues,buttonText,onSubmit,closeForm}:props
     }
 
         return (
-        <form onSubmit={handleSubmit(handleFormSubmit)} className="w-full bg-white flex flex-col items-center gap-7">
+        <form onSubmit={handleSubmit(handleFormSubmit)} className="w-full bg-white flex flex-col items-center gap-10">
 
             <div>
                 <h1 className="text-3xl font-medium">{title}</h1>
@@ -53,11 +53,11 @@ export const FormUser=({title,initialValues,buttonText,onSubmit,closeForm}:props
             </div>
             
             <div className="flex flex-row-reverse gap-30">
-                <button className="bg-gray-900/20 w-28 h-11 text-black/70 rounded-xl shadow-lg transition-all duration-200 cursor-pointer
-                        hover:shadow-2xl hover:-translate-y-1 active:bg-gray-200 active:shadow-inner" 
+                <button className="bg-gray-900/20 w-28 h-11 text-black/70 rounded-xl shadow-lg transition-all duration-200
+                        active:bg-gray-200 active:shadow-inner" 
                     type="submit">{buttonText}</button>
-                <button className="bg-white border border-black/20 w-28 h-11 text-black rounded-xl shadow-lg transition-all duration-200 cursor-pointer
-                        hover:shadow-2xl hover:-translate-y-1 active:bg-gray-200 active:shadow-inner" 
+                <button className="bg-white border border-black/20 w-28 h-11 text-black rounded-xl shadow-lg transition-all duration-200
+                        active:bg-gray-200 active:shadow-inner" 
                     type="button" onClick={closeForm}>Cancelar</button>
                 </div>
 

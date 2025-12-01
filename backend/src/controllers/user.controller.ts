@@ -26,13 +26,13 @@ export async function buscarRostro(req: Request, res: Response) {
   try {
     const { descriptor } = req.body as { descriptor: number[] };
     if (!descriptor || !Array.isArray(descriptor)) {
-      return res.status(400).json({ error: "Descriptor inválido" });
+      return res.status(400).json({error: "Descriptor invalido"});
     }
 
     //Traemos a todos los usuarios de la coleccion que tengan descriptor para buscar similitudes
     const usuarios = await User.find({ descriptor: { $exists: true } }).lean<IUser[]>();
 
-    if (!usuarios.length) return res.json({ match: false });
+    if (!usuarios.length) return res.json({ match: false, access:false });
 
     let mejorUsuario: IUser | null = null;
     let menorDistancia = Infinity;
@@ -56,8 +56,9 @@ export async function buscarRostro(req: Request, res: Response) {
       const now = new Date();
       const currentDay = now.getDay(); //Retorna el dia de la semana indicada del 0 al 6
 
-      //Almacenamos la fecha actual tipo 20251129
-      const currentDate = `${now.getFullYear()}${(now.getMonth() + 1).toString().padStart(2, "0")}${now.getDate().toString().padStart(2, "0")}`;
+      //Almacenamos la fecha actual tipo YYYY-MM-DD
+      const currentDate = `${now.getFullYear()}-${(now.getMonth() + 1).toString().padStart(2, "0")}-${now.getDate().toString().padStart(2, "0")}`;
+      const userDates = mejorUsuario.allowedDates?.map(date => date.slice(0, 10));//Filtramos las fechas a solo YYYY-MM-DD
 
       let tieneAcceso = false;
 
@@ -70,16 +71,16 @@ export async function buscarRostro(req: Request, res: Response) {
       if (mejorUsuario.rol === "visitante") {
         const type = mejorUsuario.accessType;
 
-        if (type === "Semanal") {
+        if (type === "semanal") {
           //Validación de días (0-6)
           if (Array.isArray(mejorUsuario.allowedDays) && mejorUsuario.allowedDays.includes(currentDay)) {
             tieneAcceso = true;
           }
         }
 
-      if (type === "Mensual") {
-        //Validación de fechas YYYYMMDD
-        if (Array.isArray(mejorUsuario.allowedDates) && mejorUsuario.allowedDates.includes(currentDate)) {
+      if (type === "mensual") {
+        //Validación de fechas YYYY-MM-DD
+        if (Array.isArray(userDates) && userDates.includes(currentDate)) {
           tieneAcceso = true;
         }
       }
@@ -88,19 +89,22 @@ export async function buscarRostro(req: Request, res: Response) {
       if (!tieneAcceso) {
         return res.json({
           match: true,
-          acceso: false,
-          usuario: mejorUsuario
+          access: false,
+          user: mejorUsuario
         });
       }
 
       return res.json({
         match: true,
-        acceso: true,
-        usuario: mejorUsuario
+        access: true,
+        user: mejorUsuario
       });
     }
 
-    return res.json({ match: false });
+    return res.json({ 
+      match: false,
+      access:false
+    });
   } catch (err) {
     console.error(err);
     return res.status(500).json({ error: "Error al buscar rostro" });
