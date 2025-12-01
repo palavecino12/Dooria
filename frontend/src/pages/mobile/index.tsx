@@ -7,8 +7,8 @@ export default function Mobile() {
     <div className="flex flex-col justify-center items-center h-screen gap-20">
 
       {/* Titulo */}
-      <div>
-        <h1>Administracion de usuarios</h1>
+      <div >
+        <h1 className="text-3xl font-medium">Administracion de usuarios</h1>
       </div>
 
       {/* Botones */}
