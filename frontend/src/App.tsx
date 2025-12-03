@@ -1,5 +1,5 @@
 import { BrowserRouter,Routes,Route } from "react-router-dom"
-import Mobile from "./pages/mobile"
+import { Mobile } from "./pages/mobile"
 import Register from "./pages/mobile/Register"
 import Intercom from "./pages/Intercom"
 
