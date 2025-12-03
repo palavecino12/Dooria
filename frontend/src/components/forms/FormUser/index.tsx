@@ -37,32 +37,37 @@ export const FormUser=({title,initialValues,buttonText,onSubmit,closeForm}:props
     }
 
         return (
-        <form onSubmit={handleSubmit(handleFormSubmit)} className="w-full bg-white flex flex-col items-center gap-10">
 
-            <div>
-                <h1 className="text-3xl font-medium">{title}</h1>
-            </div>
+        <div className="h-screen flex items-center justify-center bg-gray-300 p-6">
+            <div className="bg-white shadow-lg rounded-2xl p-8 w-full max-w-md">
 
-            <div className={`p-6 flex flex-col items-center ${Object.keys(errors).length > 0 ? 'gap-1' : 'gap-6'}`}>
-                <InputForm name='name' label='Name' control={control} type='text' error={errors.name} />
-                <InputForm name='lastName' label='Last Name' control={control} type='text' error={errors.lastName} />
+            {/* Titulo */}
+            <h1 className="text-2xl font-semibold text-gray-800 mb-6 text-center">{title}</h1>
+
+            <form onSubmit={handleSubmit(handleFormSubmit)} className="w-full bg-white flex flex-col items-center gap-10">
+
+            <div className={`flex flex-col items-center ${Object.keys(errors).length > 0 ? 'gap-1' : 'gap-6'}`}>
+                <InputForm name='name' label='Nombre' control={control} type='text' error={errors.name} />
+                <InputForm name='lastName' label='Apellido' control={control} type='text' error={errors.lastName} />
                 <InputForm name='dni' label='DNI' control={control} type='string' error={errors.dni} />
-                <InputForm name='number' label='Number Phone' control={control} type='text' error={errors.number} />
-                <InputForm name='address' label='Address' control={control} type='text' error={errors.address} />
+                <InputForm name='number' label='Numero de telefono' control={control} type='text' error={errors.number} />
+                <InputForm name='address' label='Direccion' control={control} type='text' error={errors.address} />
                 <InputForm name='rol' label='Rol' control={control} type='select' options={["local","visitante"]} error={errors.address} />
             </div>
             
-            <div className="flex flex-row-reverse gap-30">
-                <button className="bg-gray-900/20 w-28 h-11 text-black/70 rounded-xl shadow-lg transition-all duration-200
+            <div className="flex flex-row-reverse gap-10">
+                <button className="bg-black w-28 h-11 text-white rounded-lg shadow-lg transition-all duration-200
                         active:bg-gray-200 active:shadow-inner" 
                     type="submit">{buttonText}</button>
-                <button className="bg-white border border-black/20 w-28 h-11 text-black rounded-xl shadow-lg transition-all duration-200
+                <button className="bg-white border border-black/20 w-28 h-11 text-black rounded-lg shadow-lg transition-all duration-200
                         active:bg-gray-200 active:shadow-inner" 
                     type="button" onClick={closeForm}>Cancelar</button>
                 </div>
 
             {errors.root && <p className='message-error'>{errors.root.message}</p> }
-        </form>
+            </form>
+            </div>
+        </div>
     )
 
 }
