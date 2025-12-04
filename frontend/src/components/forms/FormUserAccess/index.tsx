@@ -18,8 +18,7 @@ export const FormUserAccess=({backToForm,data}:props)=>{
     if (option === "mensual") return <MonthlySelector data={{...data,accessType:"mensual"}} backToOptions={()=>setOption(null)}/>;
 
     return(
-        <div className="h-screen flex items-center justify-center bg-gray-300 p-6">
-            <div className="flex flex-col items-center  gap-20 bg-white shadow-2xl rounded-2xl p-8 w-full">
+            <div className="flex flex-col items-center justify-center gap-10 bg-white h-screen">
             
                 {/* Titulo */}
                 <div>
@@ -27,7 +26,8 @@ export const FormUserAccess=({backToForm,data}:props)=>{
                 </div>
 
                 {/* Botones de mensual y semanal */}
-                <div className="flex flex-col justify-center items-center gap-10">
+                <div className="flex flex-col justify-center items-center gap-15 
+                    shadow-[0_4px_10px_rgba(0,0,0,0.15),0_-4px_10px_rgba(0,0,0,0.15)] w-full p-10">
                     <button
                     onClick={()=>setOption("semanal")} 
                     className="bg-black w-34 h-11 text-white rounded-lg shadow-lg transition-all duration-200
@@ -45,8 +45,6 @@ export const FormUserAccess=({backToForm,data}:props)=>{
                         className="bg-white border border-black/20 w-28 h-11 text-black rounded-lg shadow-lg transition-all duration-200
                             active:bg-gray-200 active:shadow-inner">Volver</button>
                 </div>
-            </div>
-        </div>
-        
+            </div>    
     )
 }

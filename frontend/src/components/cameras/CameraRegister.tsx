@@ -50,38 +50,46 @@ export const CameraRegister=({data,backToForm}:props)=> {
     if(success) return <Success/>;
 
     return (
-        <div className="w-full h-screen bg-white text-white flex flex-col items-center justify-center p-6 gap-6">
+        <div className="w-full h-screen bg-white text-white flex flex-col items-center justify-center gap-6">
 
-            {/* Contenedor del video y el canvas superpuestos */}
-            <div className="relative w-full aspect-video rounded-xl overflow-hidden shadow-xl">
-                <video ref={videoRef} autoPlay muted className="absolute inset-0 w-full h-full object-cover"></video>
-                <canvas ref={canvasRef} className="absolute inset-0 w-full h-full"></canvas>
+            {/* Titulo */}
+            <h1 className="text-black text-3xl font-medium">Escaneo de rostro</h1>
+
+            <div className=" flex flex-col items-center gap-10 pt-10 pb-10 m-10 
+                shadow-[0_4px_10px_rgba(0,0,0,0.15),0_-4px_10px_rgba(0,0,0,0.15)] w-full">
+                {/* Contenedor del video y el canvas superpuestos */}
+                <div className="relative w-full aspect-video overflow-hidden border border-gray-200">
+                    <video ref={videoRef} autoPlay muted className="absolute inset-0 w-full h-full object-cover"></video>
+                    <canvas ref={canvasRef} className="absolute inset-0 w-full h-full"></canvas>
+                </div>
+
+                {/* Estado del rostro */}
+                <p className={`
+                        text-lg font-semibold px-4 py-2 rounded-lg
+                        ${estadoRostro === "reconocido" ? "bg-red-800" : ""}
+                        ${estadoRostro === "desconocido" ? "bg-green-800" : ""}
+                        ${estadoRostro === "procesando" ? "bg-yellow-700 text-black" : ""}
+                        ${estadoRostro === "ninguno" ? "bg-black" : ""}`}>
+                        
+                        {estadoRostro === "reconocido" ? "Este usuario ya existe" : ""}
+                        {estadoRostro === "desconocido" ? "Rostro listo para almacenar" : ""}
+                        {estadoRostro === "procesando" ? "Espere..." : ""}
+                        {estadoRostro === "ninguno" ? "Coloque su rostro en la camara" : ""}
+                </p>
             </div>
 
-            {/* Estado del rostro */}
-            <p className={`
-                    text-lg font-semibold px-4 py-2 rounded-xl
-                    ${estadoRostro === "reconocido" ? "bg-red-700" : ""}
-                    ${estadoRostro === "desconocido" ? "bg-green-700" : ""}
-                    ${estadoRostro === "procesando" ? "bg-yellow-600 text-black" : ""}
-                    ${estadoRostro === "ninguno" ? "bg-gray-700" : ""}`}>
-                    
-                    {estadoRostro === "reconocido" ? "Este usuario ya existe" : ""}
-                    {estadoRostro === "desconocido" ? "Rostro listo para almacenar" : ""}
-                    {estadoRostro === "procesando" ? "Espere..." : ""}
-                    {estadoRostro === "ninguno" ? "Coloque su rostro en la camara" : ""}
-            </p>
+            
 
             {/* Botones */}
             <div className="flex flex-row-reverse gap-20">
                 <button
                     onClick={handleRegistrar}
-                    className="bg-gray-900/20 p-3 text-black/70 rounded-xl shadow-lg transition-all duration-200 
-                            active:bg-gray-200 active:shadow-inner">Registrar rostro</button>
+                    className="bg-black w-34 h-11 text-white rounded-lg shadow-lg transition-all duration-200
+                        active:bg-gray-200 active:shadow-inner">Registrar rostro</button>
                 <button
                     onClick={backToForm}
-                    className="bg-white border border-black/20 w-28 h-11 text-black rounded-xl shadow-lg transition-all duration-200 
-                        active:bg-gray-200 active:shadow-inner">Volver</button>
+                    className="bg-white border border-black/20 w-28 h-11 text-black rounded-lg shadow-lg transition-all duration-200
+                            active:bg-gray-200 active:shadow-inner">Volver</button>
             </div>
         </div>
     );

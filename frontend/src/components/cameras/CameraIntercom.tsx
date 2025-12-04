@@ -19,7 +19,7 @@ export const CameraIntercom=() => {
         <div className="min-h-screen bg-white text-white flex flex-col items-center justify-center p-6 gap-6">
 
             {/* Contenedor del video y el canvas superpuestos */}
-            <div className="relative w-full aspect-video rounded-xl overflow-hidden shadow-xl">
+            <div className="relative w-full aspect-video rounded-lg overflow-hidden shadow-xl">
                 <video ref={videoRef} autoPlay muted className="absolute inset-0 w-full h-full object-cover"></video>
                 <canvas ref={canvasRef} className="absolute inset-0 w-full h-full"></canvas>
             </div>
@@ -28,10 +28,10 @@ export const CameraIntercom=() => {
             <p
                 className={`
                     text-lg font-semibold px-4 py-2 rounded-lg
-                    ${estadoRostro === "reconocido" ? "bg-green-700" : ""}
-                    ${estadoRostro === "desconocido" ? "bg-red-700" : ""}
+                    ${estadoRostro === "reconocido" ? "bg-green-800" : ""}
+                    ${estadoRostro === "desconocido" ? "bg-red-800" : ""}
                     ${estadoRostro === "procesando" ? "bg-yellow-600 text-black" : ""}
-                    ${estadoRostro === "ninguno" ? "bg-gray-700" : ""}
+                    ${estadoRostro === "ninguno" ? "bg-black" : ""}
                 `}
             >Estado Rostro: {estadoRostro}
             </p>
@@ -40,8 +40,8 @@ export const CameraIntercom=() => {
             <p
                 className={`
                     text-lg font-semibold px-4 py-2 rounded-lg
-                    ${estadoAcceso === "permitido" ? "bg-green-700" : ""}
-                    ${estadoAcceso === "denegado" ? "bg-red-700" : ""}
+                    ${estadoAcceso === "permitido" ? "bg-green-800" : ""}
+                    ${estadoAcceso === "denegado" ? "bg-red-800" : ""}
                 `}
             >Estado Acceso: {estadoAcceso}
             </p>

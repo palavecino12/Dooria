@@ -21,10 +21,8 @@ export const MonthlySelector=({backToOptions,data}:props)=>{
         
             <div className="flex flex-col items-center justify-center gap-10 bg-white h-screen">
                 {/* Titulo */}
-                <div>
-                    <h1 className="text-3xl font-medium">Mensual</h1>
-                </div>
-
+                <h1 className="text-3xl font-medium">Calendario</h1>
+                
                 {/* Calendario */}
                 <DayPicker mode="multiple" selected={selectedDays} onSelect={(days) => setSelectedDays(days ?? [])} required locale={es}
                     classNames={{

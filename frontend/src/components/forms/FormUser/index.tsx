@@ -37,16 +37,15 @@ export const FormUser=({title,initialValues,buttonText,onSubmit,closeForm}:props
     }
 
         return (
-
-        <div className="h-screen flex items-center justify-center bg-gray-300 p-6">
-            <div className="bg-white shadow-2xl rounded-2xl p-8 w-full">
+            <div className="flex flex-col items-center justify-center gap-10 bg-white h-screen">
 
                 {/* Titulo */}
                 <h1 className="text-2xl font-semibold text-gray-800 mb-6 text-center">{title}</h1>
 
                 {/* Formulario */}
                 <form onSubmit={handleSubmit(handleFormSubmit)} className="w-full bg-white flex flex-col items-center gap-10">
-                    <div className={`flex flex-col items-center ${Object.keys(errors).length > 0 ? 'gap-1' : 'gap-6'}`}>
+                    <div className={`flex flex-col items-center ${Object.keys(errors).length > 0 ? 'gap-1' : 'gap-6'}
+                        shadow-[0_4px_10px_rgba(0,0,0,0.15),0_-4px_10px_rgba(0,0,0,0.15)] w-full p-10`}>
                         <InputForm name='name' label='Nombre' control={control} type='text' error={errors.name} />
                         <InputForm name='lastName' label='Apellido' control={control} type='text' error={errors.lastName} />
                         <InputForm name='dni' label='DNI' control={control} type='string' error={errors.dni} />
@@ -66,7 +65,6 @@ export const FormUser=({title,initialValues,buttonText,onSubmit,closeForm}:props
                     {errors.root && <p className='message-error'>{errors.root.message}</p> }
                 </form>
             </div>
-        </div>
     )
 
 }
