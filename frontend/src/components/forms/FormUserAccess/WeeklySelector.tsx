@@ -35,89 +35,93 @@ export const WeeklySelector=({backToOptions,data}:props)=>{
     if(showCameraRegister)return<CameraRegister data={{...data,allowedDays:selectedDays}} backToForm={()=>setShowCameraRegister(false)}/>
 
     return(
-        <div className="h-screen flex flex-col justify-center items-center gap-30">
-            <h1 className="text-3xl font-medium">Semanal</h1>
+        
+            <div className="flex flex-col items-center justify-center gap-10 bg-white h-screen">
 
-            {/* Dias */}
-            <div ref={containerRef} className="flex flex-col gap-6">
+                {/* Titulo */}
+                <h1 className="text-3xl font-medium">Semanal</h1>
 
-                <label>
-                    <input type="checkbox" value="1" className="hidden peer" />
-                    <div className="bg-white border border-black/20 w-50 h-11 text-black rounded-xl shadow-lg 
-                        transition-all duration-200 flex justify-center items-center peer-checked:bg-gray-600 
-                        peer-checked:shadow-inner peer-checked:text-white">
-                        Lunes
-                    </div>
-                </label>
+                {/* Dias */}
+                <div ref={containerRef} className="flex flex-col items-center gap-6 border-t border-b border-gray-400 
+                                        shadow-[0_4px_10px_rgba(0,0,0,0.15),0_-4px_10px_rgba(0,0,0,0.15)] w-full p-10">
 
-                <label>
-                    <input type="checkbox" value="2" className="hidden peer" />
-                    <div className="bg-white border border-black/20 w-50 h-11 text-black rounded-xl shadow-lg 
-                        transition-all duration-200 flex justify-center items-center peer-checked:bg-gray-600 
-                        peer-checked:shadow-inner peer-checked:text-white">
-                        Martes
-                    </div>
-                </label>
+                    <label>
+                        <input type="checkbox" value="1" className="hidden peer" />
+                        <div className="bg-white border border-black/20 w-50 h-11 text-black rounded-lg shadow-lg 
+                            transition-all duration-200 flex justify-center items-center peer-checked:bg-black 
+                            peer-checked:shadow-inner peer-checked:text-white">
+                            Lunes
+                        </div>
+                    </label>
 
-                <label>
-                    <input type="checkbox" value="3" className="hidden peer" />
-                    <div className="bg-white border border-black/20 w-50 h-11 text-black rounded-xl shadow-lg 
-                        transition-all duration-200 flex justify-center items-center peer-checked:bg-gray-600 
-                        peer-checked:shadow-inner peer-checked:text-white">
-                        Miercoles
-                    </div>
-                </label>
+                    <label>
+                        <input type="checkbox" value="2" className="hidden peer" />
+                        <div className="bg-white border border-black/20 w-50 h-11 text-black rounded-lg shadow-lg 
+                            transition-all duration-200 flex justify-center items-center peer-checked:bg-black 
+                            peer-checked:shadow-inner peer-checked:text-white">
+                            Martes
+                        </div>
+                    </label>
 
-                <label>
-                    <input type="checkbox" value="4" className="hidden peer" />
-                    <div className="bg-white border border-black/20 w-50 h-11 text-black rounded-xl shadow-lg 
-                        transition-all duration-200 flex justify-center items-center peer-checked:bg-gray-600 
-                        peer-checked:shadow-inner peer-checked:text-white">
-                        Jueves
-                    </div>
-                </label>
+                    <label>
+                        <input type="checkbox" value="3" className="hidden peer" />
+                        <div className="bg-white border border-black/20 w-50 h-11 text-black rounded-lg shadow-lg 
+                            transition-all duration-200 flex justify-center items-center peer-checked:bg-black 
+                            peer-checked:shadow-inner peer-checked:text-white">
+                            Miercoles
+                        </div>
+                    </label>
 
-                <label>
-                    <input type="checkbox" value="5" className="hidden peer" />
-                    <div className="bg-white border border-black/20 w-50 h-11 text-black rounded-xl shadow-lg 
-                        transition-all duration-200 flex justify-center items-center peer-checked:bg-gray-600 
-                        peer-checked:shadow-inner peer-checked:text-white">
-                        Viernes
-                    </div>
-                </label>
+                    <label>
+                        <input type="checkbox" value="4" className="hidden peer" />
+                        <div className="bg-white border border-black/20 w-50 h-11 text-black rounded-lg shadow-lg 
+                            transition-all duration-200 flex justify-center items-center peer-checked:bg-black 
+                            peer-checked:shadow-inner peer-checked:text-white">
+                            Jueves
+                        </div>
+                    </label>
 
-                <label>
-                    <input type="checkbox" value="6" className="hidden peer" />
-                    <div className="bg-white border border-black/20 w-50 h-11 text-black rounded-xl shadow-lg 
-                        transition-all duration-200 flex justify-center items-center peer-checked:bg-gray-600 
-                        peer-checked:shadow-inner peer-checked:text-white">
-                        Sabado
-                    </div>
-                </label>
+                    <label>
+                        <input type="checkbox" value="5" className="hidden peer" />
+                        <div className="bg-white border border-black/20 w-50 h-11 text-black rounded-lg shadow-lg 
+                            transition-all duration-200 flex justify-center items-center peer-checked:bg-black 
+                            peer-checked:shadow-inner peer-checked:text-white">
+                            Viernes
+                        </div>
+                    </label>
 
-                <label>
-                    <input type="checkbox" value="0" className="hidden peer" />
-                    <div className="bg-white border border-black/20 w-50 h-11 text-black rounded-xl shadow-lg 
-                        transition-all duration-200 flex justify-center items-center peer-checked:bg-gray-600 
-                        peer-checked:shadow-inner peer-checked:text-white">
-                        Domingo
-                    </div>
-                </label>
+                    <label>
+                        <input type="checkbox" value="6" className="hidden peer" />
+                        <div className="bg-white border border-black/20 w-50 h-11 text-black rounded-lg shadow-lg 
+                            transition-all duration-200 flex justify-center items-center peer-checked:bg-black
+                            peer-checked:shadow-inner peer-checked:text-white">
+                            Sabado
+                        </div>
+                    </label>
 
-            </div>
+                    <label>
+                        <input type="checkbox" value="0" className="hidden peer" />
+                        <div className="bg-white border border-black/20 w-50 h-11 text-black rounded-lg shadow-lg 
+                            transition-all duration-200 flex justify-center items-center peer-checked:bg-black 
+                            peer-checked:shadow-inner peer-checked:text-white">
+                            Domingo
+                        </div>
+                    </label>
 
-            {/* Botones */}
-            <div className="flex flex-row-reverse gap-20">
-                <button
-                    onClick={handleSubmitUser}
-                    className="bg-gray-900/20 p-3 text-black/70 rounded-xl shadow-lg transition-all duration-200
-                            active:bg-gray-200 active:shadow-inner">Siguiente</button>
-                <button
-                onClick={backToOptions} 
-                className="bg-white border border-black/20 w-28 h-11 text-black rounded-xl shadow-lg transition-all duration-200 
+                </div>
+
+                {/* Botones */}
+                <div className="flex flex-row-reverse gap-10">
+                    <button
+                        onClick={handleSubmitUser}
+                        className="bg-black w-34 h-11 text-white rounded-lg shadow-lg transition-all duration-200
+                        active:bg-gray-200 active:shadow-inner">Siguiente</button>
+                    <button
+                    onClick={backToOptions} 
+                    className="bg-white border border-black/20 w-28 h-11 text-black rounded-lg shadow-lg transition-all duration-200
                             active:bg-gray-200 active:shadow-inner">Volver</button>
+                </div>
+
             </div>
-            
-        </div>
     )
 }
