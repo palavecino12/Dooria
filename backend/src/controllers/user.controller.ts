@@ -4,12 +4,31 @@ import { User, IUser } from "../models/User"
 //GET/usuarios/
 export async function obtenerUsuarios(req: Request, res: Response) {
   try {
-    const users = await User.find()
+    const { fullName = "" } = req.body
+    
+    //Dividimos las palabras ingresadas por el usuario
+    const terms:string[] = fullName.trim().split(/\s+/).filter(Boolean)            
+
+    //Buscamos cada palabra en ambos campos ignorando mayusculas (creamos un array)
+    const conditions = terms.map(term => ({
+      $or: [
+        { name: { $regex: term, $options: "i" } },       
+        { lastName: { $regex: term, $options: "i" } }   
+      ]
+    }))
+
+    //Usamos un and para retornar a los usuarios que cumplan con todas las condiciones
+    const users = await User.find(
+      { $and: conditions },
+      { name: 1, lastName: 1, dni: 1, number: 1, address: 1, rol: 1 }
+    )
+
     res.json(users)
   } catch (error) {
     res.status(500).json({ error: "Error al obtener usuarios" })
   }
 }
+
 
 //Distancia euclidiana entre dos arrays numéricos (calculo para encontrar similitudes en rostros)
 function distanciaEuclidiana(a: number[], b: number[]): number {
