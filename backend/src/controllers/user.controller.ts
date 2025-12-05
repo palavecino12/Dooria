@@ -4,7 +4,7 @@ import { User, IUser } from "../models/User"
 //GET/usuarios/
 export async function obtenerUsuarios(req: Request, res: Response) {
   try {
-    const { fullName = "" } = req.body
+    const { fullName = "" } = req.params
     
     //Dividimos las palabras ingresadas por el usuario
     const terms:string[] = fullName.trim().split(/\s+/).filter(Boolean)            
