@@ -18,7 +18,7 @@ export const getUsers = async (fullName:string):Promise<User[]> =>{
 
         if (!response.ok){
             const errorData = await response.json()
-            throw new Error(errorData.message || "Error desconocido en el servidor")
+            throw new Error(errorData.error || "Error desconocido en el servidor")
         }
         
         const users:User[] = await response.json()
@@ -27,4 +27,4 @@ export const getUsers = async (fullName:string):Promise<User[]> =>{
         console.error("Error en getUsers:", error)
         throw error//relanzamos el error para que lo capture el hook
     }
-}//Ver el tema de obtener los errores del back
+}

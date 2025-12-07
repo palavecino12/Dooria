@@ -4,8 +4,10 @@ import { User, IUser } from "../models/User"
 //GET/usuarios/
 export async function obtenerUsuarios(req: Request, res: Response) {
   try {
-    const { fullName = "" } = req.params
-    
+    const { fullName = "" } = req.query
+
+    if(typeof fullName !== "string")return res.status(400).json({ error: "fullName debe ser un texto" })
+
     //Dividimos las palabras ingresadas por el usuario
     const terms:string[] = fullName.trim().split(/\s+/).filter(Boolean)            
 
@@ -24,7 +26,9 @@ export async function obtenerUsuarios(req: Request, res: Response) {
     )
 
     res.json(users)
+
   } catch (error) {
+    console.error("Error en obtenerUsuarios:", error)
     res.status(500).json({ error: "Error al obtener usuarios" })
   }
 }
