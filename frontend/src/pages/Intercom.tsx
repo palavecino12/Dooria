@@ -1,6 +1,6 @@
 import { CameraIntercom } from "../components/cameras/CameraIntercom";
 
-export default function Interom() {
+export const Intercom= () =>{
   return (
       <CameraIntercom/>
   );

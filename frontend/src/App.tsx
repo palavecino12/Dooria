@@ -1,8 +1,8 @@
 import { BrowserRouter,Routes,Route } from "react-router-dom"
 import { Mobile } from "./pages/mobile"
 import { Users } from "./pages/mobile/Users"
-import Register from "./pages/mobile/Register"
-import Intercom from "./pages/Intercom"
+import { Register } from "./pages/mobile/Register"
+import{ Intercom } from "./pages/Intercom"
 
 function App() {
   return (
