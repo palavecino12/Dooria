@@ -1,28 +1,19 @@
-//Este type es solo lo que va a devolver el endpoint GET/usuarios, ya que no necesitamos el descriptor
-type User={
-        id: string,
-        name: string,
-        lastName: string,
-        dni: string,
-        number: string,
-        address: string,
-        rol: string
-}
+import { type UserListItem } from "../types/userType"
 
 //Servicio para consumir el endpoint: GET/usuarios/
-export const getUsers = async (fullName:string):Promise<User[]> =>{
+export const getUsers = async (fullName:string):Promise<UserListItem[]> =>{
     const url=`http://localhost:3000/usuarios?fullName=${encodeURIComponent(fullName)}`
 
     try {
         const response= await fetch(url)
 
+        const data = await response.json()
+
         if (!response.ok){
-            const errorData = await response.json()
-            throw new Error(errorData.error || "Error desconocido en el servidor")
+            throw new Error(data.error || "Error desconocido en el servidor")
         }
         
-        const users:User[] = await response.json()
-        return users        
+        return data as UserListItem[]
     } catch (error) {
         console.error("Error en getUsers:", error)
         throw error//relanzamos el error para que lo capture el hook

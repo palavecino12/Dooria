@@ -9,7 +9,14 @@ export async function obtenerUsuarios(req: Request, res: Response) {
     if(typeof fullName !== "string")return res.status(400).json({ error: "fullName debe ser un texto" })
 
     //Dividimos las palabras ingresadas por el usuario
-    const terms:string[] = fullName.trim().split(/\s+/).filter(Boolean)            
+    const terms:string[] = fullName.trim().split(/\s+/).filter(Boolean)
+    
+    //Si el usuario no ingreso nada retornamos todos los usuarios
+    if (terms.length === 0) {
+      const users = await User.find({},
+        { name: 1, lastName: 1, dni: 1, number: 1, address: 1, rol: 1 });
+      return res.json(users);
+    }
 
     //Buscamos cada palabra en ambos campos ignorando mayusculas (creamos un array)
     const conditions = terms.map(term => ({
@@ -25,7 +32,7 @@ export async function obtenerUsuarios(req: Request, res: Response) {
       { name: 1, lastName: 1, dni: 1, number: 1, address: 1, rol: 1 }
     )
 
-    res.json(users)
+    return res.json(users)
 
   } catch (error) {
     console.error("Error en obtenerUsuarios:", error)
