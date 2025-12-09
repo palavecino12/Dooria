@@ -13,8 +13,8 @@ export const CardUser = ({user}:props) =>{
             <p>{user.name} {user.lastName}</p>
             <p className={user.rol=="local"
                 ?"text-center bg-blue-200 rounded-sm"
-                :"text-center bg-amber-200 rounded-sm"}
-            >{user.rol}</p>
+                :"text-center bg-amber-200 rounded-sm"}>
+            {user.rol}</p>
             <button className="bg-black p-2 text-white rounded-lg shadow-lg transition-all duration-200
                         active:bg-gray-200 active:shadow-inner"><Trash2 /></button>
         </div>
