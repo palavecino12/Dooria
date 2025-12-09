@@ -10,8 +10,11 @@ export const ListUsers = ({fullName}:props) =>{
     const {users} = useGetUsers(fullName)
 
     return(
-        <div>
+        <div className="border-t border-b border-gray-400 pb-10 pt-10
+                        shadow-[0_4px_10px_rgba(0,0,0,0.15),0_-4px_10px_rgba(0,0,0,0.15)] w-full">
+        <div className="divide-y  overflow-auto h-100">
             {users.map(user=><CardUser key={user._id} user={user}/>)}
+        </div>
         </div>
     )
 }

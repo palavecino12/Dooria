@@ -58,7 +58,7 @@ export const FormUser=({title,initialValues,buttonText,onSubmit,closeForm}:props
                                 active:bg-gray-200 active:shadow-inner" 
                             type="submit">{buttonText}</button>
                         <button className="bg-white border border-black/20 w-28 h-11 text-black rounded-lg shadow-lg transition-all duration-200
-                                active:bg-gray-200 active:shadow-inner" 
+                                    active:bg-gray-200 active:shadow-inner" 
                             type="button" onClick={closeForm}>Cancelar</button>
                         </div>
                 

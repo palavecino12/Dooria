@@ -36,7 +36,7 @@ export const WeeklySelector=({backToOptions,data}:props)=>{
 
     return(
         
-            <div className="flex flex-col items-center justify-center gap-10 bg-white h-screen">
+            <div className="flex flex-col items-center justify-around gap-10 bg-white h-screen">
 
                 {/* Titulo */}
                 <h1 className="text-3xl font-medium">Semanal</h1>

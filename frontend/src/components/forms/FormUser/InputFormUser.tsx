@@ -20,9 +20,9 @@ const InputFormUser = ({ name, label, control, type, error, options }: props) =>
             <Controller name={name} control={control} render={({ field }) =>
                 type === 'select' ? (
                     <select id={name} {...field} value={field.value ?? ""} className={`w-full p-2 border border-gray-300 rounded-lg focus:ring-2 
-                                                                            focus:border-transparent focus:-translate-y-1  
-                                                                            focus:outline-none transition-all duration-200 bg-gray-50
-                                                                            ${error ? 'border-red-700' : 'border-black/20'}`}>
+                                                                                focus:border-transparent focus:-translate-y-1  
+                                                                                focus:outline-none transition-all duration-200 bg-gray-50
+                                                                                ${error ? 'border-red-700' : 'border-black/20'}`}>
                         {(options ?? []).map((opt) => (
                             <option key={opt} value={opt}>
                             {opt}
@@ -30,8 +30,8 @@ const InputFormUser = ({ name, label, control, type, error, options }: props) =>
                     </select>
                 ) : (
                     <input id={name} type={type} {...field} value={field.value ?? ""} className={`w-full p-2 border border-gray-300 rounded-lg focus:ring-2 
-                                                                                    focus:border-transparent focus:-translate-y-1 bg-gray-50
-                                                                                    focus:outline-none transition-all duration-200
+                                                                                        focus:border-transparent focus:-translate-y-1 bg-gray-50
+                                                                                        focus:outline-none transition-all duration-200
                                                                                         ${error ? 'border-red-700' : 'border-black/20'}`}/>
                 )}
             />

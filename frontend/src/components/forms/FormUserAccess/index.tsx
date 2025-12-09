@@ -18,7 +18,7 @@ export const FormUserAccess=({backToForm,data}:props)=>{
     if (option === "mensual") return <MonthlySelector data={{...data,accessType:"mensual"}} backToOptions={()=>setOption(null)}/>;
 
     return(
-            <div className="flex flex-col items-center justify-center gap-10 bg-white h-screen">
+            <div className="flex flex-col items-center justify-around gap-10 bg-white h-screen">
             
                 {/* Titulo */}
                 <div>
