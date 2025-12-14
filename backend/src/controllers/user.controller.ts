@@ -4,33 +4,39 @@ import { User, IUser } from "../models/User"
 //GET/usuarios/
 export async function obtenerUsuarios(req: Request, res: Response) {
   try {
-    const { fullName = "" } = req.query
+    const { fullName = "", filter="Todos" } = req.query
 
     if(typeof fullName !== "string")return res.status(400).json({ error: "fullName debe ser un texto" })
+    
+    if (typeof filter !== "string" || !["Todos", "Locales", "Visitantes"].includes(filter)) {
+      return res.status(400).json({ error: "Filtro inválido" });
+    }
+
+    //Vamos a almacenar la consulta en una variable para que sea mas limpio
+    const query: any = {};
+
+    if (filter === "Locales") query.rol = "local";
+    if (filter === "Visitantes") query.rol = "visitante";
 
     //Dividimos las palabras ingresadas por el usuario
     const terms:string[] = fullName.trim().split(/\s+/).filter(Boolean)
     
-    //Si el usuario no ingreso nada retornamos todos los usuarios
-    if (terms.length === 0) {
-      const users = await User.find({},
-        { name: 1, lastName: 1, dni: 1, number: 1, address: 1, rol: 1 });
-      return res.json(users);
+    //Buscamos cada palabra en ambos campos ignorando mayusculas (creamos un array)
+    //Solo añadimos el campo and si es que el usuario añadio texto
+    if (terms.length > 0) {
+      query.$and = terms.map(term => ({
+        $or: [
+          { name: { $regex: term, $options: "i" } },
+          { lastName: { $regex: term, $options: "i" } }
+        ]
+      }));
     }
 
-    //Buscamos cada palabra en ambos campos ignorando mayusculas (creamos un array)
-    const conditions = terms.map(term => ({
-      $or: [
-        { name: { $regex: term, $options: "i" } },       
-        { lastName: { $regex: term, $options: "i" } }   
-      ]
-    }))
-
-    //Usamos un and para retornar a los usuarios que cumplan con todas las condiciones
+    //Simplificamos todo a una sola consulta
     const users = await User.find(
-      { $and: conditions },
+      query,
       { name: 1, lastName: 1, dni: 1, number: 1, address: 1, rol: 1 }
-    )
+    );
 
     return res.json(users)
 

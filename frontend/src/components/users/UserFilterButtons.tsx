@@ -1,11 +1,12 @@
-//Aca voy a tener 5 botones para filtrar a los usuarios por: todos | locales | visitantes 
-import { useState } from "react";
+//Aca voy a tener 3 botones para filtrar a los usuarios por: todos | locales | visitantes 
+interface props{
+    setSelected:React.Dispatch<React.SetStateAction<string>>
+    selected:string
+}
 
-export const UserFilterButtons = () => {
-    const [selected, setSelected] = useState("Todos");
+export const UserFilterButtons = ({setSelected,selected}:props) => {
 
     const filters = ["Todos", "Locales", "Visitantes"];
-
 
     return (
         <div className="flex gap-2">

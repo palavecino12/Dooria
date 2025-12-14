@@ -1,8 +1,8 @@
 import { type UserListItem } from "../types/userType"
 
 //Servicio para consumir el endpoint: GET/usuarios/
-export const getUsers = async (fullName:string):Promise<UserListItem[]> =>{
-    const url=`http://localhost:3000/usuarios?fullName=${encodeURIComponent(fullName)}`
+export const getUsers = async (fullName:string,filter:string):Promise<UserListItem[]> =>{
+    const url=`http://localhost:3000/usuarios?fullName=${encodeURIComponent(fullName)}&filter=${encodeURIComponent(filter)}`
 
     try {
         const response= await fetch(url)

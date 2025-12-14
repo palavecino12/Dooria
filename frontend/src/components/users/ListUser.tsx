@@ -3,11 +3,12 @@ import { CardUser } from "./CardUser"
 
 interface props{
     fullName:string
+    filter:string
 }
 
-export const ListUsers = ({fullName}:props) =>{
+export const ListUsers = ({fullName,filter}:props) =>{
 
-    const {users} = useGetUsers(fullName)
+    const {users} = useGetUsers(fullName,filter)
 
     return(
         <div className="border-t border-b border-gray-400 pb-10 pt-10

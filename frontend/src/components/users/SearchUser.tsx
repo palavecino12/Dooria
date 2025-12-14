@@ -6,7 +6,7 @@ interface props{
 
 export const SearchUsers = ({setUserSearch}:props) =>{
     return(
-        <div className="relative">
+        <div className="relative w-88">
 
             {/* La razon por la que esta primero el input es para poder usar peer para cuando se hace foco en el input */}
             <input

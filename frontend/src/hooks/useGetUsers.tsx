@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { type UserListItem } from "../types/userType"
 import { getUsers } from "../services/userServices"
 
-export const useGetUsers =  (fullName:string) =>{
+export const useGetUsers =  (fullName:string,filter:string) =>{
     const [users,setUsers] = useState<UserListItem[]>([])
     const [loading,setLoading] = useState(false)
     const [error,setError] = useState<Error|null>(null)
@@ -18,7 +18,7 @@ export const useGetUsers =  (fullName:string) =>{
             try {
                 setLoading(true)
                 setError(null)
-                const data = await getUsers(fullName)
+                const data = await getUsers(fullName,filter)
                 setUsers(data)
             } catch (error) {
                 if (error instanceof Error) setError(error)
@@ -28,7 +28,7 @@ export const useGetUsers =  (fullName:string) =>{
             }
         }
         fetchUsers()
-    },[fullName,refreshUsers])
+    },[fullName,filter,refreshUsers])
 
     return {users,loading,error,refresh}
 }
