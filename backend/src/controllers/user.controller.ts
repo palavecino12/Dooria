@@ -35,7 +35,7 @@ export async function obtenerUsuarios(req: Request, res: Response) {
     //Simplificamos todo a una sola consulta
     const users = await User.find(
       query,
-      { name: 1, lastName: 1, dni: 1, number: 1, address: 1, rol: 1 }
+      { name: 1, lastName: 1, dni: 1, number: 1, address: 1, rol: 1, accessType:1, allowedDates:1, allowedDays:1 }
     );
 
     return res.json(users)

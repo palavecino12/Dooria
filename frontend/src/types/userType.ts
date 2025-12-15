@@ -7,4 +7,7 @@ export type UserListItem={
         number: string,
         address: string,
         rol: string
+        accessType?:string,
+        allowedDates?: string[],
+        allowedDays?: number[]
 }
