@@ -10,12 +10,12 @@ interface props{
 
 export const FormUserAccess=({backToForm,data}:props)=>{
 
-    const [option,setOption]=useState<"semanal"|"mensual"|null>(null)
+    const [option,setOption]=useState<"semanal"|"calendario"|null>(null)
 
     //En caso de elegir semanal, añadimos el valor del atributo en data
     if (option === "semanal") return <WeeklySelector data={{...data,accessType:"semanal"}} backToOptions={()=>setOption(null)}/>
     //En caso de elegir mensual, añadimos el valor del atributo en data
-    if (option === "mensual") return <MonthlySelector data={{...data,accessType:"mensual"}} backToOptions={()=>setOption(null)}/>;
+    if (option === "calendario") return <MonthlySelector data={{...data,accessType:"calendario"}} backToOptions={()=>setOption(null)}/>;
 
     return(
             <div className="flex flex-col items-center justify-around gap-10 bg-white h-screen">
@@ -33,7 +33,7 @@ export const FormUserAccess=({backToForm,data}:props)=>{
                     className="bg-black w-34 h-11 text-white rounded-lg shadow-lg transition-all duration-200
                         active:bg-gray-200 active:shadow-inner">Semanal</button>
                     <button 
-                    onClick={()=>setOption("mensual")}
+                    onClick={()=>setOption("calendario")}
                     className="bg-black w-34 h-11 text-white rounded-lg shadow-lg transition-all duration-200
                         active:bg-gray-200 active:shadow-inner">Calendario</button>
                 </div>

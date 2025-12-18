@@ -9,7 +9,7 @@ export const schema = z.object({
     number: z.string("Campo obligatorio").min(1, "Este campo es obligatorio").min(7, "El número de teléfono debe tener al menos 7 caracteres"),
     address: z.string("Campo obligatorio").min(1, "Este campo es obligatorio").min(10, "La dirección debe tener al menos 10 caracteres"),
     rol:z.enum(["local","visitante"]),
-    accessType:z.enum(["semanal","mensual"]).optional(),
+    accessType:z.enum(["semanal","calendario"]).optional(),
     allowedDays:z.array(z.number()).optional(),
     allowedDates:z.array(z.string().datetime()).optional()
 });

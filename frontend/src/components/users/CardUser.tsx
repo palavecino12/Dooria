@@ -40,17 +40,27 @@ export const CardUser = ({user}:props) =>{
                         active:bg-gray-200 active:shadow-inner"><Trash2 /></button>
 
             {/* Informacion de usuario visitante al desplegar tarjeta */}
-            {showFullCard && user.rol==="visitante" && (
-                <div className="w-screen">
-                    <p className="flex flex-row">Tipo de acceso: {user.accessType}</p>
-                    {user.accessType==="semanal"
-                        ?<p>Dias permitidos: {userDays.join(", ")}</p>
-                        :<p>Fechas permitidas: {userDates?.join(", ")}</p>
+            {showFullCard && user.rol === "visitante" && (
+                <div className="col-span-full mt-2 pl-6 wrap-break-words whitespace-normal">
+                    <p>- DNI: {user.dni}</p>
+                    <p>- Número: {user.number}</p>
+                    <p>- Dirección: {user.address}</p>
+                    <p>- Tipo de acceso: {user.accessType}</p>
+                    {user.accessType === "semanal" 
+                        ? <p>- Días permitidos: {userDays.join(", ")}</p>
+                        : <p>- Fechas permitidas: {userDates?.join(", ")}</p>
                     }
                 </div>
             )}
 
             {/* Informacion de usuario local al desplegar tarjeta */}
+            {showFullCard && user.rol==="local" && (
+                <div className="col-span-full mt-2 pl-6 wrap-break-words whitespace-normal">
+                    <p>- DNI: {user.dni}</p>
+                    <p>- Numero: {user.number}</p>
+                    <p>- Direccion: {user.address}</p>
+                </div>
+            )}
         </div>
     )
 }
