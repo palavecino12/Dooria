@@ -43,8 +43,8 @@ export const CardUser = ({user}:props) =>{
             {showFullCard && user.rol === "visitante" && (
                 <div className="col-span-full mt-2 pl-6 wrap-break-words whitespace-normal">
                     <p>- DNI: {user.dni}</p>
-                    <p>- Número: {user.number}</p>
-                    <p>- Dirección: {user.address}</p>
+                    <p>- Numero: {user.number}</p>
+                    <p>- Direccion: {user.address}</p>
                     <p>- Tipo de acceso: {user.accessType}</p>
                     {user.accessType === "semanal" 
                         ? <p>- Días permitidos: {userDays.join(", ")}</p>

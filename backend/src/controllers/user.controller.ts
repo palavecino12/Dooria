@@ -2,7 +2,7 @@ import { Request, Response } from "express"
 import { User, IUser } from "../models/User"
 
 //GET/usuarios/
-export async function obtenerUsuarios(req: Request, res: Response) {
+export const obtenerUsuarios = async(req: Request, res: Response) => {
   try {
     const { fullName = "", filter="Todos" } = req.query
 
@@ -46,9 +46,34 @@ export async function obtenerUsuarios(req: Request, res: Response) {
   }
 }
 
+//Eliminar un usuario
+export const eliminarUsuario = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params
+
+    if (!id) {
+      return res.status(400).json({ message: "ID requerido" })
+    }
+
+    const result = await User.deleteOne({ _id: id })
+
+    if (result.deletedCount === 0) {
+      return res.status(404).json({ message: "Usuario no encontrado" })
+    }
+
+    return res.status(200).json({ message: "Usuario eliminado correctamente" })
+
+  } catch (error) {
+    console.error("Error en eliminarUsuario:", error)
+    return res.status(500).json({ error: "Error al eliminar usuario" })
+  }
+}
+
+
+
 
 //Distancia euclidiana entre dos arrays numéricos (calculo para encontrar similitudes en rostros)
-function distanciaEuclidiana(a: number[], b: number[]): number {
+const distanciaEuclidiana = (a: number[], b: number[]): number => {
   let sum = 0;
   for (let i = 0; i < a.length; i++) {
     const diff = a[i] - b[i];
@@ -58,7 +83,7 @@ function distanciaEuclidiana(a: number[], b: number[]): number {
 }
 
 //POST/usuarios/buscar-rostro
-export async function buscarRostro(req: Request, res: Response) {
+export const buscarRostro = async(req: Request, res: Response) => {
   try {
     const { descriptor } = req.body as { descriptor: number[] };
     if (!descriptor || !Array.isArray(descriptor)) {
@@ -148,7 +173,7 @@ export async function buscarRostro(req: Request, res: Response) {
 }
 
 //POST/usuarios/registrar-rostro
-export async function registrarRostro(req: Request, res: Response) {
+export const registrarRostro = async(req: Request, res: Response) => {
   try {
     const data = req.body as IUser 
 
