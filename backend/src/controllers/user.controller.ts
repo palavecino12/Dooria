@@ -46,19 +46,19 @@ export const obtenerUsuarios = async(req: Request, res: Response) => {
   }
 }
 
-//Eliminar un usuario
-export const eliminarUsuario = async (req: Request, res: Response) => {
+//DELETE/usuarios/eliminar-usuario/:id
+export const eliminarUsuario = async(req: Request, res: Response) => {
   try {
     const { id } = req.params
 
     if (!id) {
-      return res.status(400).json({ message: "ID requerido" })
+      return res.status(400).json({ error: "ID requerido" })
     }
 
     const result = await User.deleteOne({ _id: id })
 
     if (result.deletedCount === 0) {
-      return res.status(404).json({ message: "Usuario no encontrado" })
+      return res.status(404).json({ error: "Usuario no encontrado" })
     }
 
     return res.status(200).json({ message: "Usuario eliminado correctamente" })
@@ -68,9 +68,6 @@ export const eliminarUsuario = async (req: Request, res: Response) => {
     return res.status(500).json({ error: "Error al eliminar usuario" })
   }
 }
-
-
-
 
 //Distancia euclidiana entre dos arrays numéricos (calculo para encontrar similitudes en rostros)
 const distanciaEuclidiana = (a: number[], b: number[]): number => {
