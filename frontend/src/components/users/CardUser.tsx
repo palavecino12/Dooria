@@ -1,11 +1,21 @@
 import { ChevronRight, Trash2 } from "lucide-react"
 import { type UserListItem } from "../../types/userType"
+import { useDeleteUser } from "../../hooks/useDeleteUser"
 import { useState } from "react"
 
 interface props{
     user:UserListItem
+    refresh:()=>void
 }
-export const CardUser = ({user}:props) =>{
+export const CardUser = ({user,refresh}:props) =>{
+
+    const { userDelete, loading} = useDeleteUser() //Falta traer error y message que los tendria que colocar en un modal (tambien preguntar si verdaderamente desea eliminar)
+    //Funcion del boton de eliminar usuario
+    const handleDelete = async() => {
+        await userDelete(user._id)
+        refresh()
+        //No manejo el error porque ya queda guardado en el estado del hook
+    }
 
     //Filtramos las fechas a tipo YYYY-MM-DD para que sea mas legible para el usuario
     const userDates = user?.allowedDates?.map(date => date.slice(0, 10));
@@ -36,7 +46,10 @@ export const CardUser = ({user}:props) =>{
             {user.rol}</p>
             
             {/* Boton para eliminar */}
-            <button className="bg-black p-2 text-white rounded-lg shadow-lg transition-all duration-200
+            <button
+                onClick={handleDelete}
+                disabled={loading}
+                className="bg-black p-2 text-white rounded-lg shadow-lg transition-all duration-200
                         active:bg-gray-200 active:shadow-inner"><Trash2 /></button>
 
             {/* Informacion de usuario visitante al desplegar tarjeta */}

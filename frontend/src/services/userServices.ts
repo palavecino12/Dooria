@@ -21,7 +21,7 @@ export const getUsers = async (fullName:string,filter:string):Promise<UserListIt
 }
 
 //Servicio para consumir el endpoint: Delete/usuarios/eliminar-usuario/:id
-export const deleteUser = async(id:number) =>{
+export const deleteUser = async(id:string) =>{
     const url= `http://localhost:3000/usuarios/eliminar-usuario/${id}`
 
     try {

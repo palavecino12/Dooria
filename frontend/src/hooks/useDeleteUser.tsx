@@ -6,7 +6,7 @@ export const useDeleteUser = () =>{
     const [loading,setLoading]=useState(false)
     const [error,setError]=useState<Error|null>(null)
 
-    const userDelete = async(id:number) => {
+    const userDelete = async(id:string) => {
         try {
             setLoading(true)
             setError(null)
