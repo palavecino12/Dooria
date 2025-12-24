@@ -32,6 +32,7 @@ export const deleteUser = async(id:number) =>{
         const data = await response.json()        
 
         if (!response.ok){
+            //Mandamos al hook el mensaje de error del back
             throw new Error(data.error || "Error desconocido en el servidor")
         }
 

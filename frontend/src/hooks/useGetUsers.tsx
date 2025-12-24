@@ -2,7 +2,12 @@ import { useEffect, useState } from "react"
 import { type UserListItem } from "../types/userType"
 import { getUsers } from "../services/userServices"
 
-export const useGetUsers =  (fullName:string,filter:string) =>{
+interface props{
+    fullName:string,
+    filter:string
+}
+
+export const useGetUsers =  ({ fullName,filter }:props) =>{
     const [users,setUsers] = useState<UserListItem[]>([])
     const [loading,setLoading] = useState(false)
     const [error,setError] = useState<Error|null>(null)
@@ -14,7 +19,7 @@ export const useGetUsers =  (fullName:string,filter:string) =>{
     }
 
     useEffect(()=>{
-        const fetchUsers = async () =>{
+        const fetchUsers = async() => {
             try {
                 setLoading(true)
                 setError(null)
