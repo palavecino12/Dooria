@@ -1,4 +1,4 @@
-import { ChevronRight, Trash2 } from "lucide-react"
+import { ChevronRight, Pencil, Trash2 } from "lucide-react"
 import { type UserListItem } from "../../types/userType"
 import { useDeleteUser } from "../../hooks/useDeleteUser"
 import { useState } from "react"
@@ -11,7 +11,7 @@ export const CardUser = ({user,refresh}:props) =>{
 
     const { userDelete, loading} = useDeleteUser() //Falta traer error y message que los tendria que colocar en un modal (tambien preguntar si verdaderamente desea eliminar)
     //Funcion del boton de eliminar usuario
-    const handleDelete = async() => {
+    const handleDelete = async() => { 
         await userDelete(user._id)
         refresh()
         //No manejo el error porque ya queda guardado en el estado del hook
@@ -29,15 +29,16 @@ export const CardUser = ({user,refresh}:props) =>{
     
     return(
         <div className="border-b first:border-t border-black/20 p-3 text-black 
-                grid grid-cols-[5px_1fr_100px_auto] items-center gap-4">
+                grid grid-cols-[5px_1fr_80px_auto] items-center gap-4">
             
             {/* Boton para desplegar tarjeta completa */}
-            <button onClick={()=>setShowFullCard(!showFullCard)}>
+            <button
+                onClick={()=>setShowFullCard(!showFullCard)}>
                 <ChevronRight size={18} className={showFullCard?"rotate-90":""}/>
             </button>
 
             {/* Informacion general */}
-            <p>{user.name} {user.lastName}</p>
+            <p className="whitespace-nowrap">{user.name} {user.lastName}</p>
 
             {/* Informacion de rol */}
             <p className={user.rol=="local"
@@ -45,12 +46,20 @@ export const CardUser = ({user,refresh}:props) =>{
                 :"text-center bg-amber-200 rounded-sm"}>
             {user.rol}</p>
             
-            {/* Boton para eliminar */}
-            <button
-                onClick={handleDelete}
-                disabled={loading}
-                className="bg-black p-2 text-white rounded-lg shadow-lg transition-all duration-200
-                        active:bg-gray-200 active:shadow-inner"><Trash2 /></button>
+            <div className="flex gap-1">
+                {/* Boton para editar */}
+                <button 
+                    className="bg-black p-2 text-white rounded-lg shadow-lg transition-all duration-200
+                            active:bg-gray-200 active:shadow-inner"><Pencil/></button>
+            
+                {/* Boton para eliminar */}
+                <button
+                    onClick={handleDelete}
+                    disabled={loading}
+                    className="bg-black p-2 text-white rounded-lg shadow-lg transition-all duration-200
+                            active:bg-gray-200 active:shadow-inner"><Trash2 /></button>
+            </div>
+            
 
             {/* Informacion de usuario visitante al desplegar tarjeta */}
             {showFullCard && user.rol === "visitante" && (
