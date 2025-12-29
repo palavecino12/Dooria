@@ -212,7 +212,7 @@ export function useFaceDetection({videoRef,component}:props) {
 }
 
 
-  //Funcion para almacenar un rostro
+  //Funcion para almacenar un usuario
   async function registrarRostro({name,lastName,dni,number,address,rol,accessType,allowedDays,allowedDates}:FormValues) {
     const descriptor = latestDescriptorRef.current;
     if (!descriptor) throw new Error("No hay descriptor disponible para registrar");

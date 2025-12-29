@@ -1,7 +1,7 @@
 import { Request, Response } from "express"
 import { User, IUser } from "../models/User"
 
-//GET/usuarios/
+//GET/usuarios
 export const obtenerUsuarios = async(req: Request, res: Response) => {
   try {
     const { fullName = "", filter="Todos" } = req.query
@@ -46,6 +46,25 @@ export const obtenerUsuarios = async(req: Request, res: Response) => {
   }
 }
 
+//POST/usuarios/registrar-rostro
+export const registrarRostro = async(req: Request, res: Response) => {
+  try {
+    const data = req.body as IUser 
+    //Falta validar el resto de campos con zod
+    if (!data.descriptor || !Array.isArray(data.descriptor)) {
+      return res.status(400).json({ error: "Descriptor inválido" });
+    }
+
+    const nuevo = new User(data);
+    const saved = await nuevo.save();
+
+    return res.json({ ok: true, usuario: saved });
+  } catch (err: any) {
+    console.error(err);
+    return res.status(500).json({ error: "Error al registrar rostro", detail: err.message });
+  }
+}
+
 //DELETE/usuarios/eliminar-usuario/:id
 export const eliminarUsuario = async(req: Request, res: Response) => {
   try {
@@ -67,6 +86,13 @@ export const eliminarUsuario = async(req: Request, res: Response) => {
     console.error("Error en eliminarUsuario:", error)
     return res.status(500).json({ error: "Error al eliminar usuario" })
   }
+}
+
+//UPDATE/usuarios/editar-usuario/:id
+export const editarUsuario = async(req:Request,res:Response) => {
+  const { id } = req.query
+  
+
 }
 
 //Distancia euclidiana entre dos arrays numéricos (calculo para encontrar similitudes en rostros)
@@ -169,20 +195,3 @@ export const buscarRostro = async(req: Request, res: Response) => {
   }
 }
 
-//POST/usuarios/registrar-rostro
-export const registrarRostro = async(req: Request, res: Response) => {
-  try {
-    const data = req.body as IUser 
-
-    if (!data.descriptor || !Array.isArray(data.descriptor)) {
-      return res.status(400).json({ error: "Descriptor inválido" });
-    }
-
-    const nuevo = new User(data);
-    const saved = await nuevo.save();
-    return res.json({ ok: true, usuario: saved });
-  } catch (err: any) {
-    console.error(err);
-    return res.status(500).json({ error: "Error al registrar rostro", detail: err.message });
-  }
-}
