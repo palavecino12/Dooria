@@ -230,7 +230,7 @@ export function useFaceDetection({videoRef,component}:props) {
       descriptor
     };
 
-    const resp = await fetch(`${BACKEND_URL}/usuarios/registrar-rostro`, {
+    const resp = await fetch(`${BACKEND_URL}/usuarios/registrar-usuario`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),

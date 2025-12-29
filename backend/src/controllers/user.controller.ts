@@ -1,5 +1,6 @@
 import { Request, Response } from "express"
 import { User, IUser } from "../models/User"
+import { UpdateUserDTO } from "../dtos/user.dto"
 
 //GET/usuarios
 export const obtenerUsuarios = async(req: Request, res: Response) => {
@@ -46,8 +47,8 @@ export const obtenerUsuarios = async(req: Request, res: Response) => {
   }
 }
 
-//POST/usuarios/registrar-rostro
-export const registrarRostro = async(req: Request, res: Response) => {
+//POST/usuarios/registrar-usuario (cambiar a regustrar-usuario)
+export const registrarUsuario = async(req: Request, res: Response) => {
   try {
     const data = req.body as IUser 
     //Falta validar el resto de campos con zod
@@ -90,9 +91,26 @@ export const eliminarUsuario = async(req: Request, res: Response) => {
 
 //UPDATE/usuarios/editar-usuario/:id
 export const editarUsuario = async(req:Request,res:Response) => {
-  const { id } = req.query
+  try {
+  const { id } = req.params
   
+  if (!id) {
+    return res.status(400).json({ error: "ID requerido" })
+  }
 
+  const data = req.body as UpdateUserDTO
+
+  const result = await User.updateOne({_id:id},{$set:data})
+
+  if (result.matchedCount === 0) {
+    return res.status(404).json({ error: "Usuario no encontrado" })
+  }
+
+  return res.status(200).json({ message: "Usuario editado correctamente" })
+  } catch (error) {
+    console.error("Error en editarUsuario:", error)
+    return res.status(500).json({ error: "Error al editar usuario" })
+  }
 }
 
 //Distancia euclidiana entre dos arrays numéricos (calculo para encontrar similitudes en rostros)
