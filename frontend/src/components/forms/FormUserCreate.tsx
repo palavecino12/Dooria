@@ -1,4 +1,4 @@
-//Componente especifico para crear un usuario usando el formulario reutilizable
+//Componente especifico para crear un usuario usando los formularios reutilizables
 import { useState } from "react"
 import { FormUser } from "./FormUser"
 import { CameraRegister } from "../cameras/CameraRegister"

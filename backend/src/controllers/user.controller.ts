@@ -2,10 +2,10 @@ import { Request, Response } from "express"
 import { User, IUser } from "../models/User"
 import { UpdateUserDTO } from "../dtos/user.dto"
 
-//GET/usuarios
+//GET/usuarios (sirve para mosstrar todos los ususarios y tambien para filtrar)
 export const obtenerUsuarios = async(req: Request, res: Response) => {
   try {
-    const { fullName = "", filter="Todos" } = req.query
+    const { fullName = "", filter = "Todos" } = req.query
 
     if(typeof fullName !== "string")return res.status(400).json({ error: "fullName debe ser un texto" })
     
@@ -13,7 +13,7 @@ export const obtenerUsuarios = async(req: Request, res: Response) => {
       return res.status(400).json({ error: "Filtro inválido" });
     }
 
-    //Vamos a almacenar la consulta en una variable para que sea mas limpio
+    //Creamos un objeto acumulador para realizar una consulta mas limpia
     const query: any = {};
 
     if (filter === "Locales") query.rol = "local";
@@ -34,7 +34,7 @@ export const obtenerUsuarios = async(req: Request, res: Response) => {
     }
 
     //Simplificamos todo a una sola consulta
-    const users = await User.find(
+    const users:UpdateUserDTO[] = await User.find(
       query,
       { name: 1, lastName: 1, dni: 1, number: 1, address: 1, rol: 1, accessType:1, allowedDates:1, allowedDays:1 }
     );
@@ -47,7 +47,8 @@ export const obtenerUsuarios = async(req: Request, res: Response) => {
   }
 }
 
-//POST/usuarios/registrar-usuario (cambiar a regustrar-usuario)
+//POST/usuarios/registrar-usuario (cambiar a registrar-usuario)
+// En caso de exito retorno un ok: true, actualizar que en caso de error devuelva tambien un ok:false
 export const registrarUsuario = async(req: Request, res: Response) => {
   try {
     const data = req.body as IUser 
