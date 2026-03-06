@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { type UserListItem } from "../types/userType"
+import { type UserWithoutDescriptor } from "../types/userType"
 import { getUsers } from "../services/userServices"
 
 interface props{
@@ -8,7 +8,7 @@ interface props{
 }
 
 export const useGetUsers =  ({ fullName,filter }:props) =>{
-    const [users,setUsers] = useState<UserListItem[]>([])
+    const [users,setUsers] = useState<UserWithoutDescriptor[]>([])
     const [loading,setLoading] = useState(false)
     const [error,setError] = useState<Error|null>(null)
     const [refreshUsers, setRefreshUsers] = useState(false)

@@ -36,7 +36,7 @@ export const deleteUser = async(id:string) =>{
             throw new Error(data.error || "Error desconocido en el servidor")
         }
 
-        return data
+        return data //Esto retorna un objeto con un atributo message dentro, verificar si se usa bien y cambiar nombre
     } catch (error) {
         console.error("Error en deleteUser:", error)
         throw error
@@ -46,8 +46,6 @@ export const deleteUser = async(id:string) =>{
 //Servicio para consumir el endpoint: Update/usuarios/editar-usuario/:id
 export const updateUser = async (id:string,user:UserWithoutDescriptor) => {
     const url = `http://localhost:3000/usuarios/editar-usuario/${id}`
-
-    //(nota)Crear la consulta y mandar los nuevos datos del usuario por el body
 
     try {
         const response = await fetch(url,{

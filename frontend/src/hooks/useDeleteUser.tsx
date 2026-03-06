@@ -10,7 +10,7 @@ export const useDeleteUser = () =>{
         try {
             setLoading(true)
             setError(null)
-            setMessage("")
+            setMessage("")//Limpoa el mensaje anterior
             const data = await deleteUser(id)
             //Si data no tiene errores devuelve un objto con message
             setMessage(data.message)
