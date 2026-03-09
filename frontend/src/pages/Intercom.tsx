@@ -1,7 +1,5 @@
 import { CameraIntercom } from "../components/cameras/CameraIntercom";
 
 export const Intercom= () =>{
-  return (
-      <CameraIntercom/>
-  );
+  return <CameraIntercom/>
 }

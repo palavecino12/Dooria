@@ -1,13 +1,16 @@
 import { ChevronRight, Pencil, Trash2 } from "lucide-react"
-import { type UserListItem } from "../../types/userType"
+import { type UserWithoutDescriptor } from "../../types/userType"
 import { useDeleteUser } from "../../hooks/useDeleteUser"
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 
 interface props{
-    user:UserListItem
+    user:UserWithoutDescriptor
     refresh:()=>void
 }
 export const CardUser = ({user,refresh}:props) =>{
+
+    const navigate = useNavigate()
 
     const { userDelete, loading} = useDeleteUser() //Falta traer error y message que los tendria que colocar en un modal (tambien preguntar si verdaderamente desea eliminar)
     //Funcion del boton de eliminar usuario
@@ -48,7 +51,10 @@ export const CardUser = ({user,refresh}:props) =>{
             
             <div className="flex gap-1">
                 {/* Boton para editar */}
-                <button 
+                <button
+                    onClick={()=>navigate(`/mobile/users/${user._id}/edit`,{
+                        state: {user}
+                    })}
                     className="bg-black p-2 text-white rounded-lg shadow-lg transition-all duration-200
                             active:bg-gray-200 active:shadow-inner"><Pencil/></button>
             
