@@ -6,6 +6,7 @@ import type { FormValues } from "../../../schemas/schemaForm"
 interface props{
     backToForm:()=>void
     data:FormValues
+    //initialValue: "semanal"|"calendario"|null
 }
 
 export const FormUserAccess=({backToForm,data}:props)=>{

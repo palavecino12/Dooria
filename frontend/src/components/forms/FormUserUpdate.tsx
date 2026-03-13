@@ -2,17 +2,26 @@
 //1ro abrir el formulario con los campos completos para editarlos
 //2do pasar al componente index de FormUserAcces para poder modificar el acceso del visitante
 import { useNavigate } from "react-router-dom";
-import type { FormValues } from "../../schemas/schemaForm";
 import { FormUser } from "./FormUser"
+import { useState } from "react";
+import { FormUserAccess } from "./FormUserAccess";
+import type { UserWithoutDescriptor } from "../../types/userType";
 
 interface Props {
-    onSubmit:()=>void
-    initialValues: FormValues
+    user: UserWithoutDescriptor
 }
 
 //Componente especifico para editar un usaurio utilizando el formulario reutilizable
-export const FormUserUpdate = ({onSubmit,initialValues}:Props) => {
+export const FormUserUpdate = ({user}:Props) => {
 
     const navigate = useNavigate()
-    return <FormUser buttonText="Siguiente" closeForm={()=>navigate("/mobile/users")} onSubmit={onSubmit} title="Editar Ususario" initialValues={initialValues}/>
+    const [showAccessForm, setShowAccessForm] = useState(false)
+
+    const handleSubmitUser = () =>{
+        setShowAccessForm(true)
+    }
+
+    if (showAccessForm) return <FormUserAccess backToForm={()=>setShowAccessForm(false)} 
+                                                data={user}/>
+    return <FormUser buttonText="Siguiente" closeForm={()=>navigate("/mobile/users")} onSubmit={handleSubmitUser} title="Editar Ususario" initialValues={user}/>
 }
