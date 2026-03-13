@@ -6,10 +6,10 @@ import type { FormValues } from "../../../schemas/schemaForm"
 interface props{
     backToForm:()=>void
     data:FormValues
-    //initialValue: "semanal"|"calendario"|null
+    initialValue?: "semanal"|"calendario"|null
 }
 
-export const FormUserAccess=({backToForm,data}:props)=>{
+export const FormUserAccess=({initialValue,backToForm,data}:props)=>{
 
     const [option,setOption]=useState<"semanal"|"calendario"|null>(null)
 
@@ -29,14 +29,22 @@ export const FormUserAccess=({backToForm,data}:props)=>{
                 {/* Botones de mensual y semanal */}
                 <div className="flex flex-col justify-center items-center gap-15 
                     shadow-[0_4px_10px_rgba(0,0,0,0.15),0_-4px_10px_rgba(0,0,0,0.15)] w-full p-10">
+
                     <button
                     onClick={()=>setOption("semanal")} 
-                    className="bg-black w-34 h-11 text-white rounded-lg shadow-lg transition-all duration-200
-                        active:bg-gray-200 active:shadow-inner">Semanal</button>
+                    className={`w-34 h-11 rounded-lg shadow-lg transition-all duration-200
+                        ${initialValue==="semanal"
+                            ? "bg-white text-black border border-black/20"
+                            : "bg-black text-white"
+                        } active:bg-gray-200 active:shadow-inner`}>Semanal</button>
+
                     <button 
                     onClick={()=>setOption("calendario")}
-                    className="bg-black w-34 h-11 text-white rounded-lg shadow-lg transition-all duration-200
-                        active:bg-gray-200 active:shadow-inner">Calendario</button>
+                    className={`w-34 h-11 rounded-lg shadow-lg transition-all duration-200
+                        ${initialValue==="calendario"
+                            ? "bg-white text-black border border-black/20"
+                            : "bg-black text-white"
+                        } active:bg-gray-200 active:shadow-inner`}>Calendario</button>
                 </div>
 
                 {/* Boton volver */}
