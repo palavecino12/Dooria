@@ -2,11 +2,12 @@ import { WeeklySelector } from "./WeeklySelector"
 import { MonthlySelector } from "./MonthlySelector"
 import { useState } from "react"
 import type { FormValues } from "../../../schemas/schemaForm"
+import type { UserWithoutDescriptor } from "../../../types/userType"
 
 interface props{
     backToForm:()=>void
     data:FormValues
-    initialValue?: "semanal"|"calendario"|null
+    initialValue?: UserWithoutDescriptor
 }
 
 export const FormUserAccess=({initialValue,backToForm,data}:props)=>{
@@ -14,9 +15,9 @@ export const FormUserAccess=({initialValue,backToForm,data}:props)=>{
     const [option,setOption]=useState<"semanal"|"calendario"|null>(null)
 
     //En caso de elegir semanal, añadimos el valor del atributo en data
-    if (option === "semanal") return <WeeklySelector data={{...data,accessType:"semanal"}} backToOptions={()=>setOption(null)}/>
+    if (option === "semanal") return <WeeklySelector data={{...data,accessType:"semanal"}} backToOptions={()=>setOption(null)} initialValues={initialValue?.allowedDays}/>
     //En caso de elegir mensual, añadimos el valor del atributo en data
-    if (option === "calendario") return <MonthlySelector data={{...data,accessType:"calendario"}} backToOptions={()=>setOption(null)}/>;
+    if (option === "calendario") return <MonthlySelector data={{...data,accessType:"calendario"}} backToOptions={()=>setOption(null)} initialValues={initialValue?.allowedDates} />;
 
     return(
             <div className="flex flex-col items-center justify-around gap-10 bg-white h-screen">
@@ -33,7 +34,7 @@ export const FormUserAccess=({initialValue,backToForm,data}:props)=>{
                     <button
                     onClick={()=>setOption("semanal")} 
                     className={`w-34 h-11 rounded-lg shadow-lg transition-all duration-200
-                        ${initialValue==="semanal"
+                        ${initialValue?.accessType==="semanal"
                             ? "bg-white text-black border border-black/20"
                             : "bg-black text-white"
                         } active:bg-gray-200 active:shadow-inner`}>Semanal</button>
@@ -41,7 +42,7 @@ export const FormUserAccess=({initialValue,backToForm,data}:props)=>{
                     <button 
                     onClick={()=>setOption("calendario")}
                     className={`w-34 h-11 rounded-lg shadow-lg transition-all duration-200
-                        ${initialValue==="calendario"
+                        ${initialValue?.accessType==="calendario"
                             ? "bg-white text-black border border-black/20"
                             : "bg-black text-white"
                         } active:bg-gray-200 active:shadow-inner`}>Calendario</button>

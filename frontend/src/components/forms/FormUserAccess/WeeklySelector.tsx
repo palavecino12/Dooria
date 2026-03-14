@@ -7,9 +7,10 @@ import { CameraRegister } from "../../cameras/CameraRegister";
 interface props{
     backToOptions:()=>void
     data:FormValues
+    initialValues?: number[]
 }
 
-export const WeeklySelector=({backToOptions,data}:props)=>{
+export const WeeklySelector=({initialValues,backToOptions,data}:props)=>{
 
     const containerRef=useRef<HTMLDivElement>(null);
     const [selectedDays, setSelectedDays] = useState<number[]>([]);
@@ -46,7 +47,7 @@ export const WeeklySelector=({backToOptions,data}:props)=>{
                                         shadow-[0_4px_10px_rgba(0,0,0,0.15),0_-4px_10px_rgba(0,0,0,0.15)] w-full p-10">
 
                     <label>
-                        <input type="checkbox" value="1" className="hidden peer" />
+                        <input defaultChecked={initialValues?.includes(1)} type="checkbox" value="1" className="hidden peer" />
                         <div className="bg-white border border-black/20 w-50 h-11 text-black rounded-lg shadow-lg 
                             transition-all duration-200 flex justify-center items-center peer-checked:bg-black 
                             peer-checked:shadow-inner peer-checked:text-white">
@@ -55,7 +56,7 @@ export const WeeklySelector=({backToOptions,data}:props)=>{
                     </label>
 
                     <label>
-                        <input type="checkbox" value="2" className="hidden peer" />
+                        <input defaultChecked={initialValues?.includes(2)} type="checkbox" value="2" className="hidden peer" />
                         <div className="bg-white border border-black/20 w-50 h-11 text-black rounded-lg shadow-lg 
                             transition-all duration-200 flex justify-center items-center peer-checked:bg-black 
                             peer-checked:shadow-inner peer-checked:text-white">
@@ -64,7 +65,7 @@ export const WeeklySelector=({backToOptions,data}:props)=>{
                     </label>
 
                     <label>
-                        <input type="checkbox" value="3" className="hidden peer" />
+                        <input defaultChecked={initialValues?.includes(3)} type="checkbox" value="3" className="hidden peer" />
                         <div className="bg-white border border-black/20 w-50 h-11 text-black rounded-lg shadow-lg 
                             transition-all duration-200 flex justify-center items-center peer-checked:bg-black 
                             peer-checked:shadow-inner peer-checked:text-white">
@@ -73,7 +74,7 @@ export const WeeklySelector=({backToOptions,data}:props)=>{
                     </label>
 
                     <label>
-                        <input type="checkbox" value="4" className="hidden peer" />
+                        <input defaultChecked={initialValues?.includes(4)} type="checkbox" value="4" className="hidden peer" />
                         <div className="bg-white border border-black/20 w-50 h-11 text-black rounded-lg shadow-lg 
                             transition-all duration-200 flex justify-center items-center peer-checked:bg-black 
                             peer-checked:shadow-inner peer-checked:text-white">
@@ -82,7 +83,7 @@ export const WeeklySelector=({backToOptions,data}:props)=>{
                     </label>
 
                     <label>
-                        <input type="checkbox" value="5" className="hidden peer" />
+                        <input defaultChecked={initialValues?.includes(5)} type="checkbox" value="5" className="hidden peer" />
                         <div className="bg-white border border-black/20 w-50 h-11 text-black rounded-lg shadow-lg 
                             transition-all duration-200 flex justify-center items-center peer-checked:bg-black 
                             peer-checked:shadow-inner peer-checked:text-white">
@@ -91,7 +92,7 @@ export const WeeklySelector=({backToOptions,data}:props)=>{
                     </label>
 
                     <label>
-                        <input type="checkbox" value="6" className="hidden peer" />
+                        <input defaultChecked={initialValues?.includes(6)} type="checkbox" value="6" className="hidden peer" />
                         <div className="bg-white border border-black/20 w-50 h-11 text-black rounded-lg shadow-lg 
                             transition-all duration-200 flex justify-center items-center peer-checked:bg-black
                             peer-checked:shadow-inner peer-checked:text-white">
@@ -100,7 +101,7 @@ export const WeeklySelector=({backToOptions,data}:props)=>{
                     </label>
 
                     <label>
-                        <input type="checkbox" value="0" className="hidden peer" />
+                        <input defaultChecked={initialValues?.includes(0)} type="checkbox" value="0" className="hidden peer" />
                         <div className="bg-white border border-black/20 w-50 h-11 text-black rounded-lg shadow-lg 
                             transition-all duration-200 flex justify-center items-center peer-checked:bg-black 
                             peer-checked:shadow-inner peer-checked:text-white">

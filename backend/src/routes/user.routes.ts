@@ -6,7 +6,7 @@ const router = Router()
 router.get("/", obtenerUsuarios);
 router.delete("/eliminar-usuario/:id", eliminarUsuario)
 router.post("/buscar-rostro", buscarRostro);
-router.post("/registrar-ususario", registrarUsuario);
+router.post("/registrar-usuario", registrarUsuario);
 router.put("/editar-usuario/:id", editarUsuario);
 
 export default router

@@ -7,11 +7,12 @@ import type { FormValues } from "../../../schemas/schemaForm";
 interface props{
     backToOptions:()=>void
     data:FormValues
+    initialValues?: string[]
 }
 
-export const MonthlySelector=({backToOptions,data}:props)=>{
+export const MonthlySelector=({initialValues,backToOptions,data}:props)=>{
 
-    const [selectedDays, setSelectedDays] = useState<Date[]>([]);
+    const [selectedDays, setSelectedDays] = useState<Date[]>(initialValues?.map(d => new Date(d)) ?? []);
     const [showCameraRegister,setShowCameraRegister]=useState(false);
 
     //Agregamos a date los dias que selecciono el usuario (convertimos selectDays en un array de string) 

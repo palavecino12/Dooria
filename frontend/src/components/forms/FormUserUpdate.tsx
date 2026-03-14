@@ -21,6 +21,6 @@ export const FormUserUpdate = ({user}:Props) => {
         setShowAccessForm(true)
     }
 
-    if (showAccessForm) return <FormUserAccess backToForm={()=>setShowAccessForm(false)} data={user} initialValue={user.accessType}/>
+    if (showAccessForm) return <FormUserAccess backToForm={()=>setShowAccessForm(false)} data={user} initialValue={user}/>
     return <FormUser buttonText="Siguiente" closeForm={()=>navigate("/mobile/users")} onSubmit={handleSubmitUser} title="Editar Ususario" initialValues={user}/>
 }
