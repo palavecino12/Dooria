@@ -15,7 +15,7 @@ export const FormUserAccess=({initialValue,backToForm,data}:props)=>{
     const [option,setOption]=useState<"semanal"|"calendario"|null>(null)
 
     //En caso de elegir semanal, añadimos el valor del atributo en data
-    if (option === "semanal") return <WeeklySelector data={{...data,accessType:"semanal"}} backToOptions={()=>setOption(null)} initialValues={initialValue?.allowedDays}/>
+    if (option === "semanal") return <WeeklySelector data={{...data,accessType:"semanal"}} backToOptions={()=>setOption(null)} initialValues={initialValue} mode={initialValue ? "edit" : "create"}/>
     //En caso de elegir mensual, añadimos el valor del atributo en data
     if (option === "calendario") return <MonthlySelector data={{...data,accessType:"calendario"}} backToOptions={()=>setOption(null)} initialValues={initialValue?.allowedDates} />;
 

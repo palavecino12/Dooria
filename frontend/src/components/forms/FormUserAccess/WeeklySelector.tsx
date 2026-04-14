@@ -3,21 +3,25 @@
 import { useRef, useState } from "react";
 import type { FormValues } from "../../../schemas/schemaForm";
 import { CameraRegister } from "../../cameras/CameraRegister";
+import type { UserWithoutDescriptor } from "../../../types/userType";
+import { useUpdateUser } from "../../../hooks/useUpdateUser";
 
 interface props{
     backToOptions:()=>void
     data:FormValues
-    initialValues?: number[]
+    initialValues?: UserWithoutDescriptor
+    mode: "create" | "edit"
 }
 
-export const WeeklySelector=({initialValues,backToOptions,data}:props)=>{
+export const WeeklySelector=({initialValues,backToOptions,data,mode}:props)=>{
 
     const containerRef=useRef<HTMLDivElement>(null);
     const [selectedDays, setSelectedDays] = useState<number[]>([]);
     const [showCameraRegister,setShowCameraRegister]=useState(false);
 
+    const {userUpdate} = useUpdateUser() //Luego tengo que usar el resto de estados
 
-    const handleSubmitUser=()=>{
+    const handleConfirm=()=>{
         if(!containerRef.current)return;
         //Obtenemos los dias seleccionados
         const checkedInputs = containerRef.current.querySelectorAll(
@@ -28,8 +32,14 @@ export const WeeklySelector=({initialValues,backToOptions,data}:props)=>{
             (input) => Number((input as HTMLInputElement).value)
         );
         setSelectedDays(days)
-        //Renderizamos el componente CameraRegister
-        setShowCameraRegister(true);
+        if (mode==="edit"){
+            if(!initialValues)return
+            console.log("hola") //hasta aca si llega
+            userUpdate(initialValues._id,initialValues)
+            //Luego tengo que navegar al inicio y creo que colocar la pantalla de success antes
+        } else{
+            setShowCameraRegister(true);//Renderizamos el componente CameraRegister
+        }
     }
 
     //Agregamos a date los dias que selecciono el usuario
@@ -47,7 +57,7 @@ export const WeeklySelector=({initialValues,backToOptions,data}:props)=>{
                                         shadow-[0_4px_10px_rgba(0,0,0,0.15),0_-4px_10px_rgba(0,0,0,0.15)] w-full p-10">
 
                     <label>
-                        <input defaultChecked={initialValues?.includes(1)} type="checkbox" value="1" className="hidden peer" />
+                        <input defaultChecked={initialValues?.allowedDays?.includes(1)} type="checkbox" value="1" className="hidden peer" />
                         <div className="bg-white border border-black/20 w-50 h-11 text-black rounded-lg shadow-lg 
                             transition-all duration-200 flex justify-center items-center peer-checked:bg-black 
                             peer-checked:shadow-inner peer-checked:text-white">
@@ -56,7 +66,7 @@ export const WeeklySelector=({initialValues,backToOptions,data}:props)=>{
                     </label>
 
                     <label>
-                        <input defaultChecked={initialValues?.includes(2)} type="checkbox" value="2" className="hidden peer" />
+                        <input defaultChecked={initialValues?.allowedDays?.includes(2)} type="checkbox" value="2" className="hidden peer" />
                         <div className="bg-white border border-black/20 w-50 h-11 text-black rounded-lg shadow-lg 
                             transition-all duration-200 flex justify-center items-center peer-checked:bg-black 
                             peer-checked:shadow-inner peer-checked:text-white">
@@ -65,7 +75,7 @@ export const WeeklySelector=({initialValues,backToOptions,data}:props)=>{
                     </label>
 
                     <label>
-                        <input defaultChecked={initialValues?.includes(3)} type="checkbox" value="3" className="hidden peer" />
+                        <input defaultChecked={initialValues?.allowedDays?.includes(3)} type="checkbox" value="3" className="hidden peer" />
                         <div className="bg-white border border-black/20 w-50 h-11 text-black rounded-lg shadow-lg 
                             transition-all duration-200 flex justify-center items-center peer-checked:bg-black 
                             peer-checked:shadow-inner peer-checked:text-white">
@@ -74,7 +84,7 @@ export const WeeklySelector=({initialValues,backToOptions,data}:props)=>{
                     </label>
 
                     <label>
-                        <input defaultChecked={initialValues?.includes(4)} type="checkbox" value="4" className="hidden peer" />
+                        <input defaultChecked={initialValues?.allowedDays?.includes(4)} type="checkbox" value="4" className="hidden peer" />
                         <div className="bg-white border border-black/20 w-50 h-11 text-black rounded-lg shadow-lg 
                             transition-all duration-200 flex justify-center items-center peer-checked:bg-black 
                             peer-checked:shadow-inner peer-checked:text-white">
@@ -83,7 +93,7 @@ export const WeeklySelector=({initialValues,backToOptions,data}:props)=>{
                     </label>
 
                     <label>
-                        <input defaultChecked={initialValues?.includes(5)} type="checkbox" value="5" className="hidden peer" />
+                        <input defaultChecked={initialValues?.allowedDays?.includes(5)} type="checkbox" value="5" className="hidden peer" />
                         <div className="bg-white border border-black/20 w-50 h-11 text-black rounded-lg shadow-lg 
                             transition-all duration-200 flex justify-center items-center peer-checked:bg-black 
                             peer-checked:shadow-inner peer-checked:text-white">
@@ -92,7 +102,7 @@ export const WeeklySelector=({initialValues,backToOptions,data}:props)=>{
                     </label>
 
                     <label>
-                        <input defaultChecked={initialValues?.includes(6)} type="checkbox" value="6" className="hidden peer" />
+                        <input defaultChecked={initialValues?.allowedDays?.includes(6)} type="checkbox" value="6" className="hidden peer" />
                         <div className="bg-white border border-black/20 w-50 h-11 text-black rounded-lg shadow-lg 
                             transition-all duration-200 flex justify-center items-center peer-checked:bg-black
                             peer-checked:shadow-inner peer-checked:text-white">
@@ -101,7 +111,7 @@ export const WeeklySelector=({initialValues,backToOptions,data}:props)=>{
                     </label>
 
                     <label>
-                        <input defaultChecked={initialValues?.includes(0)} type="checkbox" value="0" className="hidden peer" />
+                        <input defaultChecked={initialValues?.allowedDays?.includes(0)} type="checkbox" value="0" className="hidden peer" />
                         <div className="bg-white border border-black/20 w-50 h-11 text-black rounded-lg shadow-lg 
                             transition-all duration-200 flex justify-center items-center peer-checked:bg-black 
                             peer-checked:shadow-inner peer-checked:text-white">
@@ -114,7 +124,7 @@ export const WeeklySelector=({initialValues,backToOptions,data}:props)=>{
                 {/* Botones */}
                 <div className="flex flex-row-reverse gap-10">
                     <button
-                        onClick={handleSubmitUser}
+                        onClick={handleConfirm}
                         className="bg-black w-34 h-11 text-white rounded-lg shadow-lg transition-all duration-200
                         active:bg-gray-200 active:shadow-inner">Siguiente</button>
                     <button
