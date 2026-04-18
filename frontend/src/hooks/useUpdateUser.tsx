@@ -1,14 +1,15 @@
 import { useState } from "react"
-import type { UserWithoutDescriptor } from "../types/userType"
 import { updateUser } from "../services/userServices"
+import type { FormValues } from "../schemas/schemaForm"
 
 export const useUpdateUser = () => {
     const [message, setMessage] = useState("")
     const [loading, setloading] = useState(false)
     const [error,setError] = useState<Error|null>(null)
 
-    const userUpdate = async (id:string,user:UserWithoutDescriptor) =>{
+    const userUpdate = async (id:string,user:FormValues) =>{
         try {
+            
             setloading(true)
             setError(null)
             setMessage("")

@@ -8,6 +8,7 @@ interface props{
     backToForm:()=>void
     data:FormValues
     initialValue?: UserWithoutDescriptor
+    //Tendria que recibir directamente el "mode" quizas, mas efectivo
 }
 
 export const FormUserAccess=({initialValue,backToForm,data}:props)=>{

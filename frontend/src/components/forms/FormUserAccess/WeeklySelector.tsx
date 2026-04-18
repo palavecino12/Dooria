@@ -34,8 +34,7 @@ export const WeeklySelector=({initialValues,backToOptions,data,mode}:props)=>{
         setSelectedDays(days)
         if (mode==="edit"){
             if(!initialValues)return
-            console.log("hola") //hasta aca si llega
-            userUpdate(initialValues._id,initialValues)
+            userUpdate(initialValues._id,data)
             //Luego tengo que navegar al inicio y creo que colocar la pantalla de success antes
         } else{
             setShowCameraRegister(true);//Renderizamos el componente CameraRegister

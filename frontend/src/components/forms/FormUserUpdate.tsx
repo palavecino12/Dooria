@@ -6,6 +6,7 @@ import { FormUser } from "./FormUser"
 import { useState } from "react";
 import { FormUserAccess } from "./FormUserAccess";
 import type { UserWithoutDescriptor } from "../../types/userType";
+import type { FormValues } from "../../schemas/schemaForm";
 
 interface Props {
     user: UserWithoutDescriptor
@@ -16,11 +17,13 @@ export const FormUserUpdate = ({user}:Props) => {
 
     const navigate = useNavigate()
     const [showAccessForm, setShowAccessForm] = useState(false)
+    const [dataUser,setDataUser]=useState<FormValues|null>(null)
 
-    const handleSubmitUser = () =>{
+    const handleSubmitUser = (data:FormValues):void =>{
+        setDataUser(data)
         setShowAccessForm(true)
     }
 
-    if (showAccessForm) return <FormUserAccess backToForm={()=>setShowAccessForm(false)} data={user} initialValue={user}/>
+    if (showAccessForm && dataUser) return <FormUserAccess backToForm={()=>setShowAccessForm(false)} data={dataUser} initialValue={user}/>
     return <FormUser buttonText="Siguiente" closeForm={()=>navigate("/mobile/users")} onSubmit={handleSubmitUser} title="Editar Ususario" initialValues={user}/>
 }

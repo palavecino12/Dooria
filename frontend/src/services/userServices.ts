@@ -1,3 +1,4 @@
+import type { FormValues } from "../schemas/schemaForm"
 import { type UserWithoutDescriptor } from "../types/userType"
 
 //Servicio para consumir el endpoint: Get/usuarios/
@@ -44,7 +45,7 @@ export const deleteUser = async(id:string) =>{
 }
 
 //Servicio para consumir el endpoint: Update/usuarios/editar-usuario/:id
-export const updateUser = async (id:string,user:UserWithoutDescriptor) => {
+export const updateUser = async (id:string,user:FormValues) => {
     const url = `http://localhost:3000/usuarios/editar-usuario/${id}`
 
     try {
@@ -59,8 +60,8 @@ export const updateUser = async (id:string,user:UserWithoutDescriptor) => {
         if (!response.ok){
             throw new Error(data.error || "Error desconocido en el servidor")
         }
-
-        return data
+        console.log(data)
+        return data        
     } catch (error) {
         console.error("Error en updateUser:", error)
         throw error
