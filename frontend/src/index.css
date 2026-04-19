@@ -1,1 +1,55 @@
-@import "tailwindcss"
+@import "tailwindcss";
+
+/* --- BOTONES DE NAVEGACIÓN DOORIA --- */
+
+.rdp-nav {
+    display: flex !important;
+    gap: 10px !important;
+}
+
+/* 1. ESTADO NORMAL: Fondo blanco, borde negro, flecha negra */
+.rdp-button_next, 
+.rdp-button_previous,
+.rdp-nav button {
+    appearance: none !important;
+    background-color: #ffffff !important; 
+    background: #ffffff !important;
+    border:  1px solid rgba(0, 0, 0, 0.3) !important; 
+    box-shadow:  0 10px 15px -3px rgba(0, 0, 0, 0.1),
+                0 4px 6px -4px rgba(0, 0, 0, 0.1);
+    border-radius: 8px !important;
+    width: 45px !important;
+    height: 45px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    cursor: pointer !important;
+    opacity: 1 !important;
+    transition: all 0.1s ease; /* Para que el cambio sea suave pero rápido */
+}
+
+.rdp-chevron {
+    fill: #000000 !important;
+    color: #000000 !important;
+    width: 20px !important;
+    height: 20px !important;
+    transition: fill 0.1s ease;
+}
+
+/* 2. ESTADO PRESIONADO (ACTIVE): Invertimos colores */
+.rdp-button_next:active, 
+.rdp-button_previous:active,
+.rdp-nav button:active {
+    background-color: #000000 !important;
+    background: #000000 !important;
+}
+
+/* Cambiamos la flecha a blanca cuando el botón se presiona */
+.rdp-button_next:active .rdp-chevron, 
+.rdp-button_previous:active .rdp-chevron,
+.rdp-nav button:active .rdp-chevron {
+    fill: #ffffff !important;
+    color: #ffffff !important;
+}

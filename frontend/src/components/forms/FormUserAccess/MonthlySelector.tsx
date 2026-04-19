@@ -1,3 +1,4 @@
+import "react-day-picker/style.css";
 import { useState } from "react";
 import { DayPicker } from "react-day-picker";
 import { es } from "react-day-picker/locale";
@@ -38,33 +39,25 @@ export const MonthlySelector = ({ initialValues, backToOptions, data, mode }: pr
 
 
     return (
-
-
         <div className="flex flex-col items-center justify-around gap-10 bg-white h-screen">
+
             {/* Titulo */}
             <h1 className="text-3xl font-medium">Calendario</h1>
 
-
             {/* Calendario */}
-            <DayPicker mode="multiple" selected={selectedDays} onSelect={(days) => setSelectedDays(days ?? [])} required locale={es}
+            <div className="flex flex-col items-center gap-6 border-t border-b border-gray-400 
+                    shadow-[0_4px_10px_rgba(0,0,0,0.15),0_-4px_10px_rgba(0,0,0,0.15)] w-full p-10">
+
+            <DayPicker navLayout="around" mode="multiple" selected={selectedDays}
+                onSelect={(days) => setSelectedDays(days ?? [])} locale={es}
                 classNames={{
-                    root: "h-120 w-full p-5 bg-white border-t border-b border-gray-400 shadow-[0_4px_10px_rgba(0,0,0,0.15),0_-4px_10px_rgba(0,0,0,0.15)]",
-                    month: "relative space-y-15",
-                    caption: "grid grid-cols-3 items-center px-5",
-                    caption_label: "text-xl font-bold m-22",
-                    nav: "flex items-center justify-between col-span-3",
-                    nav_button_previous: "pointer-events-auto justify-self-start text-gray-600",
-                    nav_button_next: "pointer-events-auto justify-self-end text-gray-600",
-                    weekdays: "grid grid-cols-7 text-xl font-medium text-gray-500",
-                    week: "grid grid-cols-7",
-                    day: "text-xl w-11 h-11 flex items-center justify-center rounded-lg m-0.5",
-                    selected: "bg-black text-white",
-                    day_today: "border border-gray-200",
-                    day_outside: "text-gray-300"
-                }} />
-
-
-
+                    day: "text-xl",
+                    today: "text-black border border-black/20",
+                    selected: "bg-black text-white rounded-md",
+                    month_grid: "mt-8",
+                    weekday: "text-xl",
+                }}/>
+            </div>
 
             {/* Botones */}
             <div className="flex flex-row-reverse gap-20">

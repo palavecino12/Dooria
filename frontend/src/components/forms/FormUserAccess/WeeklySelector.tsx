@@ -68,9 +68,9 @@ export const WeeklySelector = ({ initialValues, backToOptions, data, mode }: pro
                                 defaultChecked={initialValues?.allowedDays?.includes(value)}
                                 type="checkbox"
                                 value={value}
-                                className="hidden peer"/>
+                                className="hidden peer" />
                             <div
-                                className="bg-white border border-black/20 w-50 h-11 text-black rounded-lg shadow-lg 
+                                className="bg-white border border-black/30 w-50 h-11 text-black rounded-lg shadow-lg font-semibold 
                                     transition-all duration-200 flex justify-center items-center peer-checked:bg-black 
                                     peer-checked:shadow-inner peer-checked:text-white">
                                 {day}
@@ -85,11 +85,13 @@ export const WeeklySelector = ({ initialValues, backToOptions, data, mode }: pro
                 <button
                     onClick={handleConfirm}
                     className="bg-black w-34 h-11 text-white rounded-lg shadow-lg transition-all duration-200
-                        active:bg-gray-200 active:shadow-inner">Siguiente</button>
+                        active:bg-gray-200 active:shadow-inner">Siguiente
+                </button>
                 <button
                     onClick={backToOptions}
                     className="bg-white border border-black/20 w-28 h-11 text-black rounded-lg shadow-lg transition-all duration-200
-                            active:bg-gray-200 active:shadow-inner">Volver</button>
+                            active:bg-gray-200 active:shadow-inner">Volver
+                </button>
             </div>
 
         </div>

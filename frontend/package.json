@@ -15,7 +15,7 @@
     "framer-motion": "^12.23.26",
     "lucide-react": "^0.554.0",
     "react": "^19.1.1",
-    "react-day-picker": "^9.11.2",
+    "react-day-picker": "^9.14.0",
     "react-dom": "^19.1.1",
     "react-hook-form": "^7.66.1",
     "react-router-dom": "^7.9.6",
