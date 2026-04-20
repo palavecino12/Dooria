@@ -3,58 +3,94 @@ import { MonthlySelector } from "./MonthlySelector"
 import { useState } from "react"
 import type { FormValues } from "../../../schemas/schemaForm"
 import type { UserWithoutDescriptor } from "../../../types/userType"
+import { useUpdateUser } from "../../../hooks/useUpdateUser"
+import { CameraRegister } from "../../cameras/CameraRegister"
 
 interface props {
     backToForm: () => void
     data: FormValues
     initialValue?: UserWithoutDescriptor
-    //Tendria que recibir directamente el "mode" quizas, mas efectivo
 }
 
 export const FormUserAccess = ({ initialValue, backToForm, data }: props) => {
 
-    const [option, setOption] = useState<"semanal" | "calendario" | null>(null)
+    const [option, setOption] = useState<"semanal" | "calendario" | null>("semanal")
+    const { userUpdate } = useUpdateUser()//Luego tenemos que traer los otros estados
+    const [showCameraRegister, setShowCameraRegister] = useState(false);
+    const [selectedMonths, setSelectedMonths] = useState<Date[]>(initialValue?.allowedDates?.map(d => new Date(d)) ?? []);
+    const [selectedDays, setSelectedDays] = useState<number[]>(initialValue?.allowedDays ?? []);
 
-    //En caso de elegir semanal, añadimos el valor del atributo en data
-    if (option === "semanal") return <WeeklySelector data={{ ...data, accessType: "semanal" }} backToOptions={() => setOption(null)} initialValues={initialValue} mode={initialValue ? "edit" : "create"} />
-    //En caso de elegir mensual, añadimos el valor del atributo en data
-    if (option === "calendario") return <MonthlySelector data={{ ...data, accessType: "calendario" }} backToOptions={() => setOption(null)} initialValues={initialValue} mode={initialValue ? "edit" : "create"} />;
+    //Al momento que seleccionamos un dia, lo quitamos si ya estaba selecciondo y lo agregamos si no lo estaba 
+    const toggleDay = (value: number) => {
+        setSelectedDays(prev =>
+            prev.includes(value)
+                ? prev.filter(d => d !== value)
+                : [...prev, value]
+        );
+    };
 
+    //Al confirmar añadimos a date los campos seleccionados de la semana y del calendario
+    const handleConfirm = () => {
+        if (initialValue) {
+            userUpdate(initialValue._id, { ...data, allowedDates: selectedMonths.map(d => d.toISOString()), allowedDays: selectedDays })
+            //Luego tengo que navegar al inicio y creo que colocar la pantalla de success antes
+        } else {
+            setShowCameraRegister(true)
+        }
+    }
+
+    //Agregamos a date los dias y/o fechas que selecciono el usuario (convertimos selectDays en un array de string)
+    if (showCameraRegister) return <CameraRegister data={{ ...data, allowedDates: selectedMonths.map(d => d.toISOString()), allowedDays: selectedDays }} backToForm={() => setShowCameraRegister(false)} />
     return (
-        <div className="flex flex-col items-center justify-around gap-10 bg-white h-screen">
+        <div className="flex flex-col items-center justify-around bg-white h-screen">
 
             {/* Titulo */}
             <div>
-                <h1 className="text-3xl font-medium">Acceso del visitante</h1>
+                <h1 className="text-xl font-medium">Acceso del visitante</h1>
             </div>
 
             {/* Botones de mensual y semanal */}
-            <div className="flex flex-col justify-center items-center gap-15 
-                    shadow-[0_4px_10px_rgba(0,0,0,0.15),0_-4px_10px_rgba(0,0,0,0.15)] w-full p-10">
-
+            <div>
                 <button
                     onClick={() => setOption("semanal")}
-                    className={`w-34 h-11 rounded-lg shadow-lg transition-all duration-200
-                        ${initialValue?.accessType === "semanal"
-                            ? "bg-white text-black border border-black/20"
-                            : "bg-black text-white"
-                        } active:bg-gray-200 active:shadow-inner`}>Semanal</button>
-
+                    className={`w-34 h-11 rounded-tl-lg rounded-bl-lg shadow-lg transition-all duration-200
+                        ${option === "semanal"
+                            ? "bg-black text-white"
+                            : "bg-white text-black border border-black/20"
+                        } active:bg-gray-200 active:shadow-inner`}>Semanal
+                </button>
                 <button
                     onClick={() => setOption("calendario")}
-                    className={`w-34 h-11 rounded-lg shadow-lg transition-all duration-200
-                        ${initialValue?.accessType === "calendario"
-                            ? "bg-white text-black border border-black/20"
-                            : "bg-black text-white"
-                        } active:bg-gray-200 active:shadow-inner`}>Calendario</button>
+                    className={`w-34 h-11 rounded-tr-lg rounded-br-lg shadow-lg transition-all duration-200
+                        ${option === "calendario"
+                            ? "bg-black text-white"
+                            : "bg-white text-black border border-black/20"
+                        } active:bg-gray-200 active:shadow-inner`}>Calendario
+                </button>
             </div>
 
-            {/* Boton volver */}
+            {/* Componente mensual y semanal */}
+            <div className="flex flex-row justify-center items-center gap-0 
+                    shadow-[0_4px_10px_rgba(0,0,0,0.15),0_-4px_10px_rgba(0,0,0,0.15)] w-full h-[55%] p-8">
+
+                {option === "semanal" && (<WeeklySelector selectedDays={selectedDays} toggleDay={toggleDay}/>)}
+
+                {option === "calendario" && (<MonthlySelector selectedMonths={selectedMonths} setSelectedMonths={setSelectedMonths}/>)}
+
+            </div>
+
+            {/* Boton aceptr y volver */}
             <div className="flex flex-row-reverse gap-20">
+                <button
+                    onClick={handleConfirm}
+                    className="bg-black w-34 h-11 text-white rounded-lg shadow-lg transition-all duration-200
+                            active:bg-gray-200 active:shadow-inner">{initialValue ? "Confirmar" : "Siguiente"}
+                </button>
                 <button
                     onClick={backToForm}
                     className="bg-white border border-black/20 w-28 h-11 text-black rounded-lg shadow-lg transition-all duration-200
-                            active:bg-gray-200 active:shadow-inner">Volver</button>
+                            active:bg-gray-200 active:shadow-inner">Volver
+                </button>
             </div>
         </div>
     )

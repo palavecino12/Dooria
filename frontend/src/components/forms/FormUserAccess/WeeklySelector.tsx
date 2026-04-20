@@ -1,74 +1,28 @@
 //Lo que tengo que hacer aca es recibir la data del usuario que obtenemos en el formUserCreate y sumarle la data de acceso que obtenemos aca
 //Luego mandamos esa data a CamaraRegister para que junto al descriptor cree el usuario
-import { useRef, useState } from "react";
-import type { FormValues } from "../../../schemas/schemaForm";
-import { CameraRegister } from "../../cameras/CameraRegister";
-import type { UserWithoutDescriptor } from "../../../types/userType";
-import { useUpdateUser } from "../../../hooks/useUpdateUser";
-
 interface props {
-    backToOptions: () => void
-    data: FormValues
-    initialValues?: UserWithoutDescriptor
-    mode: "create" | "edit"
+    toggleDay: (value: number) => void;
+    selectedDays: number[]
 }
 
-export const WeeklySelector = ({ initialValues, backToOptions, data, mode }: props) => {
-
-    const containerRef = useRef<HTMLDivElement>(null);
-    const [selectedDays, setSelectedDays] = useState<number[]>([]);
-    const [showCameraRegister, setShowCameraRegister] = useState(false);
+export const WeeklySelector = ({toggleDay,selectedDays }: props) => {
 
     const days = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"]
 
-    const { userUpdate } = useUpdateUser() //Luego tengo que usar el resto de estados
-
-    const handleConfirm = () => {
-        if (!containerRef.current) return;
-
-        //Obtenemos los dias seleccionados
-        const checkedInputs = containerRef.current.querySelectorAll(
-            'input[type="checkbox"]:checked'
-        );
-
-        //Los almacenamos en un array de tipo number
-        const days = Array.from(checkedInputs).map(
-            (input) => Number((input as HTMLInputElement).value)
-        );
-        setSelectedDays(days)
-
-        if (mode === "edit") {
-            if (!initialValues) return
-            userUpdate(initialValues._id, data)
-            //Luego tengo que navegar al inicio y creo que colocar la pantalla de success antes
-        } else {
-            setShowCameraRegister(true);//Renderizamos el componente CameraRegister
-        }
-    }
-
-    //Agregamos a data los dias que selecciono el usuario
-    if (showCameraRegister) return <CameraRegister data={{ ...data, allowedDays: selectedDays }} backToForm={() => setShowCameraRegister(false)} />
     return (
-
-        <div className="flex flex-col items-center justify-around gap-10 bg-white h-screen">
-
-            {/* Titulo */}
-            <h1 className="text-3xl font-medium">Semanal</h1>
-
-            {/* Dias */}
-            <div ref={containerRef} className="flex flex-col items-center gap-6 border-t border-b border-gray-400 
-                                        shadow-[0_4px_10px_rgba(0,0,0,0.15),0_-4px_10px_rgba(0,0,0,0.15)] w-full p-10">
-
+            <div className="flex flex-col items-center gap-4">
                 {days.map((day, index) => {
                     const value = index + 1;
 
                     return (
                         <label key={value}>
                             <input
-                                defaultChecked={initialValues?.allowedDays?.includes(value)}
+                                checked={selectedDays.includes(value)}
+                                onChange={() => toggleDay(value)}
                                 type="checkbox"
                                 value={value}
-                                className="hidden peer" />
+                                className="hidden peer"
+                            />
                             <div
                                 className="bg-white border border-black/30 w-50 h-11 text-black rounded-lg shadow-lg font-semibold 
                                     transition-all duration-200 flex justify-center items-center peer-checked:bg-black 
@@ -79,21 +33,5 @@ export const WeeklySelector = ({ initialValues, backToOptions, data, mode }: pro
                     )
                 })}
             </div>
-
-            {/* Botones */}
-            <div className="flex flex-row-reverse gap-10">
-                <button
-                    onClick={handleConfirm}
-                    className="bg-black w-34 h-11 text-white rounded-lg shadow-lg transition-all duration-200
-                        active:bg-gray-200 active:shadow-inner">Siguiente
-                </button>
-                <button
-                    onClick={backToOptions}
-                    className="bg-white border border-black/20 w-28 h-11 text-black rounded-lg shadow-lg transition-all duration-200
-                            active:bg-gray-200 active:shadow-inner">Volver
-                </button>
-            </div>
-
-        </div>
     )
 }
