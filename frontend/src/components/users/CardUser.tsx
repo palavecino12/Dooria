@@ -38,7 +38,7 @@ export const CardUser = ({ user, refresh }: props) => {
             {/* Boton para desplegar tarjeta completa */}
             <button
                 onClick={() => setShowFullCard(!showFullCard)}>
-                <ChevronRight size={22} className={showFullCard ? "rotate-90" : ""} />
+                <ChevronRight size={22} className={`transition-transform duration-150 ${showFullCard ? "rotate-90" : ""}`} />
             </button>
 
             {/* Informacion general */}
@@ -68,13 +68,14 @@ export const CardUser = ({ user, refresh }: props) => {
             </div>
 
             {/* Informacion de los usuarios */}
-            {showFullCard && (
-                <div className={`col-span-full wrap-break-words whitespace-normal ${user.rol === "local" ? "pl-3" : "pl-4"}`}>
+            <div className={`col-span-full overflow-hidden transition-all duration-250 ease-in-out
+                    ${showFullCard ? "max-h-[500px] opacity-100 mt-2" : "max-h-0 opacity-0"}`}>
 
+                <div className="pl-4 wrap-break-words whitespace-normal">
                     {/* Campos comunes */}
-                    <InfoItem label="DNI" value={user.dni} isLocal={user.rol === "local"} />
-                    <InfoItem label="Número" value={user.number} isLocal={user.rol === "local"} />
-                    <InfoItem label="Dirección" value={user.address} isLocal={user.rol === "local"} />
+                    <InfoItem label="DNI" value={user.dni} />
+                    <InfoItem label="Número" value={user.number} />
+                    <InfoItem label="Dirección" value={user.address} />
 
                     {/* Campos específicos de visitante */}
                     {user.rol === "visitante" && (
@@ -84,7 +85,7 @@ export const CardUser = ({ user, refresh }: props) => {
                         </>
                     )}
                 </div>
-            )}
+            </div>
         </div>
     )
 }
