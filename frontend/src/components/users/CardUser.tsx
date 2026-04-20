@@ -13,6 +13,7 @@ export const CardUser = ({user,refresh}:props) =>{
     const navigate = useNavigate()
 
     const { userDelete, loading} = useDeleteUser() //Falta traer error y message que los tendria que colocar en un modal (tambien preguntar si verdaderamente desea eliminar)
+    
     //Funcion del boton de eliminar usuario
     const handleDelete = async() => { 
         await userDelete(user._id)
@@ -21,7 +22,7 @@ export const CardUser = ({user,refresh}:props) =>{
     }
 
     //Filtramos las fechas a tipo YYYY-MM-DD para que sea mas legible para el usuario
-    const userDates = user?.allowedDates?.map(date => date.slice(0, 10));
+    const userDates = user?.allowedDates?.map(date => date.slice(0, 10))?? [];
     //Convertimos de numero a dias de la semana
     const daysMap = ["Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado"];
     const userDays = user?.allowedDays
@@ -29,6 +30,8 @@ export const CardUser = ({user,refresh}:props) =>{
         : [];
 
     const [showFullCard,setShowFullCard]=useState(false);
+
+
     
     return(
         <div className="border-b first:border-t border-black/20 p-3 text-black 
@@ -73,11 +76,16 @@ export const CardUser = ({user,refresh}:props) =>{
                     <p>- DNI: {user.dni}</p>
                     <p>- Numero: {user.number}</p>
                     <p>- Direccion: {user.address}</p>
-                    <p>- Tipo de acceso: {user.accessType}</p>
-                    {user.accessType === "semanal" 
-                        ? <p>- Días permitidos: {userDays.join(", ")}</p>
-                        : <p>- Fechas permitidas: {userDates?.join(", ")}</p>
-                    }
+                    {(userDays?.length > 0 || userDates?.length > 0) && (
+                        <div className="text-black">
+                            {userDays?.length > 0 && (
+                                <p>-Días que tenés permitidos: {userDays.join(", ")}</p>
+                            )}
+                            {userDates?.length > 0 && (
+                                <p>-Fechas que tenés permitidas: {userDates.join(", ")}</p>
+                            )}
+                        </div>
+                    )}
                 </div>
             )}
 

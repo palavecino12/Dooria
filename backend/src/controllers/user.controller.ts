@@ -3,12 +3,12 @@ import { User, IUser } from "../models/User"
 import { UpdateUserDTO } from "../dtos/user.dto"
 
 //GET/usuarios (sirve para mosstrar todos los ususarios y tambien para filtrar)
-export const obtenerUsuarios = async(req: Request, res: Response) => {
+export const obtenerUsuarios = async (req: Request, res: Response) => {
   try {
     const { fullName = "", filter = "Todos" } = req.query
 
-    if(typeof fullName !== "string")return res.status(400).json({ error: "fullName debe ser un texto" })
-    
+    if (typeof fullName !== "string") return res.status(400).json({ error: "fullName debe ser un texto" })
+
     if (typeof filter !== "string" || !["Todos", "Locales", "Visitantes"].includes(filter)) {
       return res.status(400).json({ error: "Filtro inválido" });
     }
@@ -20,8 +20,8 @@ export const obtenerUsuarios = async(req: Request, res: Response) => {
     if (filter === "Visitantes") query.rol = "visitante";
 
     //Dividimos las palabras ingresadas por el usuario
-    const terms:string[] = fullName.trim().split(/\s+/).filter(Boolean)
-    
+    const terms: string[] = fullName.trim().split(/\s+/).filter(Boolean)
+
     //Buscamos cada palabra en ambos campos ignorando mayusculas (creamos un array)
     //Solo añadimos el campo and si es que el usuario añadio texto
     if (terms.length > 0) {
@@ -34,9 +34,9 @@ export const obtenerUsuarios = async(req: Request, res: Response) => {
     }
 
     //Simplificamos todo a una sola consulta
-    const users:UpdateUserDTO[] = await User.find(
+    const users: UpdateUserDTO[] = await User.find(
       query,
-      { name: 1, lastName: 1, dni: 1, number: 1, address: 1, rol: 1, accessType:1, allowedDates:1, allowedDays:1 }
+      { name: 1, lastName: 1, dni: 1, number: 1, address: 1, rol: 1, accessType: 1, allowedDates: 1, allowedDays: 1 }
     );
 
     return res.json(users)
@@ -49,9 +49,9 @@ export const obtenerUsuarios = async(req: Request, res: Response) => {
 
 //POST/usuarios/registrar-usuario (cambiar a registrar-usuario)
 // En caso de exito retorno un ok: true, actualizar que en caso de error devuelva tambien un ok:false
-export const registrarUsuario = async(req: Request, res: Response) => {
+export const registrarUsuario = async (req: Request, res: Response) => {
   try {
-    const data = req.body as IUser 
+    const data = req.body as IUser
     //Falta validar el resto de campos con zod
     if (!data.descriptor || !Array.isArray(data.descriptor)) {
       return res.status(400).json({ error: "Descriptor inválido" });
@@ -68,7 +68,7 @@ export const registrarUsuario = async(req: Request, res: Response) => {
 }
 
 //DELETE/usuarios/eliminar-usuario/:id
-export const eliminarUsuario = async(req: Request, res: Response) => {
+export const eliminarUsuario = async (req: Request, res: Response) => {
   try {
     const { id } = req.params
 
@@ -91,23 +91,23 @@ export const eliminarUsuario = async(req: Request, res: Response) => {
 }
 
 //UPDATE/usuarios/editar-usuario/:id
-export const editarUsuario = async(req:Request,res:Response) => {
+export const editarUsuario = async (req: Request, res: Response) => {
   try {
-  const { id } = req.params
-  
-  if (!id) {
-    return res.status(400).json({ error: "ID requerido" })
-  }
+    const { id } = req.params
 
-  const data = req.body as UpdateUserDTO
+    if (!id) {
+      return res.status(400).json({ error: "ID requerido" })
+    }
 
-  const result = await User.updateOne({_id:id},{$set:data})
+    const data = req.body as UpdateUserDTO
 
-  if (result.matchedCount === 0) {
-    return res.status(404).json({ error: "Usuario no encontrado" })
-  }
+    const result = await User.updateOne({ _id: id }, { $set: data })
 
-  return res.status(200).json({ message: "Usuario editado correctamente" })
+    if (result.matchedCount === 0) {
+      return res.status(404).json({ error: "Usuario no encontrado" })
+    }
+
+    return res.status(200).json({ message: "Usuario editado correctamente" })
   } catch (error) {
     console.error("Error en editarUsuario:", error)
     return res.status(500).json({ error: "Error al editar usuario" })
@@ -125,17 +125,17 @@ const distanciaEuclidiana = (a: number[], b: number[]): number => {
 }
 
 //POST/usuarios/buscar-rostro
-export const buscarRostro = async(req: Request, res: Response) => {
+export const buscarRostro = async (req: Request, res: Response) => {
   try {
     const { descriptor } = req.body as { descriptor: number[] };
     if (!descriptor || !Array.isArray(descriptor)) {
-      return res.status(400).json({error: "Descriptor invalido"});
+      return res.status(400).json({ error: "Descriptor invalido" });
     }
 
     //Traemos a todos los usuarios de la coleccion que tengan descriptor para buscar similitudes
     const usuarios = await User.find({ descriptor: { $exists: true } }).lean<IUser[]>();
 
-    if (!usuarios.length) return res.json({ match: false, access:false });
+    if (!usuarios.length) return res.json({ match: false, access: false });
 
     let mejorUsuario: IUser | null = null;
     let menorDistancia = Infinity;
@@ -172,22 +172,16 @@ export const buscarRostro = async(req: Request, res: Response) => {
 
       //Si el rol es visitante, validamos validamos el tipo de acceso
       if (mejorUsuario.rol === "visitante") {
-        const type = mejorUsuario.accessType;
 
-        if (type === "semanal") {
           //Validación de días (0-6)
           if (Array.isArray(mejorUsuario.allowedDays) && mejorUsuario.allowedDays.includes(currentDay)) {
             tieneAcceso = true;
           }
-        }
-
-      if (type === "mensual") {
-        //Validación de fechas YYYY-MM-DD
-        if (Array.isArray(userDates) && userDates.includes(currentDate)) {
-          tieneAcceso = true;
-        }
+          //Validación de fechas YYYY-MM-DD
+          if (Array.isArray(userDates) && userDates.includes(currentDate)) {
+            tieneAcceso = true;
+          }
       }
-}
       //Respondemos según acceso
       if (!tieneAcceso) {
         return res.json({
@@ -204,9 +198,9 @@ export const buscarRostro = async(req: Request, res: Response) => {
       });
     }
 
-    return res.json({ 
+    return res.json({
       match: false,
-      access:false
+      access: false
     });
   } catch (err) {
     console.error(err);

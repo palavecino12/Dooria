@@ -1,13 +1,13 @@
 import { useCamera } from "../../hooks/useCamera";
 import { useFaceDetection } from "../../hooks/useFaceDetection";
 
-export const CameraIntercom=() => {
+export const CameraIntercom = () => {
     const videoRef = useCamera();
-    const component="intercom"
-    const { canvasRef, estadoRostro, estadoAcceso, user} = useFaceDetection({videoRef,component});
+    const component = "intercom"
+    const { canvasRef, estadoRostro, estadoAcceso, user } = useFaceDetection({ videoRef, component });
 
     //Filtramos las fechas a tipo YYYY-MM-DD para que sea mas legible para el usuario
-    const userDates = user?.allowedDates?.map(date => date.slice(0, 10));
+    const userDates = user?.allowedDates?.map(date => date.slice(0, 10))?? [];
     //Convertimos de numero a dias de la semana
     const daysMap = ["Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado"];
     const userDays = user?.allowedDays
@@ -47,16 +47,22 @@ export const CameraIntercom=() => {
             </p>
 
             {/* Indicamos que dias tiene acceso */}
-            {estadoRostro==="reconocido" && estadoAcceso==="denegado" && (
+            {estadoRostro === "reconocido" && estadoAcceso === "denegado" && (
                 <div className="border border-black/20 rounded-xl shadow-xl p-5">
                     <p className="text-black">Usuario: {user?.name} {user?.lastName}</p>
 
-                    {user?.accessType === "semanal" ? (
-                        <p className="text-black">Dias que tenes permitidos: {userDays?.join(", ")}</p>
-                    ):(
-                        <p className="text-black">Fechas que tenes permitidas: {userDates?.join(", ")}</p>
+                    {(userDays?.length > 0 || userDates?.length > 0) && (
+                        <div className="text-black">
+                            {userDays?.length > 0 && (
+                                <p>Días que tenés permitidos: {userDays.join(", ")}</p>
+                            )}
+
+                            {userDates?.length > 0 && (
+                                <p>Fechas que tenés permitidas: {userDates.join(", ")}</p>
+                            )}
+                        </div>
                     )}
-                </div>                
+                </div>
             )}
 
         </div>
