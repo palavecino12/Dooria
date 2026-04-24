@@ -50,12 +50,12 @@ export const CameraRegister=({data,backToForm}:props)=> {
     if(success) return <Success/>;
 
     return (
-        <div className="w-full h-screen bg-white text-white flex flex-col items-center justify-center gap-6">
+        <div className="w-full h-screen bg-gray-200 text-white flex flex-col items-center justify-center gap-6">
 
             {/* Titulo */}
             <h1 className="text-black text-3xl font-medium">Escaneo de rostro</h1>
 
-            <div className=" flex flex-col items-center gap-10 pt-10 pb-10 m-10 
+            <div className=" flex flex-col items-center gap-10 pt-10 pb-10 m-10 bg-white
                 shadow-[0_4px_10px_rgba(0,0,0,0.15),0_-4px_10px_rgba(0,0,0,0.15)] w-full">
                 {/* Contenedor del video y el canvas superpuestos */}
                 <div className="relative w-full aspect-video overflow-hidden border border-gray-200">

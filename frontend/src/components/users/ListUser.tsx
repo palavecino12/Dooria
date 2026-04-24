@@ -11,7 +11,7 @@ export const ListUsers = ({fullName,filter}:props) =>{
     const { users, refresh } = useGetUsers({ fullName,filter })
 
     return(
-        <div className="border-t border-b border-gray-400 pb-10 pt-10
+        <div className="border-t border-b border-gray-400 pb-10 pt-10 bg-white
                         shadow-[0_4px_10px_rgba(0,0,0,0.15),0_-4px_10px_rgba(0,0,0,0.15)] w-full">
         <div className="divide-y  overflow-auto h-100">
             {users.map(user=><CardUser key={user._id} user={user} refresh={refresh}/>)}

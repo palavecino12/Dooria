@@ -71,7 +71,7 @@ export const CardUser = ({ user, refresh }: props) => {
             <div className={`col-span-full overflow-hidden transition-all duration-250 ease-in-out
                     ${showFullCard ? "max-h-[500px] opacity-100 mt-2" : "max-h-0 opacity-0"}`}>
 
-                <div className="pl-4 wrap-break-words whitespace-normal">
+                <div className="wrap-break-words whitespace-normal">
                     {/* Campos comunes */}
                     <InfoItem label="DNI" value={user.dni} />
                     <InfoItem label="Número" value={user.number} />

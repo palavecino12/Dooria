@@ -37,14 +37,14 @@ export const FormUser=({title,initialValues,buttonText,onSubmit,closeForm}:props
     }
 
         return (
-            <div className="flex flex-col items-center justify-center gap-10 bg-white h-screen">
+            <div className="flex flex-col items-center justify-center gap-10 bg-gray-200 h-screen">
 
                 {/* Titulo */}
-                <h1 className="text-2xl font-semibold text-gray-800 mb-6 text-center">{title}</h1>
+                <h1 className="text-xl font-medium text-gray-800 mb-6 text-center">{title}</h1>
 
                 {/* Formulario */}
-                <form onSubmit={handleSubmit(handleFormSubmit)} className="w-full bg-white flex flex-col items-center gap-10">
-                    <div className={`flex flex-col items-center ${Object.keys(errors).length > 0 ? 'gap-1' : 'gap-6'}
+                <form onSubmit={handleSubmit(handleFormSubmit)} className="w-full bg-gray-200 flex flex-col items-center gap-10">
+                    <div className={`flex flex-col items-center bg-white ${Object.keys(errors).length > 0 ? 'gap-1' : 'gap-6'}
                         shadow-[0_4px_10px_rgba(0,0,0,0.15),0_-4px_10px_rgba(0,0,0,0.15)] w-full p-10`}>
                         <InputForm name='name' label='Nombre' control={control} type='text' error={errors.name} />
                         <InputForm name='lastName' label='Apellido' control={control} type='text' error={errors.lastName} />
@@ -53,14 +53,15 @@ export const FormUser=({title,initialValues,buttonText,onSubmit,closeForm}:props
                         <InputForm name='address' label='Direccion' control={control} type='text' error={errors.address} />
                         <InputForm name='rol' label='Rol' control={control} type='select' options={["local","visitante"]} error={errors.address} />
                     </div>
-                    <div className="flex flex-row-reverse gap-10">
+                    {/* Botones */}
+                    <div className="flex flex-row-reverse gap-10 bg-gray-200">
                         <button className="bg-black w-28 h-11 text-white rounded-lg shadow-lg transition-all duration-200
                                 active:bg-gray-200 active:shadow-inner" 
                             type="submit">{buttonText}</button>
                         <button className="bg-white border border-black/20 w-28 h-11 text-black rounded-lg shadow-lg transition-all duration-200
                                     active:bg-gray-200 active:shadow-inner" 
                             type="button" onClick={closeForm}>Cancelar</button>
-                        </div>
+                    </div>
                 
                     {errors.root && <p className='message-error'>{errors.root.message}</p> }
                 </form>
