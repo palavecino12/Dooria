@@ -6,17 +6,17 @@ import type { FormValues } from "../../schemas/schemaForm";
 import { useNavigate } from "react-router-dom";
 import { Success } from "../feedback/Success";
 
-interface props{
-    data:FormValues
-    backToForm:()=>void
+interface props {
+    data: FormValues
+    backToForm: () => void
 }
 
-export const CameraRegister=({data,backToForm}:props)=> {
+export const CameraRegister = ({ data, backToForm }: props) => {
 
-    const [success, setSuccess]=useState(false)
+    const [success, setSuccess] = useState(false)
     const videoRef = useCamera();
-    const component="register"
-    const { canvasRef, estadoRostro, registrarRostro } = useFaceDetection({videoRef,component});
+    const component = "register"
+    const { estadoRostro, registrarRostro, canvasRef } = useFaceDetection({ videoRef, component });
     const navigate = useNavigate()
 
     //Funcion para almacenar el usuario
@@ -27,11 +27,11 @@ export const CameraRegister=({data,backToForm}:props)=> {
                 lastName: data.lastName,
                 dni: data.dni,
                 number: data.number,
-                address:data.address,
+                address: data.address,
                 rol: data.rol,
-                accessType:data.accessType,
-                allowedDays:data.allowedDays,
-                allowedDates:data.allowedDates                
+                accessType: data.accessType,
+                allowedDays: data.allowedDays,
+                allowedDates: data.allowedDates
                 //Agregar los atributos de acceso opcionales
             });
             console.log("Respuesta registro:", resp);
@@ -47,7 +47,7 @@ export const CameraRegister=({data,backToForm}:props)=> {
         }
     };
     //Mostramos pantalla de exito si todo sale bien
-    if(success) return <Success/>;
+    if (success) return <Success />;
 
     return (
         <div className="w-full h-screen bg-gray-200 text-white flex flex-col items-center justify-center gap-6">
@@ -58,8 +58,10 @@ export const CameraRegister=({data,backToForm}:props)=> {
             <div className=" flex flex-col items-center gap-10 pt-10 pb-10 m-10 bg-white
                 shadow-[0_4px_10px_rgba(0,0,0,0.15),0_-4px_10px_rgba(0,0,0,0.15)] w-full">
                 {/* Contenedor del video y el canvas superpuestos */}
-                <div className="relative w-full aspect-video overflow-hidden border border-gray-200">
-                    <video ref={videoRef} autoPlay muted className="absolute inset-0 w-full h-full object-cover"></video>
+                <div
+                    className="relative w-full aspect-square overflow-hidden bg-black"
+                    style={{ clipPath: 'ellipse(30% 40% at 50% 50%)' }}>
+                    <video ref={videoRef} autoPlay muted className="absolute inset-0 w-full h-full object-contain"></video>
                     <canvas ref={canvasRef} className="absolute inset-0 w-full h-full"></canvas>
                 </div>
 
@@ -70,15 +72,13 @@ export const CameraRegister=({data,backToForm}:props)=> {
                         ${estadoRostro === "desconocido" ? "bg-green-800" : ""}
                         ${estadoRostro === "procesando" ? "bg-yellow-700 text-black" : ""}
                         ${estadoRostro === "ninguno" ? "bg-black" : ""}`}>
-                        
-                        {estadoRostro === "reconocido" ? "Este usuario ya existe" : ""}
-                        {estadoRostro === "desconocido" ? "Rostro listo para almacenar" : ""}
-                        {estadoRostro === "procesando" ? "Espere..." : ""}
-                        {estadoRostro === "ninguno" ? "Coloque su rostro en la camara" : ""}
+
+                    {estadoRostro === "reconocido" ? "Este usuario ya existe" : ""}
+                    {estadoRostro === "desconocido" ? "Rostro listo para almacenar" : ""}
+                    {estadoRostro === "procesando" ? "Espere..." : ""}
+                    {estadoRostro === "ninguno" ? "Coloque su rostro en la camara" : ""}
                 </p>
             </div>
-
-            
 
             {/* Botones */}
             <div className="flex flex-row-reverse gap-20">

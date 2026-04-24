@@ -1,7 +1,7 @@
 // hook que se encarga unicamente de iniciar la camara y mostrar el video en pantalla.
 import { useEffect, useRef } from "react"
 
-export function useCamera() {
+export const useCamera=()=> {
   const videoRef = useRef<HTMLVideoElement | null>(null)
   const streamRef = useRef<MediaStream | null>(null)
 
@@ -18,10 +18,10 @@ export function useCamera() {
 
     return () => {
       if (streamRef.current) {
-        streamRef.current.getTracks().forEach((t) => t.stop())
+        streamRef.current.getTracks().forEach((t) => t.stop()) //Cleanup al desmontar el componente (apaga la camara y libera recursos del sistema)
       }
     }
   }, [])
 
-  return videoRef
+  return videoRef //retornamos el ref para poder asignarlo al <video/> donde importemos el hook
 }
