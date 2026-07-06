@@ -1,4 +1,8 @@
-//Index que contiene el renderizado del componente ListUsers, SearchUsers y la comunicacion entre si
+//Index que contiene el renderizado del componente ListUsers, SearchUsers, UserFilterButton y la comunicacion entre si
+
+
+
+//Este codigo tendria que estar directamente en page/mobile/Users.tsx (pienso)
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ListUsers } from "./ListUser";

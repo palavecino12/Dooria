@@ -8,7 +8,6 @@ type EstadoAcceso = "permitido" | "denegado";
 
 interface props {
   videoRef: RefObject<HTMLVideoElement | null>,
-  component: "register" | "intercom"//Pasamos por parametro que componente estamos usando para colocar diferentes colores
 }
 
 interface FaceMatchResult {
@@ -17,9 +16,8 @@ interface FaceMatchResult {
   user?: FormValues
 }
 
-export function useFaceDetection({ videoRef, component }: props) {
+export function useFaceDetection({ videoRef }: props) {
 
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [estadoRostro, setEstadoRostro] = useState<EstadoRostro>("ninguno");
   const [estadoAcceso, setEstadoAcceso] = useState<EstadoAcceso>("denegado");
   const [user, setUser] = useState<FormValues | null>(null);
@@ -39,12 +37,10 @@ export function useFaceDetection({ videoRef, component }: props) {
     estadoRostroRef.current = estadoRostro;
   }, [estadoRostro]);
 
-
   useEffect(() => {
     const video = videoRef.current;
-    const canvas = canvasRef.current;
 
-    if (!video || !canvas) return;
+    if (!video) return;
 
     //Carga de modelos
     const loadModels = async () => {
@@ -55,7 +51,6 @@ export function useFaceDetection({ videoRef, component }: props) {
       ]);
       console.log("Modelos cargados");
     };
-
 
     //Funcion donde le mandamos un descriptor y lo busca en la base de datos
     const reconocerRostro = async (descriptor: number[]) => {
@@ -72,49 +67,20 @@ export function useFaceDetection({ videoRef, component }: props) {
       }
     };
 
-    const updateSize = () => {
-      if (!video || !canvas) return;
-
-
-      const width = video.clientWidth;
-      const height = video.clientHeight;
-
-
-      canvas.width = width;
-      canvas.height = height;
-
-
-      faceapi.matchDimensions(canvas, { width, height });
-    };
-
-
     //Funcion donde comienza la reproduccion del video
     const handlePlay = () => {
-
-      //Ajustamos el canvas al mismo tamaño que el video
-      updateSize();
-
-
-      const displaySize = {
-        width: video.clientWidth,
-        height: video.clientHeight,
-      };
-
 
       //Cerebro del hook
       if (intervalRef.current != null) return; //Si ya existe un intervalo, no creamos otro
       intervalRef.current = window.setInterval(async () => {
         if (video.paused || video.ended) return;
 
-
         if (processingRef.current) return; //Si hay una deteccion en curso no interferimos
         processingRef.current = true; //Si no hay una deteccion en curso, colocamos true para indicar que comenzamos una
-
 
         if (estadoRostroRef.current === "ninguno") {
           setEstadoRostro("procesando");
         }
-
 
         try {
           //Detectamos la cara usando los modelos
@@ -123,15 +89,6 @@ export function useFaceDetection({ videoRef, component }: props) {
             .detectAllFaces(video, new faceapi.TinyFaceDetectorOptions({ inputSize: 160, scoreThreshold: 0.5, }))
             .withFaceLandmarks()
             .withFaceDescriptors();
-
-
-          const resized = faceapi.resizeResults(detections, displaySize);//Escalamos la deteccion de la cara al tamaño del canvas para dibujarlas bien
-          const ctx = canvas.getContext("2d"); //Contexto 2d del canvas para poder dibujar
-          if (!ctx) return;
-
-
-          ctx.clearRect(0, 0, canvas.width, canvas.height);//Limpiamos el canvas en cada frame (sino cada cuadro se pintaria encima del anterior)
-
 
           //Si no se detecto ninguna cara, resetea todos los datos
           if (!detections || detections.length === 0) {
@@ -145,27 +102,22 @@ export function useFaceDetection({ videoRef, component }: props) {
             return;
           }
 
-
           //En caso de que si detecte un rostro, almacena el descriptor actual en el ref
           const descriptor = detections[0].descriptor;
           const descriptorArray = Array.from(descriptor) as number[];
           latestDescriptorRef.current = descriptorArray;
-
 
           //Si el backend no esta pausado, consultamos si existe el rostro en la base de datos
           if (!detenerBackendRef.current) {
             const resultado: FaceMatchResult = await reconocerRostro(descriptorArray);
             console.log("resultado backend:", resultado);
 
-
             //Si hubo march frenamos todo, colocamos como reconocido el rostro y guardamos el usuario
             if (resultado.match) {
-
 
               //Almacenamos el ususario que se encontro
               if (resultado.user) setUser(resultado.user)
               setEstadoRostro("reconocido");
-
 
               if (resultado.access) {
                 setEstadoAcceso("permitido")
@@ -173,11 +125,9 @@ export function useFaceDetection({ videoRef, component }: props) {
                 setEstadoAcceso("denegado")
               }
 
-
               //Frenamos el back
               detenerBackendRef.current = true;
               intentosRef.current = 0;
-
 
               //Se vuelve a habilitar el backend a los 1500ms
               setTimeout(() => {
@@ -189,11 +139,9 @@ export function useFaceDetection({ videoRef, component }: props) {
               //Si los intentos llegan a 3, marcamos el rostro como desconocido y frenamos backend por 1.5s
               if (intentosRef.current >= MAX_INTENTOS) {
 
-
                 setEstadoAcceso("denegado")
                 setEstadoRostro("desconocido");
                 detenerBackendRef.current = true;
-
 
                 setTimeout(() => {
                   detenerBackendRef.current = false;
@@ -201,17 +149,6 @@ export function useFaceDetection({ videoRef, component }: props) {
               }
             }
           }
-
-
-          //Dibujamos el bounding box siempre
-          const box = resized[0].detection.box;
-          ctx.lineWidth = 3;//Grosor de la linea
-          ctx.strokeStyle = estadoColor(estadoRostroRef.current, component);//Colocamos el color de la caja dependiendo del estado del rostro
-          ctx.strokeRect(box.x, box.y, box.width, box.height);//Dibujamos el rectangulo en la cara
-
-
-          faceapi.draw.drawFaceLandmarks(canvas, resized);//Dibujamos los parametros de la cara (lo hace automatico)
-
 
         } catch (err) {
           console.error("Error en loop detección:", err);
@@ -222,12 +159,6 @@ export function useFaceDetection({ videoRef, component }: props) {
       }, 150);
     };
 
-
-    window.addEventListener("resize", updateSize);
-    const resizeObserver = new ResizeObserver(updateSize);
-    resizeObserver.observe(video);
-
-
     loadModels() //Cargamos los modelos antes de empezar la deteccion sobre el video
       .then(() => {
         video.addEventListener("play", handlePlay);
@@ -235,53 +166,22 @@ export function useFaceDetection({ videoRef, component }: props) {
       })
       .catch((err) => console.error("Error cargando modelos:", err));
 
-
     return () => {
       if (intervalRef.current) window.clearInterval(intervalRef.current);
 
       video.removeEventListener("play", handlePlay);
-    
-      window.removeEventListener("resize", updateSize);
 
-      resizeObserver.disconnect();
     };
-  }, [videoRef, component]); //Colocamos VideoRef como dependencia ya que a veces el componente se monta antes que el DOM, por lo tanto VideoRef no tiene ninguna referencia
-
-
-  //Funcion para colocar color a la caja dependiendo del estado del rostro (dependiendo si se usa en register o intercom)
-  function estadoColor(estado: EstadoRostro, component: "intercom" | "register") {
-    if (component === "intercom") {
-      if (estado === "reconocido") return "green";
-      if (estado === "desconocido") return "red";
-      if (estado === "procesando") return "yellow";
-      return "rgba(255,255,255,0.2)";
-    } else {
-      if (estado === "reconocido") return "red";
-      if (estado === "desconocido") return "green";
-      if (estado === "procesando") return "yellow";
-      return "rgba(255,255,255,0.1)";
-    }
-  }
+  }, [videoRef]); //Colocamos VideoRef como dependencia ya que a veces el componente se monta antes que el DOM, por lo tanto VideoRef no tiene ninguna referencia
 
   //Funcion para almacenar un usuario
   async function registrarRostro({ name, lastName, dni, number, address, rol, accessType, allowedDays, allowedDates }: FormValues) {
+
     const descriptor = latestDescriptorRef.current;
+
     if (!descriptor) throw new Error("No hay descriptor disponible para registrar");
 
-
-    const body = {
-      name,
-      lastName,
-      dni,
-      number,
-      address,
-      rol,
-      accessType,
-      allowedDays,
-      allowedDates,
-      descriptor
-    };
-
+    const body = {name,lastName,dni,number,address,rol,accessType,allowedDays,allowedDates,descriptor};
 
     const resp = await fetch(`${BACKEND_URL}/usuarios/registrar-usuario`, {
       method: "POST",
@@ -291,6 +191,5 @@ export function useFaceDetection({ videoRef, component }: props) {
     return resp.json();
   }
 
-
-  return { canvasRef, estadoRostro, estadoAcceso, user, registrarRostro };
+  return { estadoRostro, estadoAcceso, user, registrarRostro };
 }

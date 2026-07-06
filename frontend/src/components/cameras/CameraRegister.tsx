@@ -15,8 +15,7 @@ export const CameraRegister = ({ data, backToForm }: props) => {
 
     const [success, setSuccess] = useState(false)
     const videoRef = useCamera();
-    const component = "register"
-    const { estadoRostro, registrarRostro, canvasRef } = useFaceDetection({ videoRef, component });
+    const { estadoRostro, registrarRostro } = useFaceDetection({ videoRef });
     const navigate = useNavigate()
 
     //Funcion para almacenar el usuario
@@ -42,12 +41,14 @@ export const CameraRegister = ({ data, backToForm }: props) => {
                 navigate("/mobile")
             }, 2500);
 
+
         } catch (err) {
             console.error("Error al registrar rostro:", err);
         }
     };
     //Mostramos pantalla de exito si todo sale bien
     if (success) return <Success />;
+
 
     return (
         <div className="w-full h-screen bg-gray-200 text-white flex flex-col items-center justify-center gap-6">
@@ -62,7 +63,6 @@ export const CameraRegister = ({ data, backToForm }: props) => {
                     className="relative w-full aspect-square overflow-hidden bg-black"
                     style={{ clipPath: 'ellipse(30% 40% at 50% 50%)' }}>
                     <video ref={videoRef} autoPlay muted className="absolute inset-0 w-full h-full object-contain"></video>
-                    <canvas ref={canvasRef} className="absolute inset-0 w-full h-full"></canvas>
                 </div>
 
                 {/* Estado del rostro */}
@@ -72,6 +72,7 @@ export const CameraRegister = ({ data, backToForm }: props) => {
                         ${estadoRostro === "desconocido" ? "bg-green-800" : ""}
                         ${estadoRostro === "procesando" ? "bg-yellow-700 text-black" : ""}
                         ${estadoRostro === "ninguno" ? "bg-black" : ""}`}>
+
 
                     {estadoRostro === "reconocido" ? "Este usuario ya existe" : ""}
                     {estadoRostro === "desconocido" ? "Rostro listo para almacenar" : ""}
@@ -89,7 +90,7 @@ export const CameraRegister = ({ data, backToForm }: props) => {
                 <button
                     onClick={backToForm}
                     className="bg-white border border-black/20 w-28 h-11 text-black rounded-lg shadow-lg transition-all duration-200
-                            active:bg-gray-200 active:shadow-inner">Volver</button>
+                        active:bg-gray-200 active:shadow-inner">Volver</button>
             </div>
         </div>
     );

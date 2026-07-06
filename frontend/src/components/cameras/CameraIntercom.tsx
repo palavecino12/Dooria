@@ -3,8 +3,7 @@ import { useFaceDetection } from "../../hooks/useFaceDetection";
 
 export const CameraIntercom = () => {
     const videoRef = useCamera();
-    const component = "intercom"
-    const { canvasRef, estadoRostro, estadoAcceso, user } = useFaceDetection({ videoRef, component });
+    const { estadoRostro, estadoAcceso, user } = useFaceDetection({ videoRef });
 
     //Filtramos las fechas a tipo YYYY-MM-DD para que sea mas legible para el usuario
     const userDates = user?.allowedDates?.map(date => date.slice(0, 10))?? [];
@@ -21,7 +20,6 @@ export const CameraIntercom = () => {
             {/* Contenedor del video y el canvas superpuestos */}
             <div className="relative w-full aspect-video rounded-lg overflow-hidden shadow-xl">
                 <video ref={videoRef} autoPlay muted className="absolute inset-0 w-full h-full object-cover"></video>
-                <canvas ref={canvasRef} className="absolute inset-0 w-full h-full"></canvas>
             </div>
 
             {/* Estado del rostro */}

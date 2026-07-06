@@ -4,6 +4,7 @@ import { Users } from "./pages/mobile/Users"
 import { Register } from "./pages/mobile/Register"
 import{ Intercom } from "./pages/Intercom"
 import { EditUser } from "./pages/mobile/EditUser"
+import { FormUserCreate } from "./components/forms/FormUserCreate"
 
 function App() {
   return (
@@ -14,6 +15,8 @@ function App() {
         <Route path="/mobile/users" element={<Users/>}/>
         <Route path="/mobile/users/:id/edit" element={<EditUser/>}/>
         <Route path="/intercom" element={<Intercom/>}/>
+
+        <Route path="/test" element={<FormUserCreate/>}/>
       </Routes>
     </BrowserRouter>
   )

@@ -37,13 +37,13 @@ export const FormUser=({title,initialValues,buttonText,onSubmit,closeForm}:props
     }
 
         return (
-            <div className="flex flex-col items-center justify-center gap-10 bg-gray-200 h-screen">
+            <div className="flex h-dvh flex-col items-center  gap-10 bg-gray-200">
 
                 {/* Titulo */}
-                <h1 className="text-xl font-medium text-gray-800 mb-6 text-center">{title}</h1>
+                <h1 className="text-xl font-medium text-gray-800 mb-1 text-center">{title}</h1>
 
                 {/* Formulario */}
-                <form onSubmit={handleSubmit(handleFormSubmit)} className="w-full bg-gray-200 flex flex-col items-center gap-10">
+                <form onSubmit={handleSubmit(handleFormSubmit)} className="w-full bg-gray-200 flex flex-col items-center gap-5">
                     <div className={`flex flex-col items-center bg-white ${Object.keys(errors).length > 0 ? 'gap-1' : 'gap-6'}
                         shadow-[0_4px_10px_rgba(0,0,0,0.15),0_-4px_10px_rgba(0,0,0,0.15)] w-full p-10`}>
                         <InputForm name='name' label='Nombre' control={control} type='text' error={errors.name} />

@@ -10,24 +10,25 @@ export const UserFilterButtons = ({ setSelected, selected }: props) => {
 
     return (
         <div className="flex">
-            {filters.map((id) => {
-
+            {filters.map((filter) => {
+                //Codigo para redondear solo las esquinas exteriores de los botones exteriores
                 const rounded =
-                    id === "Todos"
+                    filter === "Todos"
                         ? "rounded-tl-lg rounded-bl-lg"
-                        : id === "Locales"
+                        : filter === "Locales"
                             ? "rounded-none"
                             : "rounded-tr-lg rounded-br-lg";
                 return (
                     <button
-                        key={id}
-                        onClick={() => setSelected(id)}
+                        key={filter}
+                        onClick={() => setSelected(filter)}
                         className={`transition-all duration-200 w-29 h-11 ${rounded}
-                            ${selected === id
+                            ${selected === filter
                                 ? "bg-black text-white"
                                 : "bg-white border border-black/20 text-black shadow-lg"
                             }
-                        active:scale-95 active:shadow-inner`}>{id}
+                        active:scale-95 active:shadow-inner`}>
+                            {filter}
                     </button>
                 );
             })}
