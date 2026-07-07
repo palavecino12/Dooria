@@ -78,10 +78,6 @@ export function useFaceDetection({ videoRef }: props) {
         if (processingRef.current) return; //Si hay una deteccion en curso no interferimos
         processingRef.current = true; //Si no hay una deteccion en curso, colocamos true para indicar que comenzamos una
 
-        if (estadoRostroRef.current === "ninguno") {
-          setEstadoRostro("procesando");
-        }
-
         try {
           //Detectamos la cara usando los modelos
           //Detections se convierte en un array con info del rostro
@@ -100,6 +96,11 @@ export function useFaceDetection({ videoRef }: props) {
             setEstadoAcceso("denegado");
             setUser(null);
             return;
+          }
+          
+          //Si detectamos un rostro, pasamos al estado de procesando
+          if (estadoRostroRef.current === "ninguno") {
+            setEstadoRostro("procesando");
           }
 
           //En caso de que si detecte un rostro, almacena el descriptor actual en el ref
@@ -181,7 +182,7 @@ export function useFaceDetection({ videoRef }: props) {
 
     if (!descriptor) throw new Error("No hay descriptor disponible para registrar");
 
-    const body = {name,lastName,dni,number,address,rol,accessType,allowedDays,allowedDates,descriptor};
+    const body = { name, lastName, dni, number, address, rol, accessType, allowedDays, allowedDates, descriptor };
 
     const resp = await fetch(`${BACKEND_URL}/usuarios/registrar-usuario`, {
       method: "POST",

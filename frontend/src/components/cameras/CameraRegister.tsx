@@ -99,7 +99,7 @@ export const CameraRegister = ({ data, backToForm }: props) => {
 
             {estadoRostro === "desconocido" ? (
                 <button
-                    className={`px-5 py-3 rounded-xl font-medium transition-all duration-300 ${currentUI.messageBg} ${currentUI.messageText}`}
+                    className={`px-7 py-3 rounded-xl font-semibold transition-all duration-300 text-lg ${currentUI.messageBg} ${currentUI.messageText}`}
                     onClick={handleRegistrar}>
                     {currentUI.message}
                 </button>
