@@ -49,6 +49,38 @@ export const CameraRegister = ({ data, backToForm }: props) => {
     //Mostramos pantalla de exito si todo sale bien
     if (success) return <Success />;
 
+    //Diferentes estados de la UI dependiendo del estado del rostro
+    const faceUI = {
+        ninguno: {
+            border: "border-gray-300",
+            glow: "",
+            messageBg: "bg-gray-900",
+            messageText: "text-white",
+            message: "Coloque su rostro en la cámara",
+        },
+        procesando: {
+            border: "border-yellow-400",
+            glow: "shadow-[0_0_25px_rgba(250,204,21,0.7)] animate-pulse",
+            messageBg: "bg-yellow-400",
+            messageText: "text-black",
+            message: "Analizando rostro...",
+        },
+        desconocido: {
+            border: "border-green-500",
+            glow: "shadow-[0_0_25px_rgba(34,197,94,0.8)]",
+            messageBg: "bg-green-600",
+            messageText: "text-white",
+            message: "Rostro listo para registrar",
+        },
+        reconocido: {
+            border: "border-red-500",
+            glow: "shadow-[0_0_25px_rgba(239,68,68,0.8)]",
+            messageBg: "bg-red-600",
+            messageText: "text-white",
+            message: "Este usuario ya existe",
+        },
+    };
+    const currentUI = faceUI[estadoRostro];
 
     return (
         <div className="w-full h-screen bg-gray-200 text-white flex flex-col items-center justify-center gap-6">
@@ -58,26 +90,15 @@ export const CameraRegister = ({ data, backToForm }: props) => {
 
             <div className=" flex flex-col items-center gap-10 pt-10 pb-10 m-10 bg-white
                 shadow-[0_4px_10px_rgba(0,0,0,0.15),0_-4px_10px_rgba(0,0,0,0.15)] w-full">
+
                 {/* Contenedor del video y el canvas superpuestos */}
-                <div
-                    className="relative w-full aspect-square overflow-hidden bg-black"
-                    style={{ clipPath: 'ellipse(30% 40% at 50% 50%)' }}>
+                <div className={`relative w-75 h-[400px] overflow-hidden rounded-[50%] bg-black border-[5px] transition-all duration-300 ${currentUI.border} ${currentUI.glow}`}>
                     <video ref={videoRef} autoPlay muted className="absolute inset-0 w-full h-full object-contain"></video>
                 </div>
 
                 {/* Estado del rostro */}
-                <p className={`
-                        text-lg font-semibold px-4 py-2 rounded-lg
-                        ${estadoRostro === "reconocido" ? "bg-red-800" : ""}
-                        ${estadoRostro === "desconocido" ? "bg-green-800" : ""}
-                        ${estadoRostro === "procesando" ? "bg-yellow-700 text-black" : ""}
-                        ${estadoRostro === "ninguno" ? "bg-black" : ""}`}>
-
-
-                    {estadoRostro === "reconocido" ? "Este usuario ya existe" : ""}
-                    {estadoRostro === "desconocido" ? "Rostro listo para almacenar" : ""}
-                    {estadoRostro === "procesando" ? "Espere..." : ""}
-                    {estadoRostro === "ninguno" ? "Coloque su rostro en la camara" : ""}
+                <p className={`px-5 py-3 rounded-xl font-medium transition-all duration-300 ${currentUI.messageBg} ${currentUI.messageText}`}>
+                    {currentUI.message}
                 </p>
             </div>
 
