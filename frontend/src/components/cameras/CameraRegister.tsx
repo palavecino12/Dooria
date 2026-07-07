@@ -71,7 +71,7 @@ export const CameraRegister = ({ data, backToForm }: props) => {
             glow: "shadow-[0_0_25px_rgba(34,197,94,0.8)]",
             messageBg: "bg-green-600",
             messageText: "text-white",
-            message: "Rostro listo para registrar",
+            message: "Registrar",
         },
         reconocido: {
             color: "border-red-500",
@@ -96,27 +96,30 @@ export const CameraRegister = ({ data, backToForm }: props) => {
             </div>
 
             {/* Estado del rostro */}
-            <p className={`px-5 py-3 rounded-xl font-medium transition-all duration-300 ${currentUI.messageBg} ${currentUI.messageText}`}>
-                {currentUI.message}
-            </p>
+
+            {estadoRostro === "desconocido" ? (
+                <button
+                    className={`px-5 py-3 rounded-xl font-medium transition-all duration-300 ${currentUI.messageBg} ${currentUI.messageText}`}
+                    onClick={handleRegistrar}>
+                    {currentUI.message}
+                </button>
+            ) : (
+                <p
+                    className={`px-5 py-3 rounded-full font-medium transition-all duration-300 ${currentUI.messageBg} ${currentUI.messageText}`}>
+                    {currentUI.message}
+                </p>
+            )}
 
             {/* Botones */}
             <div className="flex flex-row-reverse gap-20">
-                {estadoRostro === "desconocido" ? (
-                    <button
-                        onClick={handleRegistrar}
-                        className="bg-black w-34 h-11 text-white rounded-lg shadow-lg transition-all duration-200 
-                        active:bg-gray-200 active:shadow-inner">
-                        Registrar rostro
-                    </button>
-                ) : (
+                {estadoRostro !== "desconocido" && (
                     <button
                         onClick={backToForm}
                         className="bg-white border border-black/20 w-28 h-11 text-black rounded-lg shadow-lg transition-all 
                         duration-200 active:bg-gray-200 active:shadow-inner">
                         Volver
-                    </button>
-                )}
+                    </button>)
+                }
             </div>
         </div>
     );
