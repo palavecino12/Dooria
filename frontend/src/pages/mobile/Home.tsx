@@ -1,29 +1,27 @@
 import { useNavigate } from "react-router-dom";
+import { Button } from "../../components/common/Button";
+import { Header } from "../../components/common/Header";
 
 export const Home = () => {
   const navigate = useNavigate()
 
   return (
-    <div className="flex flex-col items-center justify-center gap-10 bg-gray-200 h-screen">
-      {/* Titulo */}
-      <h1 className="text-xl font-medium">Panel Administracion</h1>
+    <div className="flex h-dvh flex-col bg-gray-200 overflow-hidden">
+      <Header title="Panel Administrador" />
 
-      {/* Botones */}
-      <div className="flex flex-col items-center p-10 gap-8 bg-gray-100
+      <main className="flex flex-1 items-center justify-center">
+        {/* Botones */}
+        <div className="flex flex-col items-center p-10 gap-8 bg-gray-100
             shadow-[0_4px_10px_rgba(0,0,0,0.15),0_-4px_10px_rgba(0,0,0,0.15)] w-full">
-        <button className="bg-black w-34 h-11 text-white rounded-lg shadow-lg transition-all duration-200
-                                  active:bg-gray-200 active:shadow-inner"
-          onClick={() => navigate("/mobile/users")}> Ver Usuarios</button>
 
-        <button className="bg-black w-34 h-11 text-white rounded-lg shadow-lg transition-all duration-200
-                                  active:bg-gray-200 active:shadow-inner"
-          onClick={() => navigate("/mobile/register")}>Añadir Usuario</button>
+          <Button onClick={() => navigate("/mobile/users")}> Ver Usuarios</Button>
 
+          <Button onClick={() => navigate("/mobile/register")}>Añadir Usuario</Button>
 
-        <button className="bg-black w-34 h-11 text-white rounded-lg shadow-lg transition-all duration-200
-                                  active:bg-gray-200 active:shadow-inner"
-          onClick={() => navigate("/mobile/intercom")}>Ver Portero</button>
-      </div>
+          <Button onClick={() => navigate("/mobile/intercom")}>Ver Portero</Button>
+        </div>
+      </main>
+
     </div>
   );
 }
