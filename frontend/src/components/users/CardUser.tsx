@@ -33,7 +33,7 @@ export const CardUser = ({ user, refresh }: props) => {
 
     return (
         <div className="border-b first:border-t border-black/20 p-3 text-black 
-                grid grid-cols-[5px_1fr_80px_auto] items-center gap-4">
+                grid grid-cols-[5px_1fr_80px_auto] items-center gap-x-4">
 
             {/* Boton para desplegar tarjeta completa */}
             <button

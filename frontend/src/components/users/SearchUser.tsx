@@ -12,7 +12,7 @@ export const SearchUsers = ({setUserSearch}:props) =>{
             <input
                 type="text"
                 placeholder="Buscar usuario..."
-                className="peer w-full pl-10 p-2 border border-gray-300 rounded-lg shadow-lg
+                className="peer w-full h-12 pl-10 p-2 border border-gray-300 rounded-lg shadow-lg
                     focus:ring-2 focus:border-transparent focus:outline-none focus:shadow-inner
                     transition-all duration-200 bg-white active:scale-95"
                 onChange={(e) => {

@@ -1,13 +1,10 @@
 //Index que contiene el renderizado del componente ListUsers, SearchUsers, UserFilterButton y la comunicacion entre si
-
-
-
-//Este codigo tendria que estar directamente en page/mobile/Users.tsx (pienso)
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ListUsers } from "./ListUser";
 import { SearchUsers } from "./SearchUser";
 import { UserFilterButtons } from "./UserFilterButtons";
+import { Button } from "../common/Button";
 
 export const UsersPage = () =>{
     const navigate = useNavigate()
@@ -17,7 +14,7 @@ export const UsersPage = () =>{
     const [selected, setSelected] = useState("Todos");
 
     return(
-        <div className="h-screen flex flex-col items-center justify-center gap-10 bg-gray-200">
+        <div className="h-dvh flex flex-col items-center justify-center gap-5 bg-gray-200">
             {/* Buscador de usuarios */}
             <SearchUsers setUserSearch={setUserSearch}/>
 
@@ -27,9 +24,7 @@ export const UsersPage = () =>{
             {/* Lista de usuarios */}
             <ListUsers fullName={userSearch} filter={selected}/>
 
-            <button className="bg-white border border-black/20 w-28 h-11 text-black rounded-lg shadow-lg transition-all duration-200
-                                active:bg-gray-200 active:shadow-inner"
-                    onClick={()=>navigate("/mobile")}>Volver</button>
+            <Button variant="secundario" onClick={()=>navigate("/mobile")}>Volver</Button>
         </div>
     )
 }

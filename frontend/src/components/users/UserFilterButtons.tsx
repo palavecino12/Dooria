@@ -22,7 +22,7 @@ export const UserFilterButtons = ({ setSelected, selected }: props) => {
                     <button
                         key={filter}
                         onClick={() => setSelected(filter)}
-                        className={`transition-all duration-200 w-29 h-11 ${rounded}
+                        className={`transition-all duration-200 w-29 h-11 text-lg font-medium ${rounded}
                             ${selected === filter
                                 ? "bg-black text-white"
                                 : "bg-white border border-black/20 text-black shadow-lg"

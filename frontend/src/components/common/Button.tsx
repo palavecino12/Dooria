@@ -1,4 +1,6 @@
-interface ButtonProps {
+import { type ButtonHTMLAttributes } from "react";
+
+interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
     variant?: "primario" | "secundario";
     onClick?: () => void;
     children: React.ReactNode;
