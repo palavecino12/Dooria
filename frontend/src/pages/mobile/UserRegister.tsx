@@ -1,5 +1,5 @@
 import { FormUserCreate } from "../../components/forms/FormUserCreate"
 
-export const Register=()=>{
+export const UserRegister=()=>{
     return <FormUserCreate/>
 }
