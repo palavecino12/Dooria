@@ -20,7 +20,7 @@ export const CameraRegister = ({ data, backToForm }: props) => {
     const navigate = useNavigate()
 
     //Funcion para almacenar el usuario
-    const handleRegistrar = async () => {
+    const handleRegister = async () => {
         try {
             const resp = await registrarRostro({
                 name: data.name,
@@ -96,22 +96,20 @@ export const CameraRegister = ({ data, backToForm }: props) => {
             </div>
 
             {/* Estado del rostro */}
-
-            {estadoRostro === "desconocido" ? (
-                <button
-                    className={`px-7 py-3 rounded-xl font-semibold transition-all duration-300 text-lg ${currentUI.messageBg} ${currentUI.messageText}`}
-                    onClick={handleRegistrar}>
-                    {currentUI.message}
-                </button>
-            ) : (
-                <p
-                    className={`px-5 py-3 rounded-full font-medium transition-all duration-300 ${currentUI.messageBg} ${currentUI.messageText}`}>
-                    {currentUI.message}
-                </p>
-            )}
+            {/* Colocamos los mensajes en un boton para poder hacer transicion */}
+            <button
+                onClick={estadoRostro === "desconocido" ? handleRegister : undefined}
+                disabled={estadoRostro !== "desconocido"}
+                className={`px-7 py-3 font-semibold text-lg transition-all duration-300 ${currentUI.messageBg} ${currentUI.messageText}
+                ${estadoRostro === "desconocido"
+                        ? "rounded-xl cursor-pointer hover:scale-105"
+                        : "rounded-3xl cursor-default"
+                    }`}>
+                {currentUI.message}
+            </button>
 
             {/* Botones */}
-            <div className="flex flex-row-reverse gap-20">
+            <div className="flex flex-row-reverse gap-20 transition-all duration-300">
                 {estadoRostro !== "desconocido" && (
                     <button
                         onClick={backToForm}
