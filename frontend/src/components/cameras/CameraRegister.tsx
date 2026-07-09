@@ -3,7 +3,6 @@ import { useState } from "react";
 import { useCamera } from "../../hooks/useCamera";
 import { useFaceDetection } from "../../hooks/useFaceDetection";
 import type { FormValues } from "../../schemas/schemaForm";
-import { useNavigate } from "react-router-dom";
 import { Success } from "../feedback/Success";
 import { FaceGuide } from "./FaceGuide";
 import { Header } from "../common/Header";
@@ -18,7 +17,6 @@ export const CameraRegister = ({ data, backToForm }: props) => {
     const [success, setSuccess] = useState(false)
     const videoRef = useCamera();
     const { estadoRostro, registrarRostro } = useFaceDetection({ videoRef });
-    const navigate = useNavigate()
 
     //Funcion para almacenar el usuario
     const handleRegister = async () => {
@@ -37,19 +35,14 @@ export const CameraRegister = ({ data, backToForm }: props) => {
             });
             console.log("Respuesta registro:", resp);
 
-            //En caso de exito mostramos una pantalla de success, luego redirigimos al inicio
             setSuccess(true);
-            setTimeout(() => {
-                navigate("/mobile")
-            }, 2500);
-
-
+            
         } catch (err) {
             console.error("Error al registrar rostro:", err);
         }
     };
     //Mostramos pantalla de exito si todo sale bien
-    if (success) return <Success />;
+    if (success) return <Success message="Usuario creado con exito!" />;
 
     //Diferentes estados de la UI dependiendo del estado del rostro
     const faceUI = {
