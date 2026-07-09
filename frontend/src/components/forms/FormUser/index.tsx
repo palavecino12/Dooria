@@ -39,14 +39,14 @@ export const FormUser = ({ title, initialValues, buttonText, onSubmit, closeForm
     }
 
     return (
-        <div className="flex h-dvh flex-col items-center  gap-10 bg-gray-200">
+        <div className="flex h-dvh flex-col items-center gap-5 bg-gray-200">
 
             <Header title={title} />
 
             {/* Formulario */}
             <form onSubmit={handleSubmit(handleFormSubmit)} className="w-full bg-gray-200 flex flex-col items-center gap-5">
-                <div className={`flex flex-col items-center bg-white ${Object.keys(errors).length > 0 ? 'gap-1' : 'gap-6'}
-                        shadow-[0_4px_10px_rgba(0,0,0,0.15),0_-4px_10px_rgba(0,0,0,0.15)] w-full p-10`}>
+                <div className={`flex flex-col items-center bg-white ${Object.keys(errors).length > 0 ? 'gap-1' : 'gap-3'}
+                        shadow-[0_4px_10px_rgba(0,0,0,0.15),0_-4px_10px_rgba(0,0,0,0.15)] w-full px-10 py-5`}>
                     <InputForm name='name' label='Nombre' control={control} type='text' error={errors.name} />
                     <InputForm name='lastName' label='Apellido' control={control} type='text' error={errors.lastName} />
                     <InputForm name='dni' label='DNI' control={control} type='string' error={errors.dni} />
@@ -55,9 +55,9 @@ export const FormUser = ({ title, initialValues, buttonText, onSubmit, closeForm
                     <InputForm name='rol' label='Rol' control={control} type='select' options={["local", "visitante"]} error={errors.address} />
                 </div>
                 {/* Botones */}
-                <div className="flex flex-row-reverse gap-10 bg-gray-200">
-                    <Button type="submit">{buttonText}</Button>
+                <div className="flex flex-row gap-10 bg-gray-200">
                     <Button variant="secundario" type="button" onClick={closeForm}>Cancelar</Button>
+                    <Button type="submit">{buttonText}</Button>
                 </div>
 
                 {errors.root && <p className='message-error'>{errors.root.message}</p>}
