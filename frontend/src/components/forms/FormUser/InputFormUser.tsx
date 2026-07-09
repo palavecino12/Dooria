@@ -15,7 +15,7 @@ interface props {
 const InputFormUser = ({ name, label, control, type, error, options }: props) => {
     return (
         <div className="w-full">
-            <label className="block text-sm text-gray-800 mb-1" htmlFor={name}>{label}</label>
+            <label className="block text-sm mb-1" htmlFor={name}>{label}</label>
 
             <Controller name={name} control={control} render={({ field }) =>
                 type === 'select' ? (

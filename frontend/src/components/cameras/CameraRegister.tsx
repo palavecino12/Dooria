@@ -6,6 +6,7 @@ import type { FormValues } from "../../schemas/schemaForm";
 import { useNavigate } from "react-router-dom";
 import { Success } from "../feedback/Success";
 import { FaceGuide } from "./FaceGuide";
+import { Header } from "../common/Header";
 
 interface props {
     data: FormValues
@@ -84,41 +85,42 @@ export const CameraRegister = ({ data, backToForm }: props) => {
     const currentUI = faceUI[estadoRostro];
 
     return (
-        <div className="w-full h-screen bg-gray-200 text-white flex flex-col items-center justify-center gap-6">
+        <div className="w-full h-dvh bg-gray-200 text-white flex flex-col">
 
-            {/* Titulo */}
-            <h1 className="text-black text-3xl font-medium">Escaneo de rostro</h1>
+            <Header title="Escaneo de Rostro"></Header>
 
-            {/* Contenedor del video */}
-            <div className={`relative w-75 h-[400px] overflow-hidden rounded-[50%] bg-black border-[5px] transition-all duration-300 ${currentUI.color} ${currentUI.glow}`}>
-                <video ref={videoRef} autoPlay muted className="absolute inset-0 w-full h-full object-cover -scale-x-100"></video>
-                <FaceGuide color={currentUI.color} />
-            </div>
+            <main className="flex-1 flex flex-col items-center justify-center gap-6">
+                {/* Contenedor del video */}
+                <div className={`relative w-75 h-[400px] overflow-hidden rounded-[50%] bg-black border-[5px] transition-all duration-300 ${currentUI.color} ${currentUI.glow}`}>
+                    <video ref={videoRef} autoPlay muted className="absolute inset-0 w-full h-full object-cover -scale-x-100"></video>
+                    <FaceGuide color={currentUI.color} />
+                </div>
 
-            {/* Estado del rostro */}
-            {/* Colocamos los mensajes en un boton para poder hacer transicion */}
-            <button
-                onClick={estadoRostro === "desconocido" ? handleRegister : undefined}
-                disabled={estadoRostro !== "desconocido"}
-                className={`px-7 py-3 font-semibold text-lg transition-all duration-300 ${currentUI.messageBg} ${currentUI.messageText}
+                {/* Estado del rostro */}
+                {/* Colocamos los mensajes en un boton para poder hacer transicion */}
+                <button
+                    onClick={estadoRostro === "desconocido" ? handleRegister : undefined}
+                    disabled={estadoRostro !== "desconocido"}
+                    className={`font-medium text-lg transition-all duration-300 ${currentUI.messageBg} ${currentUI.messageText}
                 ${estadoRostro === "desconocido"
-                        ? "rounded-xl cursor-pointer hover:scale-105"
-                        : "rounded-3xl cursor-default"
-                    }`}>
-                {currentUI.message}
-            </button>
+                            ? "h-11 w-40 rounded-xl cursor-pointer hover:scale-105"
+                            : "px-6 py-2 rounded-3xl cursor-default"
+                        }`}>
+                    {currentUI.message}
+                </button>
 
-            {/* Botones */}
-            <div className="flex flex-row-reverse gap-20 transition-all duration-300">
-                {estadoRostro !== "desconocido" && (
-                    <button
-                        onClick={backToForm}
-                        className="bg-white border border-black/20 w-28 h-11 text-black rounded-lg shadow-lg transition-all 
+                {/* Botones */}
+                <div className="flex transition-all duration-300">
+                    {estadoRostro !== "desconocido" && (
+                        <button
+                            onClick={backToForm}
+                            className="bg-white border border-black/20 w-40 h-11 text-black rounded-lg shadow-lg transition-all 
                         duration-200 active:bg-gray-200 active:shadow-inner">
-                        Volver
-                    </button>)
-                }
-            </div>
+                            Volver
+                        </button>)
+                    }
+                </div>
+            </main>
         </div>
     );
 }

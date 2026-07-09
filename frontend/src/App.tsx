@@ -17,7 +17,7 @@ function App() {
         <Route path="/mobile/intercom" element={<MobileIntercom/>}/>
         <Route path="/intercom" element={<Intercom/>}/>
 
-        <Route path="/test" element={<UsersList/>}/>
+        <Route path="/test" element={<Intercom/>}/>
       </Routes>
     </BrowserRouter>
   )

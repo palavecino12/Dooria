@@ -1,16 +1,21 @@
 import { useNavigate } from "react-router-dom";
 import { useCamera } from "../../hooks/useCamera";
 import { useFaceDetection } from "../../hooks/useFaceDetection";
+import { Button } from "../common/Button";
+import { Header } from "../common/Header";
 
 interface CameraIntercomProps {
-    showActions?: boolean
+    isMobile?: boolean
 }
 
-export const CameraIntercom = ({ showActions = false }: CameraIntercomProps) => {
-    const navigate=useNavigate()
+export const CameraIntercom = ({ isMobile = false }: CameraIntercomProps) => {
+    const navigate = useNavigate()
 
     const videoRef = useCamera();
     const { estadoRostro, estadoAcceso, user } = useFaceDetection({ videoRef });
+    console.log(estadoAcceso)//denegado
+    console.log(estadoRostro)//reconocido
+    console.log(user)//{_id: '6a4d9cb3ca84ff5c80fc0c45', name: 'Facundo', lastName: 'Palavecino', dni: '43830657', number: '2634377144', rol: 'visitante'}
 
     //Filtramos las fechas a tipo YYYY-MM-DD para que sea mas legible para el usuario
     const userDates = user?.allowedDates?.map(date => date.slice(0, 10)) ?? [];
@@ -40,7 +45,7 @@ export const CameraIntercom = ({ showActions = false }: CameraIntercomProps) => 
             bg: "bg-gray-900",
             text: "text-white text-center",
             title: "Esperando usuario",
-            message: "Coloque su rostro frente a la cámara.",
+            message: "Coloque su rostro frente a la cámara",
         },
         loading: {
             videoBorder: "border-yellow-400",
@@ -72,85 +77,105 @@ export const CameraIntercom = ({ showActions = false }: CameraIntercomProps) => 
             bg: "bg-red-600",
             text: "text-white text-center",
             title: "Usuario no registrado",
-            message: "Solicite asistencia.",
+            message: "Solicite asistencia",
         },
     };
     const currentScreen = screenUI[screenState];
 
+    //Estilos de la pantalla del intercom dependiendo si lo vemos desde el intercom o desde el telefonoo
+    const layout = isMobile
+        ? {
+            statusCard: "py-3 px-10",
+            statusTitle: "text-lg font-bold",
+            statusMessage: "text-base font-medium text-white/90",
+
+            deniedCard: "p-2",
+            deniedTitle: "text-base font-semibold",
+            deniedSection: "mt-1",
+        }
+        : {
+            statusCard: "w-full py-5",
+            statusTitle: "text-3xl font-bold",
+            statusMessage: "mt-2 text-lg font-medium",
+
+            deniedCard: "p-5",
+            deniedTitle: "text-lg font-semibold",
+            deniedSection: "mt-3",
+        };
+
     return (
-        <div className="min-h-screen bg-white text-white flex flex-col items-center justify-center gap-6">
+        <div className="w-full h-dvh bg-gray-200 text-white flex flex-col">
 
-            {/* Contenedor del video */}
-            <div className={`relative w-full aspect-video overflow-hidden rounded-2xl border-[5px] transition-all 
+            {isMobile && <Header title="Portero" />}
+
+            <main className="flex-1 flex flex-col items-center justify-center gap-6">
+                {/* Contenedor del video */}
+                <div className={`relative w-full aspect-video overflow-hidden rounded-2xl border-[5px] transition-all 
                 duration-300 ${currentScreen.videoBorder} ${currentScreen.glow}`}>
-                <video ref={videoRef} autoPlay muted className="absolute inset-0 w-full h-full object-cover"></video>
-            </div>
+                    <video ref={videoRef} autoPlay muted className="absolute inset-0 w-full h-full object-cover -scale-x-100"></video>
+                </div>
 
-            {/* Tarjeta de mensaje del estado del ususario */}
-            <div
-                className={`w-full rounded-4xl px-6 py-5 transition-all duration-300 shadow-xl ${currentScreen.bg} ${currentScreen.text}`}>
-                {/* Titulo de la tarjeta */}
-                <h2 className="text-3xl font-bold">
-                    {currentScreen.title}
-                </h2>
-                {/* Subtitulo de la tarjeta */}
-                <p className="mt-2 text-lg font-medium">
-                    {currentScreen.message}
-                </p>
-            </div>
-
-            {/* En caso de estar registrado pero no tener acceso, mostramos mensaje adicional */}
-            {screenState === "denied" && (
-                <div className="rounded-xl border border-red-200 bg-red-50 p-5 text-gray-800">
-
-                    <h3 className="text-lg font-semibold">
-                        Motivo del rechazo:
-                    </h3>
-                    <p>Hoy no posee autorización para ingresar.</p>
-
-                    {/* Mostramos los dias permitidos si es que tiene */}
-                    {userDays.length > 0 && (
-                        <div className="mt-3">
-                            <p className="font-medium">
-                                Días habilitados:
-                            </p>
-                            <p className="text-gray-600">
-                                {userDays.join(", ")}
-                            </p>
-                        </div>
-                    )}
-
-                    {/* Mostramos las fechas permitidos si es que tiene */}
-                    {userDates.length > 0 && (
-                        <div className="mt-3">
-                            <p className="font-medium">
-                                Fechas habilitadas:
-                            </p>
-                            <p className="text-gray-600">
-                                {userDates.join(", ")}
-                            </p>
-                        </div>
+                {/* Tarjeta de mensaje del estado del ususario */}
+                <div
+                    className={`${layout.statusCard} rounded-4xl transition-all duration-300 shadow-xl ${currentScreen.bg} ${currentScreen.text}`}>
+                    {/* Titulo de la tarjeta */}
+                    <h2 className={`${layout.statusTitle}`}>
+                        {currentScreen.title}
+                    </h2>
+                    {/* Subtitulo de la tarjeta (lo mostramos solo en caso de usarlo desde Intercom o de un usuario registrado pero sin acceso ese dia) */}
+                    {(!isMobile || screenState === "denied") && (
+                        <p className={`${layout.statusMessage} font-medium`}>
+                            {currentScreen.message}
+                        </p>
                     )}
 
                 </div>
-            )}
 
-            {showActions && (
-                <div className="mt-6 flex w-full gap-4">
-                    <button
-                        onClick={()=>navigate("/mobile")}
-                        className="flex-1 rounded-xl border border-gray-300 bg-white py-3 
-                        font-semibold text-gray-800 transition-colors hover:bg-gray-100">
-                        Volver
-                    </button>
+                {/* En caso de estar registrado pero no tener acceso, mostramos mensaje adicional */}
+                {screenState === "denied" && (
+                    <div className={`rounded-xl border border-red-200 bg-red-50 text-gray-800 ${layout.deniedCard}`}>
 
-                    <button
-                        className="flex-1 rounded-xl bg-green-600 py-3 font-semibold 
-                        text-white transition-colors hover:bg-green-700">
-                        Permitir acceso
-                    </button>
-                </div>
-            )}
+                        <h3 className={layout.deniedTitle}>
+                            Motivo del rechazo:
+                        </h3>
+                        <p>Hoy no posee autorización para ingresar.</p>
+
+                        {/* Mostramos los dias permitidos si es que tiene */}
+                        {userDays.length > 0 && (
+                            <div className={`${layout.deniedSection}`}>
+                                <p className="font-semibold">
+                                    Días habilitados:
+                                </p>
+                                <p>
+                                    {userDays.join(", ")}
+                                </p>
+                            </div>
+                        )}
+
+                        {/* Mostramos las fechas permitidos si es que tiene */}
+                        {userDates.length > 0 && (
+                            <div className={`${layout.deniedSection}`}>
+                                <p className="font-semibold">
+                                    Fechas habilitadas:
+                                </p>
+                                <p>
+                                    {userDates.join(", ")}
+                                </p>
+                            </div>
+                        )}
+
+                    </div>
+                )}
+
+                {isMobile && (
+                    <div className={`flex justify-center w-full gap-10 ${screenState !== "denied" ? "mt-30" : "mt-1"}`}>
+                        <Button variant="secundario" onClick={() => navigate("/mobile")}>Volver</Button>
+                        <Button>Permitir acceso</Button>
+                    </div>
+                )}
+            </main>
+
+
 
         </div>
     );
