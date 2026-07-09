@@ -7,6 +7,9 @@ import { useUpdateUser } from "../../../hooks/useUpdateUser"
 import { CameraRegister } from "../../cameras/CameraRegister"
 import { Header } from "../../common/Header"
 import { Button } from "../../common/Button"
+import { Error } from "../../feedback/Error"
+import { Success } from "../../feedback/Success"
+import { Loading } from "../../feedback/Loading"
 
 interface props {
     backToForm: () => void
@@ -17,7 +20,7 @@ interface props {
 export const FormUserAccess = ({ initialValue, backToForm, data }: props) => {
 
     const [option, setOption] = useState<"semanal" | "calendario" | null>("semanal")
-    const { userUpdate } = useUpdateUser()//Luego tenemos que traer los otros estados
+    const { userUpdate, error, loading, message } = useUpdateUser()//Luego tenemos que traer los otros estados
     const [showCameraRegister, setShowCameraRegister] = useState(false);
     const [selectedMonths, setSelectedMonths] = useState<Date[]>(initialValue?.allowedDates?.map(d => new Date(d)) ?? []);
     const [selectedDays, setSelectedDays] = useState<number[]>(initialValue?.allowedDays ?? []);
@@ -32,10 +35,9 @@ export const FormUserAccess = ({ initialValue, backToForm, data }: props) => {
     };
 
     //Al confirmar añadimos a date los campos seleccionados de la semana y del calendario
-    const handleConfirm = () => {
+    const handleConfirm = async () => {
         if (initialValue) {
-            userUpdate(initialValue._id, { ...data, allowedDates: selectedMonths.map(d => d.toISOString()), allowedDays: selectedDays })
-            //Luego tengo que navegar al inicio y creo que colocar la pantalla de success antes
+            await userUpdate(initialValue._id, { ...data, allowedDates: selectedMonths.map(d => d.toISOString()), allowedDays: selectedDays })
         } else {
             setShowCameraRegister(true)
         }
@@ -44,6 +46,16 @@ export const FormUserAccess = ({ initialValue, backToForm, data }: props) => {
     //Agregamos a date los dias y/o fechas que selecciono el usuario (convertimos selectDays en un array de string)
     if (showCameraRegister) return <CameraRegister data={{ ...data, allowedDates: selectedMonths.map(d => d.toISOString()), allowedDays: selectedDays }} backToForm={() => setShowCameraRegister(false)} />
 
+    //En caso de que querramos editar, renderizamos pantallas de feedback al terminar
+    if (initialValue && loading) {
+        return <Loading />
+    }
+    if (initialValue && error) {
+        return <Error message={error.message} />
+    }
+    if (initialValue && message) {
+        return <Success message={message} />
+    }
     return (
         <div className="flex h-dvh flex-col bg-gray-200">
 

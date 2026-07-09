@@ -11,24 +11,24 @@ interface props {
     title: string
     initialValues?: Partial<FormValues>//Si esta variable llega vacia, se crea un usuario con los datos que ingrese. Si llega con datos, es para editar 
     onSubmit: (data: FormValues) => void//onSubumit va a ser la funcion de crear el usuario o editarlo
-    buttonText: string
     closeForm: () => void
 }
 
-export const FormUser = ({ title, initialValues, buttonText, onSubmit, closeForm }: props) => {
+export const FormUser = ({ title, initialValues, onSubmit, closeForm }: props) => {
 
     //Validamos los datos del usuario
-    const { control, handleSubmit, formState: { errors }, setError } = useForm<FormValues>({
+    const { control, handleSubmit, formState: { errors }, setError, watch } = useForm<FormValues>({
         resolver: zodResolver(schema),
         defaultValues: {
             rol: initialValues?.rol ?? "local",
             ...initialValues
         }//Los inputs apareceran rellenados con estos datos, asi el usuario los puede editar, si llega vacia los inputs estaran vacios para que los rellene el usuario
     })
+    //Esto es solamente para cambiar el texto del boton, ya que debe decir distintas cosas dependiendo del rol del usuario
+    const rol = watch("rol")
 
     //Creamos el metodo que se va a ejecutar si todos los campos son validos
     const handleFormSubmit: SubmitHandler<FormValues> = async (data) => {
-
         try {
             await onSubmit(data)//Ejecutamos la funcion que recibimos por parametro (en este caso manda data a otro componente)
         } catch (error) {
@@ -54,10 +54,11 @@ export const FormUser = ({ title, initialValues, buttonText, onSubmit, closeForm
                     <InputForm name='address' label='Direccion' control={control} type='text' error={errors.address} />
                     <InputForm name='rol' label='Rol' control={control} type='select' options={["local", "visitante"]} error={errors.address} />
                 </div>
+
                 {/* Botones */}
                 <div className="flex flex-row gap-10 bg-gray-200">
                     <Button variant="secundario" type="button" onClick={closeForm}>Cancelar</Button>
-                    <Button type="submit">{buttonText}</Button>
+                    <Button type="submit">{rol === "local" ? "Confirmar" : "Siguiente"}</Button>
                 </div>
 
                 {errors.root && <p className='message-error'>{errors.root.message}</p>}
