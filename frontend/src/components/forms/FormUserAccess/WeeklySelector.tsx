@@ -10,7 +10,7 @@ export const WeeklySelector = ({toggleDay,selectedDays }: props) => {
     const days = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"]
 
     return (
-            <div className="flex flex-col items-center gap-4">
+            <div className="flex flex-col items-center gap-3">
                 {days.map((day, index) => {
                     const value = index + 1;
 
