@@ -12,7 +12,7 @@ export const WeeklySelector = ({toggleDay,selectedDays }: props) => {
     return (
             <div className="flex flex-col items-center gap-3">
                 {days.map((day, index) => {
-                    const value = index + 1;
+                    const value = index;
 
                     return (
                         <label key={value}>

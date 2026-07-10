@@ -13,10 +13,7 @@ export const CameraIntercom = ({ isMobile = false }: CameraIntercomProps) => {
 
     const videoRef = useCamera();
     const { estadoRostro, estadoAcceso, user } = useFaceDetection({ videoRef });
-    console.log(estadoAcceso)//denegado
-    console.log(estadoRostro)//reconocido
-    console.log(user)//{_id: '6a4d9cb3ca84ff5c80fc0c45', name: 'Facundo', lastName: 'Palavecino', dni: '43830657', number: '2634377144', rol: 'visitante'}
-
+    
     //Filtramos las fechas a tipo YYYY-MM-DD para que sea mas legible para el usuario
     const userDates = user?.allowedDates?.map(date => date.slice(0, 10)) ?? [];
     //Convertimos de numero a dias de la semana
@@ -174,9 +171,6 @@ export const CameraIntercom = ({ isMobile = false }: CameraIntercomProps) => {
                     </div>
                 )}
             </main>
-
-
-
         </div>
     );
 }

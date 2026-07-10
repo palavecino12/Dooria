@@ -45,7 +45,6 @@ export const FormUserUpdate = ({ user }: Props) => {
     if (message) {
         return <Success message={message} />
     }
-    //En caso de que el rol del usuario sea "local" no debo pasar al siguiente formulario
     if (showAccessForm && dataUser) return <FormUserAccess backToForm={() => setShowAccessForm(false)} data={dataUser} initialValue={user} />
     return <FormUser closeForm={() => navigate("/mobile/users")} onSubmit={handleSubmitUser} title="Editar Ususario" initialValues={user} />
 }

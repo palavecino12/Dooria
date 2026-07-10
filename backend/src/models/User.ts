@@ -7,7 +7,6 @@ export interface IUser {
     number:string;
     address:string;
     rol:string;
-    accessType?: string;
     allowedDays?: number[];
     allowedDates?: string[];
     descriptor?: number[];
@@ -20,7 +19,6 @@ const userSchema = new Schema<IUser>({
     number:{type: String, required: true},
     address:{type: String, required: true},
     rol:{type: String,required:true},
-    accessType:{type: String},
     allowedDays:{type: [Number]},
     allowedDates:{type: [String]},
     descriptor:{type: [Number]}

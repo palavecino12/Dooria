@@ -24,9 +24,11 @@ export const CardUser = ({ user, refresh }: props) => {
     //Filtramos las fechas a tipo YYYY-MM-DD para que sea mas legible para el usuario
     const userDates = user?.allowedDates?.map(date => date.slice(0, 10)) ?? [];
     //Convertimos de numero a dias de la semana
-    const daysMap = ["Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado"];
+    const daysMap = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"];
     const userDays = user?.allowedDays
-        ? user.allowedDays.map(d => daysMap[d])
+        ? [...user.allowedDays]
+            .sort((a, b) => a - b)//Ordenamos los dias
+            .map(d => daysMap[d])
         : [];
 
     const [showFullCard, setShowFullCard] = useState(false);

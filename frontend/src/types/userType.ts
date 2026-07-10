@@ -7,7 +7,6 @@ export type User = {
         number: string
         address: string
         rol: "local" | "visitante"
-        accessType?: "semanal" | "calendario"
         allowedDates?: string[]
         allowedDays?: number[]
         descriptor: number[]

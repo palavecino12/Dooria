@@ -28,7 +28,6 @@ export const CameraRegister = ({ data, backToForm }: props) => {
                 number: data.number,
                 address: data.address,
                 rol: data.rol,
-                accessType: data.accessType,
                 allowedDays: data.allowedDays,
                 allowedDates: data.allowedDates
                 //Agregar los atributos de acceso opcionales
@@ -41,7 +40,7 @@ export const CameraRegister = ({ data, backToForm }: props) => {
             console.error("Error al registrar rostro:", err);
         }
     };
-    //Mostramos pantalla de exito si todo sale bien
+    //Mostramos pantalla de exito si todo sale bien (hay que crear el hook para registraer el ususario y usarlo aca)
     if (success) return <Success message="Usuario creado con exito!" />;
 
     //Diferentes estados de la UI dependiendo del estado del rostro
@@ -96,7 +95,7 @@ export const CameraRegister = ({ data, backToForm }: props) => {
                     disabled={estadoRostro !== "desconocido"}
                     className={`font-medium text-lg transition-all duration-300 ${currentUI.messageBg} ${currentUI.messageText}
                 ${estadoRostro === "desconocido"
-                            ? "h-11 w-40 rounded-xl cursor-pointer hover:scale-105"
+                            ? "h-11 w-40 rounded-xl cursor-pointer active:scale-95 hover:scale-105"
                             : "px-6 py-2 rounded-3xl cursor-default"
                         }`}>
                     {currentUI.message}
