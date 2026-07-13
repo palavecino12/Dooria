@@ -1,30 +1,28 @@
 import { ChevronRight, Pencil, Trash2 } from "lucide-react"
 import { type UserWithoutDescriptor } from "../../types/userType"
-import { useDeleteUser } from "../../hooks/useDeleteUser"
-import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { InfoItem } from "./InfoItem"
 import { ConfirmModal } from "../feedback/ConfirmModal"
-import { Loading } from "../feedback/Loading"
+import { useState } from "react"
 
 interface CardUsersProps {
     user: UserWithoutDescriptor
     refresh: () => void
+    userDelete:(id:string)=>void
 }
-export const CardUser = ({ user, refresh }: CardUsersProps) => {
+export const CardUser = ({ user, refresh, userDelete }: CardUsersProps) => {
 
     const navigate = useNavigate()
-    const { userDelete, loading } = useDeleteUser() //Falta traer error y message que los tendria que colocar en un modal (tambien preguntar si verdaderamente desea eliminar)
 
-    //Estado para abrir y cerrar el modal de confirmacion al eliminar
+    //Estado para abrir y cerrar el modal de confirmacion al eliminar un usuario
     const [openModal, setOpenModal] = useState(false);
 
-    //Funcion del boton de eliminar usuario
+    //Funcion del boton para eliminar usuario
     const handleDelete = async () => {
+        setOpenModal(false);
         await userDelete(user._id)
         refresh()
         //No manejo el error porque ya queda guardado en el estado del hook
-        setOpenModal(false);
     }
 
     //Filtramos las fechas a tipo YYYY-MM-DD para que sea mas legible para el usuario
@@ -39,7 +37,6 @@ export const CardUser = ({ user, refresh }: CardUsersProps) => {
 
     const [showFullCard, setShowFullCard] = useState(false);
 
-    if (loading) return <Loading/>
     return (
         <>
             <div className="border-b first:border-t border-black/20 p-3 text-black 
@@ -72,7 +69,6 @@ export const CardUser = ({ user, refresh }: CardUsersProps) => {
                     {/* Boton para eliminar */}
                     <button
                         onClick={() => setOpenModal(true)}
-                        disabled={loading}
                         className="bg-black p-2 text-white rounded-lg shadow-lg transition-all duration-200
                             active:bg-gray-200 active:shadow-inner"><Trash2 /></button>
                 </div>
@@ -97,11 +93,13 @@ export const CardUser = ({ user, refresh }: CardUsersProps) => {
                     </div>
                 </div>
             </div>
-            
+
             {/* Modal para confirmar la eliminacion de un usuario */}
             <ConfirmModal open={openModal} onConfirm={handleDelete} onCancel={() => setOpenModal(false)}>
                 <h1>¿Está seguro que desea eliminar a <strong>{user.name}</strong>?</h1>
             </ConfirmModal>
+
+            
         </>
 
     )

@@ -35,11 +35,20 @@ export const FormUserUpdate = ({ user }: Props) => {
             console.log(showAccessForm)
         }
     }
-    //Mostramos pantallas de feedback
-    if (loading) return <Loading />
+    //Mostramos pantallas de feedback (la pantalla de carga se coloca dentro del return ya flota sobre la interfaz)
     if (error) return <Error message={error.message} />
     if (message) return <Success message={message} />
     
-    if (showAccessForm && dataUser) return <FormUserAccess backToForm={() => setShowAccessForm(false)} data={dataUser} initialValue={user} />
-    return <FormUser closeForm={() => navigate("/mobile/users")} onSubmit={handleSubmitUser} title="Editar Ususario" initialValues={user} />
+    return (
+    <>
+        {/* Pantalla loading, esta dentro para que se vea sobre la interfaz */}
+        {loading && <Loading />}
+
+        {showAccessForm && dataUser ? (
+            <FormUserAccess backToForm={() => setShowAccessForm(false)} data={dataUser} initialValue={user}/>
+        ) : (
+            <FormUser closeForm={() => navigate("/mobile/users")} onSubmit={handleSubmitUser} title="Editar Usuario" initialValues={user}/>
+        )}
+    </>
+);
 }

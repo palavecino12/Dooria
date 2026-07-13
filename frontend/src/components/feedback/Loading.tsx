@@ -1,12 +1,18 @@
 import { LoaderCircle } from "lucide-react"
 import { motion } from "framer-motion"
+import { createPortal } from "react-dom";
 
 interface LoadingProps {
     message?: string
 }
 
 export const Loading = ({message = "Procesando..."}: LoadingProps) => {
-    return (
+
+    const modalRoot = document.getElementById("modal");
+
+    if (!modalRoot) return null;
+
+    return createPortal(
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 backdrop-blur-sm">
             <div className="flex h-60 w-60 flex-col items-center justify-center gap-6 rounded-2xl bg-white shadow-2xl">
                 <motion.div
@@ -29,5 +35,5 @@ export const Loading = ({message = "Procesando..."}: LoadingProps) => {
                 </p>
             </div>
         </div>
-    )
+    ,modalRoot)
 }

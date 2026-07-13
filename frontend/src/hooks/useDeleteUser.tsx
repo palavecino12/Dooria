@@ -2,7 +2,7 @@ import { useState } from "react"
 import { deleteUser } from "../services/userServices"
 
 export const useDeleteUser = () =>{
-    const [message,setMessage] = useState("")
+    const [message, setMessage] = useState<string | null>(null);
     const [loading,setLoading]=useState(false)
     const [error,setError]=useState<Error|null>(null)
 
@@ -10,7 +10,7 @@ export const useDeleteUser = () =>{
         try {
             setLoading(true)
             setError(null)
-            setMessage("")//Limpoa el mensaje anterior
+            setMessage(null);//Limpoa el mensaje anterior
             const data = await deleteUser(id)
             //Si data no tiene errores devuelve un objto con message
             setMessage(data.message)
