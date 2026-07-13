@@ -47,15 +47,10 @@ export const FormUserAccess = ({ initialValue, backToForm, data }: props) => {
     if (showCameraRegister) return <CameraRegister data={{ ...data, allowedDates: selectedMonths.map(d => d.toISOString()), allowedDays: selectedDays }} backToForm={() => setShowCameraRegister(false)} />
 
     //En caso de que querramos editar, renderizamos pantallas de feedback al terminar
-    if (initialValue && loading) {
-        return <Loading />
-    }
-    if (initialValue && error) {
-        return <Error message={error.message} />
-    }
-    if (initialValue && message) {
-        return <Success message={message} />
-    }
+    if (loading) return <Loading />
+    if (error) return <Error message={error.message} />
+    if (message) return <Success message={message} />
+    
     return (
         <div className="flex h-dvh flex-col bg-gray-200">
 

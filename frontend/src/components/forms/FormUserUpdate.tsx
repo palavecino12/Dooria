@@ -26,7 +26,7 @@ export const FormUserUpdate = ({ user }: Props) => {
     const [dataUser, setDataUser] = useState<FormValues | null>(null)
 
     const handleSubmitUser = async (data: FormValues) => {
-    //En caso de que el usuario tenga el rol "local" editamos solo sus datos y no pasamos al siguiente formulario
+        //En caso de que el usuario tenga el rol "local" editamos solo sus datos y no pasamos al siguiente formulario
         if (data.rol === "local") {
             await userUpdate(user._id, data)
         } else {
@@ -36,15 +36,10 @@ export const FormUserUpdate = ({ user }: Props) => {
         }
     }
     //Mostramos pantallas de feedback
-    if (loading) {
-        return <Loading />
-    }
-    if (error) {
-        return <Error message={error.message} />
-    }
-    if (message) {
-        return <Success message={message} />
-    }
+    if (loading) return <Loading />
+    if (error) return <Error message={error.message} />
+    if (message) return <Success message={message} />
+    
     if (showAccessForm && dataUser) return <FormUserAccess backToForm={() => setShowAccessForm(false)} data={dataUser} initialValue={user} />
     return <FormUser closeForm={() => navigate("/mobile/users")} onSubmit={handleSubmitUser} title="Editar Ususario" initialValues={user} />
 }

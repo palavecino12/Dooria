@@ -5,9 +5,7 @@ interface LoadingProps {
     message?: string
 }
 
-export const Loading = ({
-    message = "Procesando..."
-}: LoadingProps) => {
+export const Loading = ({message = "Procesando..."}: LoadingProps) => {
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 backdrop-blur-sm">
             <div className="flex h-60 w-60 flex-col items-center justify-center gap-6 rounded-2xl bg-white shadow-2xl">
