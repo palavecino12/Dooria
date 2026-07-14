@@ -175,22 +175,5 @@ export function useFaceDetection({ videoRef }: props) {
     };
   }, [videoRef]); //Colocamos VideoRef como dependencia ya que a veces el componente se monta antes que el DOM, por lo tanto VideoRef no tiene ninguna referencia
 
-  //Funcion para almacenar un usuario
-  async function registrarRostro({ name, lastName, dni, number, address, rol, accessType, allowedDays, allowedDates }: FormValues) {
-
-    const descriptor = latestDescriptorRef.current;
-
-    if (!descriptor) throw new Error("No hay descriptor disponible para registrar");
-
-    const body = { name, lastName, dni, number, address, rol, accessType, allowedDays, allowedDates, descriptor };
-
-    const resp = await fetch(`${BACKEND_URL}/usuarios/registrar-usuario`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    });
-    return resp.json();
-  }
-
-  return { estadoRostro, estadoAcceso, user, registrarRostro };
+  return { estadoRostro, estadoAcceso, user, latestDescriptorRef };
 }

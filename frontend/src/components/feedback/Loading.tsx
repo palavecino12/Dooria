@@ -1,4 +1,4 @@
-import { LoaderCircle } from "lucide-react"
+import { Loader } from "lucide-react"
 import { motion } from "framer-motion"
 import { createPortal } from "react-dom";
 
@@ -18,19 +18,19 @@ export const Loading = ({message = "Procesando..."}: LoadingProps) => {
                 <motion.div
                     animate={{ rotate: 360 }}
                     transition={{
-                        duration: 1,
+                        duration: 3,
                         repeat: Infinity,
                         ease: "linear",
                     }}
                 >
-                    <LoaderCircle
+                    <Loader
                         size={80}
-                        strokeWidth={3}
+                        strokeWidth={2}
                         className="text-black"
                     />
                 </motion.div>
 
-                <p className="text-lg font-medium text-gray-700">
+                <p className="text-lg font-medium">
                     {message}
                 </p>
             </div>

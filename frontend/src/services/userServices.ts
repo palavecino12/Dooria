@@ -1,20 +1,20 @@
 import type { FormValues } from "../schemas/schemaForm"
-import { type UserWithoutDescriptor } from "../types/userType"
+import { type UserWithoutDescriptor, type CreateUser } from "../types/userType"
 
 //Servicio para consumir el endpoint: Get/usuarios/
-export const getUsers = async (fullName:string,filter:string):Promise<UserWithoutDescriptor[]> =>{
-    const url=`http://localhost:3000/usuarios?fullName=${encodeURIComponent(fullName)}&filter=${encodeURIComponent(filter)}`
+export const getUsers = async (fullName: string, filter: string): Promise<UserWithoutDescriptor[]> => {
+    const url = `http://localhost:3000/usuarios?fullName=${encodeURIComponent(fullName)}&filter=${encodeURIComponent(filter)}`
 
     try {
-        const response= await fetch(url)
+        const response = await fetch(url)
 
         const data = await response.json()
 
-        if (!response.ok){
+        if (!response.ok) {
             //Mandamos al hook el mensaje de error del back
             throw new Error(data.error || "Error desconocido en el servidor")
         }
-        
+
         return data as UserWithoutDescriptor[]
     } catch (error) {
         console.error("Error en getUsers:", error)
@@ -22,18 +22,42 @@ export const getUsers = async (fullName:string,filter:string):Promise<UserWithou
     }
 }
 
-//Servicio para consumir el endpoint: Delete/usuarios/eliminar-usuario/:id
-export const deleteUser = async(id:string) =>{
-    const url= `http://localhost:3000/usuarios/eliminar-usuario/${id}`
+//Servicio para consumir el endpoint: Post/usuarios/registrar-usuario
+export const registerUser = async (user: CreateUser) => {
+    const url = "http://localhost:3000/usuarios/registrar-usuario";
 
     try {
-        const response = await fetch(url,{
-            method:"DELETE"
-        })
-        
-        const data = await response.json()        
+        const response = await fetch(url, {
+            method: "POST",
+            headers: {"Content-Type": "application/json",},
+            body: JSON.stringify(user),
+        });
 
-        if (!response.ok){
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.error || "Error desconocido en el servidor");
+        }
+
+        return data;
+    } catch (error) {
+        console.error("Error en registerUser:", error);
+        throw error;
+    }
+};
+
+//Servicio para consumir el endpoint: Delete/usuarios/eliminar-usuario/:id
+export const deleteUser = async (id: string) => {
+    const url = `http://localhost:3000/usuarios/eliminar-usuario/${id}`
+
+    try {
+        const response = await fetch(url, {
+            method: "DELETE"
+        })
+
+        const data = await response.json()
+
+        if (!response.ok) {
             throw new Error(data.error || "Error desconocido en el servidor")
         }
 
@@ -45,23 +69,23 @@ export const deleteUser = async(id:string) =>{
 }
 
 //Servicio para consumir el endpoint: Update/usuarios/editar-usuario/:id
-export const updateUser = async (id:string,user:FormValues) => {
+export const updateUser = async (id: string, user: FormValues) => {
     const url = `http://localhost:3000/usuarios/editar-usuario/${id}`
 
     try {
-        const response = await fetch(url,{
-            method:"PUT",
-            headers:{"Content-Type":"application/json"},
+        const response = await fetch(url, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify(user)
         })
 
         const data = await response.json()
 
-        if (!response.ok){
+        if (!response.ok) {
             throw new Error(data.error || "Error desconocido en el servidor")
         }
         console.log(data)
-        return data        
+        return data
     } catch (error) {
         console.error("Error en updateUser:", error)
         throw error

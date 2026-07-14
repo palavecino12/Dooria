@@ -47,7 +47,7 @@ export const obtenerUsuarios = async (req: Request, res: Response) => {
   }
 }
 
-//POST/usuarios/registrar-usuario (cambiar a registrar-usuario)
+//POST/usuarios/registrar-usuario 
 // En caso de exito retorno un ok: true, actualizar que en caso de error devuelva tambien un ok:false
 export const registrarUsuario = async (req: Request, res: Response) => {
   try {
@@ -60,7 +60,7 @@ export const registrarUsuario = async (req: Request, res: Response) => {
     const nuevo = new User(data);
     const saved = await nuevo.save();
 
-    return res.json({ ok: true, usuario: saved });
+    return res.json({ ok: true, usuario: saved, message: "Usuario creado con exito!" });
   } catch (err: any) {
     console.error(err);
     return res.status(500).json({ error: "Error al registrar rostro", detail: err.message });
@@ -173,14 +173,14 @@ export const buscarRostro = async (req: Request, res: Response) => {
       //Si el rol es visitante, validamos validamos el tipo de acceso
       if (mejorUsuario.rol === "visitante") {
 
-          //Validación de días (0-6)
-          if (Array.isArray(mejorUsuario.allowedDays) && mejorUsuario.allowedDays.includes(currentDay)) {
-            tieneAcceso = true;
-          }
-          //Validación de fechas YYYY-MM-DD
-          if (Array.isArray(userDates) && userDates.includes(currentDate)) {
-            tieneAcceso = true;
-          }
+        //Validación de días (0-6)
+        if (Array.isArray(mejorUsuario.allowedDays) && mejorUsuario.allowedDays.includes(currentDay)) {
+          tieneAcceso = true;
+        }
+        //Validación de fechas YYYY-MM-DD
+        if (Array.isArray(userDates) && userDates.includes(currentDate)) {
+          tieneAcceso = true;
+        }
       }
       //Respondemos según acceso
       if (!tieneAcceso) {

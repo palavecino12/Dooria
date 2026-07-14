@@ -54,6 +54,7 @@ export const FormUserUpdate = ({ user }: Props) => {
             {/* Pantalla loading, esta dentro para que se vea sobre la interfaz */}
             {loading && <Loading />}
 
+            {/* Formularios */}
             {showAccessForm && dataUser ? (
                 <FormUserAccess backToForm={() => setShowAccessForm(false)} data={dataUser} initialValue={user} />
             ) : (
