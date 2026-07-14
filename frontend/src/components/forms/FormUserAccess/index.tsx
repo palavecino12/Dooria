@@ -7,9 +7,9 @@ import { useUpdateUser } from "../../../hooks/useUpdateUser"
 import { CameraRegister } from "../../cameras/CameraRegister"
 import { Header } from "../../common/Header"
 import { Button } from "../../common/Button"
-import { Error } from "../../feedback/Error"
-import { Success } from "../../feedback/Success"
 import { Loading } from "../../feedback/Loading"
+import { useToast } from "../../../hooks/useToast"
+import { useNavigate } from "react-router-dom"
 
 interface props {
     backToForm: () => void
@@ -19,8 +19,11 @@ interface props {
 
 export const FormUserAccess = ({ initialValue, backToForm, data }: props) => {
 
+    const { userUpdate, loading } = useUpdateUser()
+    const { showToast } = useToast()//Toas que nos da feedback
+    const navigate = useNavigate()
+
     const [option, setOption] = useState<"semanal" | "calendario" | null>("semanal")
-    const { userUpdate, error, loading, message } = useUpdateUser()//Luego tenemos que traer los otros estados
     const [showCameraRegister, setShowCameraRegister] = useState(false);
     const [selectedMonths, setSelectedMonths] = useState<Date[]>(initialValue?.allowedDates?.map(d => new Date(d)) ?? []);
     const [selectedDays, setSelectedDays] = useState<number[]>(initialValue?.allowedDays ?? []);
@@ -37,7 +40,21 @@ export const FormUserAccess = ({ initialValue, backToForm, data }: props) => {
     //Al confirmar añadimos a date los campos seleccionados de la semana y del calendario
     const handleConfirm = async () => {
         if (initialValue) {
-            await userUpdate(initialValue._id, { ...data, allowedDates: selectedMonths.map(d => d.toISOString()), allowedDays: selectedDays })
+            try {
+
+                const message = await userUpdate(initialValue._id, { ...data, allowedDates: selectedMonths.map(d => d.toISOString()), allowedDays: selectedDays })
+                showToast({ message: message, variant: "success" })
+                navigate("/mobile/users");
+                
+            } catch (error) {
+                showToast({
+                    variant: "error",
+                    message:
+                        error instanceof Error
+                            ? error.message
+                            : "Error desconocido",
+                });
+            }
         } else {
             setShowCameraRegister(true)
         }
@@ -45,61 +62,59 @@ export const FormUserAccess = ({ initialValue, backToForm, data }: props) => {
 
     //Agregamos a date los dias y/o fechas que selecciono el usuario (convertimos selectDays en un array de string)
     if (showCameraRegister) return <CameraRegister data={{ ...data, allowedDates: selectedMonths.map(d => d.toISOString()), allowedDays: selectedDays }} backToForm={() => setShowCameraRegister(false)} />
-
-    //En caso de que querramos editar, renderizamos pantallas de feedback al terminar
-    if (loading) return <Loading />
-    if (error) return <Error message={error.message} />
-    if (message) return <Success message={message} />
-    
     return (
-        <div className="flex h-dvh flex-col bg-gray-200">
+        <>
+            {/* Pantalla loading, esta dentro para que se vea sobre la interfaz */}
+            {loading && <Loading />}
 
-            <Header title="Acceso del Visitante" />
+            <div className="flex h-dvh flex-col bg-gray-200">
 
-            <main className="flex flex-col flex-1">
-                {/* Botones de mensual y semanal */}
-                <div className="flex justify-center py-6">
-                    <button
-                        onClick={() => setOption("semanal")}
-                        className={`w-34 h-11 rounded-tl-lg rounded-bl-lg shadow-lg transition-all duration-100
+                <Header title="Acceso del Visitante" />
+
+                <main className="flex flex-col flex-1">
+                    {/* Botones de mensual y semanal */}
+                    <div className="flex justify-center py-6">
+                        <button
+                            onClick={() => setOption("semanal")}
+                            className={`w-34 h-11 rounded-tl-lg rounded-bl-lg shadow-lg transition-all duration-100
                         ${option === "semanal"
-                                ? "bg-black text-white"
-                                : "bg-white text-black border border-black/20"
-                            } active:scale-95 active:shadow-inner`}>Semanal
-                    </button>
-                    <button
-                        onClick={() => setOption("calendario")}
-                        className={`w-34 h-11 rounded-tr-lg rounded-br-lg shadow-lg transition-all duration-100
+                                    ? "bg-black text-white"
+                                    : "bg-white text-black border border-black/20"
+                                } active:scale-95 active:shadow-inner`}>Semanal
+                        </button>
+                        <button
+                            onClick={() => setOption("calendario")}
+                            className={`w-34 h-11 rounded-tr-lg rounded-br-lg shadow-lg transition-all duration-100
                         ${option === "calendario"
-                                ? "bg-black text-white"
-                                : "bg-white text-black border border-black/20"
-                            } active:scale-95 active:shadow-inner`}>Calendario
-                    </button>
-                </div>
+                                    ? "bg-black text-white"
+                                    : "bg-white text-black border border-black/20"
+                                } active:scale-95 active:shadow-inner`}>Calendario
+                        </button>
+                    </div>
 
-                {/* Componente mensual y semanal */}
-                <div className="flex-1 flex items-center justify-center">
-                    <div className="bg-white flex justify-center w-full p-4
+                    {/* Componente mensual y semanal */}
+                    <div className="flex-1 flex items-center justify-center">
+                        <div className="bg-white flex justify-center w-full p-4
                     shadow-[0_4px_10px_rgba(0,0,0,0.15),0_-4px_10px_rgba(0,0,0,0.15)]">
 
-                        {option === "semanal" && (<WeeklySelector selectedDays={selectedDays} toggleDay={toggleDay} />)}
-                        {option === "calendario" && (<MonthlySelector selectedMonths={selectedMonths} setSelectedMonths={setSelectedMonths} />)}
+                            {option === "semanal" && (<WeeklySelector selectedDays={selectedDays} toggleDay={toggleDay} />)}
+                            {option === "calendario" && (<MonthlySelector selectedMonths={selectedMonths} setSelectedMonths={setSelectedMonths} />)}
 
+                        </div>
                     </div>
-                </div>
 
-                {/* Boton aceptr y volver */}
-                <div className="flex justify-center gap-10 py-6">
-                    <Button variant="secundario" onClick={backToForm}>
-                        Volver
-                    </Button>
-                    <Button onClick={handleConfirm}>
-                        {initialValue ? "Confirmar" : "Siguiente"}
-                    </Button>
-                </div>
-            </main>
+                    {/* Boton aceptr y volver */}
+                    <div className="flex justify-center gap-10 py-6">
+                        <Button variant="secundario" onClick={backToForm}>
+                            Volver
+                        </Button>
+                        <Button onClick={handleConfirm}>
+                            {initialValue ? "Confirmar" : "Siguiente"}
+                        </Button>
+                    </div>
+                </main>
+            </div>
+        </>
 
-
-        </div>
     )
 }

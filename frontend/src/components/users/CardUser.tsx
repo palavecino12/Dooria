@@ -7,10 +7,9 @@ import { useState } from "react"
 
 interface CardUsersProps {
     user: UserWithoutDescriptor
-    refresh: () => void
-    userDelete:(id:string)=>void
+    userDelete:(id:string)=>Promise<void>
 }
-export const CardUser = ({ user, refresh, userDelete }: CardUsersProps) => {
+export const CardUser = ({ user, userDelete }: CardUsersProps) => {
 
     const navigate = useNavigate()
 
@@ -21,8 +20,6 @@ export const CardUser = ({ user, refresh, userDelete }: CardUsersProps) => {
     const handleDelete = async () => {
         setOpenModal(false);
         await userDelete(user._id)
-        refresh()
-        //No manejo el error porque ya queda guardado en el estado del hook
     }
 
     //Filtramos las fechas a tipo YYYY-MM-DD para que sea mas legible para el usuario

@@ -1,10 +1,8 @@
 import { useDeleteUser } from "../../hooks/useDeleteUser"
 import { useGetUsers } from "../../hooks/useGetUsers"
+import { useToast } from "../../hooks/useToast"
 import { Loading } from "../feedback/Loading"
-import { Toast } from "../feedback/Toast"
 import { CardUser } from "./CardUser"
-import { useEffect, useState } from "react"
-
 
 interface props {
     fullName: string
@@ -15,35 +13,29 @@ export const ListUsers = ({ fullName, filter }: props) => {
 
     const { users, refresh } = useGetUsers({ fullName, filter })
 
-    const { userDelete, loading, error, message } = useDeleteUser()
+    const { userDelete, loading } = useDeleteUser()
 
-    //Estado para abrir notificacion de feedback al eliminar un usuario
-    const [toast, setToast] = useState({
-        open: false,
-        variant: "success" as "success" | "error",
-        message: "",
-    });
+    const { showToast } = useToast();//Toas que nos da feedback
 
-    //Mostramos un toast cuando cambia el estado del hook
-    useEffect(() => {
-        if (message) {
-            setToast({
-                open: true,
+    const handleDelete = async (id: string) => {
+        try {
+
+            const message = await userDelete(id);
+            refresh();
+            showToast({
                 variant: "success",
                 message,
             });
-            return;
-        }
-
-        if (error) {
-            setToast({
-                open: true,
+        } catch (error) {
+            showToast({
                 variant: "error",
-                message: error.message,
+                message:
+                    error instanceof Error
+                        ? error.message
+                        : "Error desconocido",
             });
         }
-    }, [message, error]);
-
+    };
 
     return (
         <>
@@ -56,7 +48,7 @@ export const ListUsers = ({ fullName, filter }: props) => {
                 <div className="divide-y overflow-auto h-100">
                     {users.length > 0 ? (
                         users.map(user =>
-                            <CardUser key={user._id} user={user} refresh={refresh} userDelete={userDelete} />
+                            <CardUser key={user._id} user={user} userDelete={handleDelete} />
                         )
                     ) : (
                         <div className="h-full flex items-center justify-center text-gray-500 text-lg font-medium">
@@ -65,19 +57,6 @@ export const ListUsers = ({ fullName, filter }: props) => {
                     )}
                 </div>
             </div>
-
-            {/* Toast de feedback */}
-            <Toast
-                open={toast.open}
-                variant={toast.variant}
-                message={toast.message}
-                onClose={() =>
-                    setToast((prev) => ({
-                        ...prev,
-                        open: false,
-                    }))
-                }
-            />
         </>
 
     )

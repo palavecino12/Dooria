@@ -1,26 +1,31 @@
-import { useState } from "react"
-import { deleteUser } from "../services/userServices"
+//Nuevo enfoque de hook, donde:
+//Ejecutamos, retornamos el loading y devolvemos el resultado o error
+import { useState } from "react";
+import { deleteUser } from "../services/userServices";
 
-export const useDeleteUser = () =>{
-    const [message, setMessage] = useState<string | null>(null);
-    const [loading,setLoading]=useState(false)
-    const [error,setError]=useState<Error|null>(null)
+export const useDeleteUser = () => {
 
-    const userDelete = async(id:string) => {
+    const [loading, setLoading] = useState(false);
+
+    const userDelete = async (id: string): Promise<string> => {
+
         try {
-            setLoading(true)
-            setError(null)
-            setMessage(null);//Limpoa el mensaje anterior
-            const data = await deleteUser(id)
-            //Si data no tiene errores devuelve un objto con message
-            setMessage(data.message)
-        } catch (error) {
-            if (error instanceof Error) setError(error) //Capturamos el mensaje de error del back
-            else setError(new Error("Error desconocido"))
-        }finally{
-            setLoading(false)
-        }
-    }
+            
+            setLoading(true);
+            const data = await deleteUser(id);
+            return data.message;
 
-    return {userDelete,message,loading,error}
-}
+        } catch (error) {
+
+            if (error instanceof Error) {
+                throw error;
+            }
+            throw new Error("Error desconocido");
+
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return { userDelete, loading };
+};

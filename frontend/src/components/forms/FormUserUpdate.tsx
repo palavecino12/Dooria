@@ -9,8 +9,7 @@ import type { UserWithoutDescriptor } from "../../types/userType";
 import type { FormValues } from "../../schemas/schemaForm";
 import { useUpdateUser } from "../../hooks/useUpdateUser";
 import { Loading } from "../feedback/Loading";
-import { Error } from "../feedback/Error";
-import { Success } from "../feedback/Success";
+import { useToast } from "../../hooks/useToast";
 
 interface Props {
     user: UserWithoutDescriptor
@@ -19,36 +18,47 @@ interface Props {
 //Componente especifico para editar un usaurio utilizando el formulario reutilizable
 export const FormUserUpdate = ({ user }: Props) => {
 
-    const { error, loading, message, userUpdate } = useUpdateUser()
+    const { loading, userUpdate } = useUpdateUser()
+    const { showToast } = useToast();//Toas que nos da feedback
 
     const navigate = useNavigate()
     const [showAccessForm, setShowAccessForm] = useState(false)
     const [dataUser, setDataUser] = useState<FormValues | null>(null)
 
     const handleSubmitUser = async (data: FormValues) => {
-        //En caso de que el usuario tenga el rol "local" editamos solo sus datos y no pasamos al siguiente formulario
+
         if (data.rol === "local") {
-            await userUpdate(user._id, data)
+            try {
+
+                const message = await userUpdate(user._id, data);
+                showToast({ variant: "success", message, });
+                navigate("/mobile/users");
+
+            } catch (error) {
+                showToast({
+                    variant: "error",
+                    message:
+                        error instanceof Error
+                            ? error.message
+                            : "Error desconocido",
+                });
+            }
         } else {
-            setDataUser(data)
-            setShowAccessForm(true)
-            console.log(showAccessForm)
+            setDataUser(data);
+            setShowAccessForm(true);
         }
     }
-    //Mostramos pantallas de feedback (la pantalla de carga se coloca dentro del return ya flota sobre la interfaz)
-    if (error) return <Error message={error.message} />
-    if (message) return <Success message={message} />
-    
-    return (
-    <>
-        {/* Pantalla loading, esta dentro para que se vea sobre la interfaz */}
-        {loading && <Loading />}
 
-        {showAccessForm && dataUser ? (
-            <FormUserAccess backToForm={() => setShowAccessForm(false)} data={dataUser} initialValue={user}/>
-        ) : (
-            <FormUser closeForm={() => navigate("/mobile/users")} onSubmit={handleSubmitUser} title="Editar Usuario" initialValues={user}/>
-        )}
-    </>
-);
+    return (
+        <>
+            {/* Pantalla loading, esta dentro para que se vea sobre la interfaz */}
+            {loading && <Loading />}
+
+            {showAccessForm && dataUser ? (
+                <FormUserAccess backToForm={() => setShowAccessForm(false)} data={dataUser} initialValue={user} />
+            ) : (
+                <FormUser closeForm={() => navigate("/mobile/users")} onSubmit={handleSubmitUser} title="Editar Usuario" initialValues={user} />
+            )}
+        </>
+    );
 }
