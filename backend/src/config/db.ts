@@ -1,11 +1,18 @@
-import mongoose from "mongoose"
+import mongoose from "mongoose";
 
 export const connectDB = async () => {
   try {
-    await mongoose.connect("mongodb://localhost:27017/DooriaDB")
-    console.log("MongoDB conectado correctamente")
+    const mongoUrl = process.env.MONGODB_URL;
+
+    if (!mongoUrl) {
+      throw new Error("MONGODB_URL no está definida en las variables de entorno");
+    }
+
+    await mongoose.connect(mongoUrl);
+
+    console.log("MongoDB conectado correctamente");
   } catch (error) {
-    console.error("Error al conectar MongoDB:", error)
-    process.exit(1)
+    console.error("Error al conectar MongoDB:", error);
+    process.exit(1);
   }
-}
+};

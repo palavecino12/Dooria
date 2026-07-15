@@ -1,9 +1,14 @@
 import type { FormValues } from "../schemas/schemaForm"
 import { type UserWithoutDescriptor, type CreateUser } from "../types/userType"
 
+const apiUrl = import.meta.env.VITE_API_URL;
+if (!apiUrl) {
+    throw new Error("La variable de entorno VITE_API_URL no está definida");
+}
+
 //Servicio para consumir el endpoint: Get/usuarios/
 export const getUsers = async (fullName: string, filter: string): Promise<UserWithoutDescriptor[]> => {
-    const url = `http://localhost:3000/usuarios?fullName=${encodeURIComponent(fullName)}&filter=${encodeURIComponent(filter)}`
+    const url = `${apiUrl}/usuarios?fullName=${encodeURIComponent(fullName)}&filter=${encodeURIComponent(filter)}`
 
     try {
         const response = await fetch(url)
@@ -24,7 +29,7 @@ export const getUsers = async (fullName: string, filter: string): Promise<UserWi
 
 //Servicio para consumir el endpoint: Post/usuarios/registrar-usuario
 export const registerUser = async (user: CreateUser) => {
-    const url = "http://localhost:3000/usuarios/registrar-usuario";
+    const url = `${apiUrl}/usuarios/registrar-usuario`;
 
     try {
         const response = await fetch(url, {
@@ -48,7 +53,7 @@ export const registerUser = async (user: CreateUser) => {
 
 //Servicio para consumir el endpoint: Delete/usuarios/eliminar-usuario/:id
 export const deleteUser = async (id: string) => {
-    const url = `http://localhost:3000/usuarios/eliminar-usuario/${id}`
+    const url = `${apiUrl}/usuarios/eliminar-usuario/${id}`
 
     try {
         const response = await fetch(url, {
@@ -70,7 +75,7 @@ export const deleteUser = async (id: string) => {
 
 //Servicio para consumir el endpoint: Update/usuarios/editar-usuario/:id
 export const updateUser = async (id: string, user: FormValues) => {
-    const url = `http://localhost:3000/usuarios/editar-usuario/${id}`
+    const url = `${apiUrl}/usuarios/editar-usuario/${id}`
 
     try {
         const response = await fetch(url, {
