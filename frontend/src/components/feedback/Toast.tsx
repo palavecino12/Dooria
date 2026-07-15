@@ -1,4 +1,4 @@
-//Este va a ser un componente de notificacion (toast) en caso de exito o error al momento de eliminar un usuario
+//Este va a ser un componente de notificacion (toast) en caso de exito o error al momento de eliminar o editar un usuario
 //Se usa una notificacion para no molestar al usuario en toda la pantalla por si quiere hacer otro operacion
 import { useEffect } from "react";
 import { createPortal } from "react-dom";
@@ -18,7 +18,7 @@ export const Toast = ({ open, variant, message, onClose, }: ToastProps) => {
 
     useEffect(() => {
         if (!open) return;
-
+        //Cerramos el modal en 2 segundos
         const timer = setTimeout(() => {
             onClose();
         }, 2000)
