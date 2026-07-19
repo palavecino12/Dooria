@@ -3,6 +3,11 @@ import { useEffect, useRef, useState, type RefObject } from "react";
 import * as faceapi from "face-api.js";
 import { type FormValues } from "../schemas/schemaForm";
 
+const apiUrl = import.meta.env.VITE_API_URL;
+if (!apiUrl) {
+    throw new Error("La variable de entorno VITE_API_URL no está definida");
+}
+
 type EstadoRostro = "ninguno" | "procesando" | "reconocido" | "desconocido";
 type EstadoAcceso = "permitido" | "denegado";
 
@@ -31,7 +36,6 @@ export function useFaceDetection({ videoRef }: props) {
   const intervalRef = useRef<number | null>(null); //Ref para almacenar el id del intervalo
 
   const MAX_INTENTOS = 3;
-  const BACKEND_URL = "http://localhost:3000";
 
   useEffect(() => {
     estadoRostroRef.current = estadoRostro;
@@ -55,7 +59,7 @@ export function useFaceDetection({ videoRef }: props) {
     //Funcion donde le mandamos un descriptor y lo busca en la base de datos
     const reconocerRostro = async (descriptor: number[]) => {
       try {
-        const resp = await fetch(`${BACKEND_URL}/usuarios/buscar-rostro`, {
+        const resp = await fetch(`${apiUrl}/usuarios/buscar-rostro`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ descriptor }),
