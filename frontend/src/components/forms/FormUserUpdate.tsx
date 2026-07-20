@@ -31,8 +31,10 @@ export const FormUserUpdate = ({ user }: Props) => {
 
         if (data.rol === "local") {
             try {
+                //Borramos los datos que tenia almacenado en el acceso para que si vuelve a ser visitante aparezca vacio.
+                const userToUpdate: FormValues = { ...data, allowedDays: [], allowedDates: [], };
 
-                const message = await userUpdate(user._id, data);
+                const message = await userUpdate(user._id, userToUpdate);
                 await refresh()
                 showToast({ variant: "success", message, });
                 navigate("/mobile/users");

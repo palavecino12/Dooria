@@ -53,7 +53,6 @@ export function useFaceDetection({ videoRef }: props) {
         faceapi.nets.faceLandmark68Net.loadFromUri("/models/face_landmark_68"), //Encuentra ojos, cejas, nariz, boca
         faceapi.nets.faceRecognitionNet.loadFromUri("/models/face_recognition"), //Genera el descriptor
       ]);
-      console.log("Modelos cargados");
     };
 
     //Funcion donde le mandamos un descriptor y lo busca en la base de datos
