@@ -5,37 +5,8 @@ import { UpdateUserDTO } from "../dtos/user.dto"
 //GET/usuarios (sirve para mosstrar todos los ususarios y tambien para filtrar)
 export const obtenerUsuarios = async (req: Request, res: Response) => {
   try {
-    const { fullName = "", filter = "Todos" } = req.query
-
-    if (typeof fullName !== "string") return res.status(400).json({ error: "fullName debe ser un texto" })
-
-    if (typeof filter !== "string" || !["Todos", "Locales", "Visitantes"].includes(filter)) {
-      return res.status(400).json({ error: "Filtro inválido" });
-    }
-
-    //Creamos un objeto acumulador para realizar una consulta mas limpia
-    const query: any = {};
-
-    if (filter === "Locales") query.rol = "local";
-    if (filter === "Visitantes") query.rol = "visitante";
-
-    //Dividimos las palabras ingresadas por el usuario
-    const terms: string[] = fullName.trim().split(/\s+/).filter(Boolean)
-
-    //Buscamos cada palabra en ambos campos ignorando mayusculas (creamos un array)
-    //Solo añadimos el campo and si es que el usuario añadio texto
-    if (terms.length > 0) {
-      query.$and = terms.map(term => ({
-        $or: [
-          { name: { $regex: term, $options: "i" } },
-          { lastName: { $regex: term, $options: "i" } }
-        ]
-      }));
-    }
-
-    //Simplificamos todo a una sola consulta
-    const users: UpdateUserDTO[] = await User.find(
-      query,
+    //Obtenemos solo lo necesario para mostrar a un usuario en una lista
+    const users: UpdateUserDTO[] = await User.find({},
       { name: 1, lastName: 1, dni: 1, number: 1, address: 1, rol: 1, accessType: 1, allowedDates: 1, allowedDays: 1 }
     );
 
@@ -48,7 +19,7 @@ export const obtenerUsuarios = async (req: Request, res: Response) => {
 }
 
 //POST/usuarios/registrar-usuario 
-// En caso de exito retorno un ok: true, actualizar que en caso de error devuelva tambien un ok:false
+//En caso de exito retorno un ok: true, actualizar que en caso de error devuelva tambien un ok:false
 export const registrarUsuario = async (req: Request, res: Response) => {
   try {
     const data = req.body as IUser
