@@ -22,7 +22,7 @@ export const UsersPage = () =>{
             <UserFilterButtons selected={selected} setSelected={setSelected}/>
 
             {/* Lista de usuarios */}
-            <ListUsers fullName={userSearch} filter={selected}/>
+            <ListUsers selected={selected} userSearch={userSearch}/>
 
             <Button variant="secundario" onClick={()=>navigate("/mobile")}>Volver</Button>
         </div>

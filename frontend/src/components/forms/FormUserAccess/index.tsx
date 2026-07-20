@@ -10,6 +10,7 @@ import { Button } from "../../common/Button"
 import { Loading } from "../../feedback/Loading"
 import { useToast } from "../../../hooks/useToast"
 import { useNavigate } from "react-router-dom"
+import { useUsers } from "../../../hooks/useUsers"
 
 interface props {
     backToForm: () => void
@@ -19,9 +20,11 @@ interface props {
 
 export const FormUserAccess = ({ initialValue, backToForm, data }: props) => {
 
+    const navigate = useNavigate()
+    const { refresh } = useUsers()
+
     const { userUpdate, loading } = useUpdateUser()
     const { showToast } = useToast()//Toas que nos da feedback
-    const navigate = useNavigate()
 
     const [option, setOption] = useState<"semanal" | "calendario" | null>("semanal")
     const [showCameraRegister, setShowCameraRegister] = useState(false);
@@ -43,9 +46,10 @@ export const FormUserAccess = ({ initialValue, backToForm, data }: props) => {
             try {
 
                 const message = await userUpdate(initialValue._id, { ...data, allowedDates: selectedMonths.map(d => d.toISOString()), allowedDays: selectedDays })
+                await refresh()
                 showToast({ message: message, variant: "success" })
                 navigate("/mobile/users");
-                
+
             } catch (error) {
                 showToast({
                     variant: "error",

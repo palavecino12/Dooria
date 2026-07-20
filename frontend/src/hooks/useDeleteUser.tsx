@@ -1,5 +1,5 @@
 //Nuevo enfoque de hook, donde:
-//Ejecutamos, retornamos el loading y devolvemos el resultado o error
+//Ejecutamos, retornamos el loading y devolvemos el resultado en la funcion. En caso de error se captura en el componente
 import { useState } from "react";
 import { deleteUser } from "../services/userServices";
 

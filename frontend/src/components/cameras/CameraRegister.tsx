@@ -17,9 +17,10 @@ interface props {
 
 export const CameraRegister = ({ data, backToForm }: props) => {
 
+    const videoRef = useCamera();
+
     const [successMessage, setSuccessMessage] = useState<string | null>(null)
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
-    const videoRef = useCamera();
     const { estadoRostro, latestDescriptorRef } = useFaceDetection({ videoRef });
     const { createUser, loading } = useRegisterUser()
 

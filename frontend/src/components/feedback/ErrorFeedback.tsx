@@ -27,11 +27,8 @@ export const ErrorFeedback = ({ message = "Ups..." }: ErrorProps) => {
                     animate={{ color: "#ffffff" }}
                     transition={{ duration: 1, delay: 0.6 }}
                 >
-                    <CircleX
-                        size={126}
-                        strokeWidth={7.5}
-                        absoluteStrokeWidth
-                    />
+                    <CircleX size={126} strokeWidth={7.5}absoluteStrokeWidth/>
+                    
                 </motion.div>
             </motion.div>
 

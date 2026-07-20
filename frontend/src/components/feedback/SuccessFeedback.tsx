@@ -27,11 +27,8 @@ export const SuccessFeedback = ({ message = "Operacion exitosa!" }: SuccessProps
                     animate={{ color: "#ffffff" }}
                     transition={{ duration: 1, delay: 0.6 }}
                 >
-                    <CircleCheck
-                        size={126}
-                        strokeWidth={7.5}
-                        absoluteStrokeWidth
-                    />
+                    <CircleCheck size={126} strokeWidth={7.5} absoluteStrokeWidth/>
+                    
                 </motion.div>
             </motion.div>
             <p className="text-white w-full text-center text-2xl font-bold">{message}</p>

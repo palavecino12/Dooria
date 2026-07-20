@@ -10,18 +10,20 @@ import type { FormValues } from "../../schemas/schemaForm";
 import { useUpdateUser } from "../../hooks/useUpdateUser";
 import { Loading } from "../feedback/Loading";
 import { useToast } from "../../hooks/useToast";
+import { useUsers } from "../../hooks/useUsers";
 
 interface Props {
     user: UserWithoutDescriptor
 }
 
-//Componente especifico para editar un usaurio utilizando el formulario reutilizable
+//Componente especifico para editar un usaurio utilizando el formulario reutilizable.
 export const FormUserUpdate = ({ user }: Props) => {
+
+    const navigate = useNavigate()
+    const { refresh } = useUsers()//Refresh de la lista global de usuarios.
 
     const { loading, userUpdate } = useUpdateUser()
     const { showToast } = useToast();//Toas que nos da feedback
-
-    const navigate = useNavigate()
     const [showAccessForm, setShowAccessForm] = useState(false)
     const [dataUser, setDataUser] = useState<FormValues | null>(null)
 
@@ -31,6 +33,7 @@ export const FormUserUpdate = ({ user }: Props) => {
             try {
 
                 const message = await userUpdate(user._id, data);
+                await refresh()
                 showToast({ variant: "success", message, });
                 navigate("/mobile/users");
 

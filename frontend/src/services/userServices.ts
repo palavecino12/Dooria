@@ -7,8 +7,8 @@ if (!apiUrl) {
 }
 
 //Servicio para consumir el endpoint: Get/usuarios/
-export const getUsers = async (fullName: string, filter: string): Promise<UserWithoutDescriptor[]> => {
-    const url = `${apiUrl}/usuarios?fullName=${encodeURIComponent(fullName)}&filter=${encodeURIComponent(filter)}`
+export const getUsers = async (): Promise<UserWithoutDescriptor[]> => {
+    const url = `${apiUrl}/usuarios`
 
     try {
         const response = await fetch(url)
