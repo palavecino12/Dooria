@@ -12,18 +12,17 @@ const PORT = process.env.PORT || 3000;
 
 //Aplicación de Express que manejará las rutas HTTP de la API.
 const app = express();
-app.use(cors({origin: process.env.FRONTEND_URL || "http://localhost:5173",}));
+app.use(cors({origin: process.env.FRONTEND_URL}));
 app.use(express.json());
 
 app.use("/usuarios", userRoutes);
-
 
 //Creamos el servidor http de node asociado a express.
 const httpServer = createServer(app);
 //Creamos el servidor socket.io.
 const io = new Server(httpServer, {
     cors: {
-        origin: process.env.FRONTEND_URL || "http://localhost:5173",
+        origin: process.env.FRONTEND_URL,
         methods: ["GET", "POST"],
     },
 });

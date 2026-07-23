@@ -7,18 +7,19 @@ export const useCamera = (enabled = true) => {
 
   useEffect(() => {
 
-    //En caso de que lo use el mobile retornamos null ya que el no lo tiene que recibir.
+    //En caso de que lo use el mobile retornamos null ya que el no lo tiene que recibir el video.
     if (!enabled) return;
 
     const startVideo = async () => {
 
       try {
-
+        //Almacenamos el MediaStream del video.
         streamRef.current = await navigator.mediaDevices.getUserMedia({
           video: true,
         });
 
         if (videoRef.current) {
+          //Colocamos el video en en el componente.
           videoRef.current.srcObject = streamRef.current;
         }
 
@@ -37,5 +38,4 @@ export const useCamera = (enabled = true) => {
   }, [enabled]);
 
   return { videoRef, streamRef, };
-
 };

@@ -19,7 +19,7 @@ export const CameraIntercom = ({ isMobile = false }: CameraIntercomProps) => {
     //La deteccion de rostro solo se va a usar en el intercom.
     const faceDetection = useFaceDetection({ videoRef, enabled: !isMobile });
     //Comunicacion con sel servidor de socket.io
-    const { remoteState } = useWebRTC({ isMobile, streamRef, faceDetection })
+    const { remoteState } = useWebRTC({ isMobile, streamRef, videoRef, faceDetection })
 
     useEffect(() => {
         console.log(remoteState);
