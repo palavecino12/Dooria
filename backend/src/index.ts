@@ -20,7 +20,7 @@ app.use("/usuarios", userRoutes);
 
 //Creamos el servidor http de node asociado a express.
 const httpServer = createServer(app);
-//Creamos el servidor socket.io que utiliza este mismo servidor http para aceptar conexiones en tiempo real.
+//Creamos el servidor socket.io.
 const io = new Server(httpServer, {
     cors: {
         origin: process.env.FRONTEND_URL || "http://localhost:5173",

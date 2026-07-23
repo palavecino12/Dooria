@@ -3,34 +3,51 @@ import { useCamera } from "../../hooks/useCamera";
 import { useFaceDetection } from "../../hooks/useFaceDetection";
 import { Button } from "../common/Button";
 import { Header } from "../common/Header";
+import { useWebRTC } from "../../hooks/useWebRTC";
+import { useEffect } from "react";
 
 interface CameraIntercomProps {
     isMobile?: boolean
 }
 
 export const CameraIntercom = ({ isMobile = false }: CameraIntercomProps) => {
+
     const navigate = useNavigate()
 
-    const videoRef = useCamera();
-    const { estadoRostro, estadoAcceso, user } = useFaceDetection({ videoRef });
-    
+    //La camara solo se va a usar en el intercom.
+    const { videoRef, streamRef } = useCamera(!isMobile);
+    //La deteccion de rostro solo se va a usar en el intercom.
+    const faceDetection = useFaceDetection({ videoRef, enabled: !isMobile });
+    //Comunicacion con sel servidor de socket.io
+    const { remoteState } = useWebRTC({ isMobile, streamRef, faceDetection })
+
+    useEffect(() => {
+        console.log(remoteState);
+    }, [remoteState]);
+
+    //Si es mobile usamos los datos que recibimos del interom
+    //Y si es intercom usamos los datos directos de faceDetection.
+    const currentState = isMobile
+        ? remoteState
+        : faceDetection;
+
     //Filtramos las fechas a tipo YYYY-MM-DD para que sea mas legible para el usuario
-    const userDates = user?.allowedDates?.map(date => date.slice(0, 10)) ?? [];
+    const userDates = currentState.user?.allowedDates?.map(date => date.slice(0, 10)) ?? [];
     //Convertimos de numero a dias de la semana
     const daysMap = ["Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado"];
-    const userDays = user?.allowedDays
-        ? user.allowedDays.map(d => daysMap[d])
+    const userDays = currentState.user?.allowedDays
+        ? currentState.user.allowedDays.map(d => daysMap[d])
         : [];
 
     //Usamos esta variable para identificar mas facil cuando un ususario esta registrado pero no tiene acceso
     const screenState =
-        estadoRostro === "ninguno"
+        currentState.estadoRostro === "ninguno"
             ? "idle"
-            : estadoRostro === "procesando"
+            : currentState.estadoRostro === "procesando"
                 ? "loading"
-                : estadoRostro === "desconocido"
+                : currentState.estadoRostro === "desconocido"
                     ? "unknown"
-                    : estadoAcceso === "permitido"
+                    : currentState.estadoAcceso === "permitido"
                         ? "granted"
                         : "denied";
 
@@ -58,7 +75,7 @@ export const CameraIntercom = ({ isMobile = false }: CameraIntercomProps) => {
             bg: "bg-green-600",
             text: "text-white text-center",
             title: "Acceso permitido",
-            message: `Bienvenido ${user?.name ?? ""}`,
+            message: `Bienvenido ${currentState.user?.name ?? ""}`,
         },
         denied: {
             videoBorder: "border-red-500",
@@ -66,7 +83,7 @@ export const CameraIntercom = ({ isMobile = false }: CameraIntercomProps) => {
             bg: "bg-red-600",
             text: "text-white text-center",
             title: "Acceso denegado",
-            message: `${user?.name} ${user?.lastName}`,
+            message: `${currentState.user?.name} ${currentState.user?.lastName}`,
         },
         unknown: {
             videoBorder: "border-red-500",

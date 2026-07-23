@@ -5,7 +5,7 @@ import { type FormValues } from "../schemas/schemaForm";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 if (!apiUrl) {
-    throw new Error("La variable de entorno VITE_API_URL no está definida");
+  throw new Error("La variable de entorno VITE_API_URL no está definida");
 }
 
 type EstadoRostro = "ninguno" | "procesando" | "reconocido" | "desconocido";
@@ -13,6 +13,7 @@ type EstadoAcceso = "permitido" | "denegado";
 
 interface props {
   videoRef: RefObject<HTMLVideoElement | null>,
+  enabled?: boolean
 }
 
 interface FaceMatchResult {
@@ -21,7 +22,7 @@ interface FaceMatchResult {
   user?: FormValues
 }
 
-export function useFaceDetection({ videoRef }: props) {
+export function useFaceDetection({ videoRef, enabled = true }: props) {
 
   const [estadoRostro, setEstadoRostro] = useState<EstadoRostro>("ninguno");
   const [estadoAcceso, setEstadoAcceso] = useState<EstadoAcceso>("denegado");
@@ -42,6 +43,10 @@ export function useFaceDetection({ videoRef }: props) {
   }, [estadoRostro]);
 
   useEffect(() => {
+
+    //Si se abre desde le mobile retornamos null.
+    if (!enabled) return;
+
     const video = videoRef.current;
 
     if (!video) return;
@@ -100,7 +105,7 @@ export function useFaceDetection({ videoRef }: props) {
             setUser(null);
             return;
           }
-          
+
           //Si detectamos un rostro, pasamos al estado de procesando
           if (estadoRostroRef.current === "ninguno") {
             setEstadoRostro("procesando");
@@ -176,7 +181,7 @@ export function useFaceDetection({ videoRef }: props) {
       video.removeEventListener("play", handlePlay);
 
     };
-  }, [videoRef]); //Colocamos VideoRef como dependencia ya que a veces el componente se monta antes que el DOM, por lo tanto VideoRef no tiene ninguna referencia
+  }, [videoRef, enabled]); //Colocamos VideoRef como dependencia ya que a veces el componente se monta antes que el DOM, por lo tanto VideoRef no tiene ninguna referencia
 
   return { estadoRostro, estadoAcceso, user, latestDescriptorRef };
 }
