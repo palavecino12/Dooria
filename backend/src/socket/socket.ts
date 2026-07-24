@@ -9,11 +9,9 @@ export const configureSockets = (io: Server) => {
     io.on("connection", (socket: Socket) => {
 
         viewers.set(socket.id, socket);
-        console.log("Viewer conectado:", socket.id, "Total viewers:", viewers.size);
 
-        //Identificamos quein funciona como intercom.
+        //Identificamos quien funciona como intercom.
         socket.on("join-intercom", () => {
-
             intercom = socket;
         });
 
@@ -78,9 +76,7 @@ export const configureSockets = (io: Server) => {
                     estadoAcceso,
                     user,
                 });
-
             });
-
         });
     });
 };

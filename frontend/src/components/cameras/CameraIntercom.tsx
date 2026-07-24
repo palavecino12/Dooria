@@ -4,7 +4,7 @@ import { useFaceDetection } from "../../hooks/useFaceDetection";
 import { Button } from "../common/Button";
 import { Header } from "../common/Header";
 import { useWebRTC } from "../../hooks/useWebRTC";
-import { useEffect } from "react";
+import { useFaceStateSocket } from "../../hooks/useFaceStateSocket";
 
 interface CameraIntercomProps {
     isMobile?: boolean
@@ -18,12 +18,10 @@ export const CameraIntercom = ({ isMobile = false }: CameraIntercomProps) => {
     const { videoRef, streamRef } = useCamera(!isMobile);
     //La deteccion de rostro solo se va a usar en el intercom.
     const faceDetection = useFaceDetection({ videoRef, enabled: !isMobile });
-    //Comunicacion con sel servidor de socket.io
-    const { remoteState } = useWebRTC({ isMobile, streamRef, videoRef, faceDetection })
-
-    useEffect(() => {
-        console.log(remoteState);
-    }, [remoteState]);
+    //Gestiona la conexion WebRTC para transmitir el video del intercom hacia los viewers.
+    useWebRTC({ isMobile, streamRef, videoRef })
+    //Retransmite el estado del rostro del intercom hacia los viewers.
+    const { remoteState } = useFaceStateSocket({isMobile,faceDetection});
 
     //Si es mobile usamos los datos que recibimos del interom
     //Y si es intercom usamos los datos directos de faceDetection.

@@ -1,33 +1,22 @@
-import { useEffect, useRef, useState } from "react";
+//Este hook gestiona la conexion WebRTC (transmisin de video) entre el intercom y los viewers.
+//Usa socket.io para manejar la señalización, intercambiando offers, answers y ice candidates entre ambas entidades.
+import { useEffect, useRef } from "react";
 import { socket } from "../services/socketServices";
-import type { FormValues } from "../schemas/schemaForm";
 
 interface props {
     isMobile: boolean,
     streamRef: React.RefObject<MediaStream | null>,
     videoRef: React.RefObject<HTMLVideoElement | null>,
-    faceDetection?: {
-        estadoRostro: string;
-        estadoAcceso: string;
-        user: FormValues | null;
-    }
 }
 
-export const useWebRTC = ({ isMobile, streamRef, faceDetection, videoRef }: props) => {
+export const useWebRTC = ({ isMobile, streamRef, videoRef }: props) => {
 
-    //STATES
+    //REFS
 
     //Intercom: muchas conexiones
     const peerConnections = useRef<Map<string, RTCPeerConnection>>(new Map());
-
     //Viewer: una sola conexión
     const peerConnection = useRef<RTCPeerConnection | null>(null);
-
-    const [remoteState, setRemoteState] = useState({
-        estadoRostro: "ninguno",
-        estadoAcceso: "denegado",
-        user: null,
-    });
 
     //SOCKET EVENTS
 
@@ -88,7 +77,7 @@ export const useWebRTC = ({ isMobile, streamRef, faceDetection, videoRef }: prop
         }
 
         const pc = new RTCPeerConnection({
-            iceServers: [{urls: "stun:stun.l.google.com:19302"}]
+            iceServers: [{ urls: "stun:stun.l.google.com:19302" }]
         });
 
         pc.onicecandidate = (event) => {
@@ -137,14 +126,14 @@ export const useWebRTC = ({ isMobile, streamRef, faceDetection, videoRef }: prop
         return pc;
     };
 
-    //Agregamos el track del video, creamos la oferta y la emitimos.
+    //Agregamos el track del video, creamos la oferta y la emite.
     const createOffer = async (viewerId: string) => {
 
         const pc = createIntercomPeerConnection(viewerId);
 
         if (!pc) return;
 
-        //Sólo agregamos tracks si todavía no hay ninguno.
+        //Sólo agrega tracks si todavía no hay ninguno.
         if (pc.getSenders().length === 0) {
             addLocalTracks(pc);
         }
@@ -157,7 +146,7 @@ export const useWebRTC = ({ isMobile, streamRef, faceDetection, videoRef }: prop
     };
 
 
-    //Creamos una respuesta del viewer al intercom.
+    //Crea una respuesta del viewer al intercom.
     const createAnswer = async (offer: RTCSessionDescriptionInit) => {
 
         const pc = createViewerPeerConnection();
@@ -173,7 +162,7 @@ export const useWebRTC = ({ isMobile, streamRef, faceDetection, videoRef }: prop
         socket.emit("answer", { viewerId: socket.id, answer });
     };
 
-    //Agregamos el video (tracks) de la camara a la conexion webrtc para que pueda transmitirse.
+    //Agrega el video (tracks) de la camara a la conexion webrtc para que pueda transmitirse.
     const addLocalTracks = (pc: RTCPeerConnection) => {
 
         if (!streamRef.current) return;
@@ -214,25 +203,9 @@ export const useWebRTC = ({ isMobile, streamRef, faceDetection, videoRef }: prop
         socket.on("ice-candidate", ({ candidate }) => {
             onIceCandidateViewer(candidate);
         });
-
-        socket.on("face-state", (state) => {
-            console.log("Estado recibido", state);
-            setRemoteState(state);
-        });
-
     };
 
-    //EFFECTS
-
-    //Solo pasamos por socket el estado del rostro en tiempo real.
-    useEffect(() => {
-
-        if (isMobile) return;
-        if (!faceDetection) return;
-
-        socket.emit("face-state", faceDetection);
-
-    }, [faceDetection, isMobile]);
+    //EFFECT
 
     useEffect(() => {
 
@@ -247,20 +220,22 @@ export const useWebRTC = ({ isMobile, streamRef, faceDetection, videoRef }: prop
             registerIntercomEvents();
         }
 
+        //Guarda las referencias actuales para el cleanup seguro
+        const currentPeerConnections = peerConnections.current;
+        const currentPeerConnection = peerConnection.current;
+
         return () => {
             socket.off("viewer-connected");
             socket.off("offer");
             socket.off("answer");
-            socket.off("face-state");
 
-            peerConnections.current.forEach(pc => pc.close());
-            peerConnections.current.clear();
+            currentPeerConnections.forEach(pc => pc.close());
+            currentPeerConnections.clear();
 
-            peerConnection.current?.close();
-            peerConnection.current = null;
+            currentPeerConnection?.close();
         };
 
     }, [isMobile]);
 
-    return { remoteState };
+    return null;
 };
