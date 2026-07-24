@@ -11,6 +11,9 @@ interface props {
 
 export const useWebRTC = ({ isMobile, streamRef, videoRef }: props) => {
 
+    //Estado del video para poder avisar al usuario.
+    //const [connectionState, setConnectionState] = useState<"connecting" | "connected" | "no-intercom">("connecting");
+
     //REFS
 
     //Intercom: muchas conexiones

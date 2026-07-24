@@ -21,7 +21,7 @@ export const CameraIntercom = ({ isMobile = false }: CameraIntercomProps) => {
     //Gestiona la conexion WebRTC para transmitir el video del intercom hacia los viewers.
     useWebRTC({ isMobile, streamRef, videoRef })
     //Retransmite el estado del rostro del intercom hacia los viewers.
-    const { remoteState } = useFaceStateSocket({isMobile,faceDetection});
+    const { remoteState } = useFaceStateSocket({ isMobile, faceDetection });
 
     //Si es mobile usamos los datos que recibimos del interom
     //Y si es intercom usamos los datos directos de faceDetection.
@@ -32,7 +32,7 @@ export const CameraIntercom = ({ isMobile = false }: CameraIntercomProps) => {
     //Filtramos las fechas a tipo YYYY-MM-DD para que sea mas legible para el usuario
     const userDates = currentState.user?.allowedDates?.map(date => date.slice(0, 10)) ?? [];
     //Convertimos de numero a dias de la semana
-    const daysMap = ["Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado"];
+    const daysMap = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"];
     const userDays = currentState.user?.allowedDays
         ? currentState.user.allowedDays.map(d => daysMap[d])
         : [];
