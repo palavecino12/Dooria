@@ -17,7 +17,7 @@ interface props {
 
 export const CameraRegister = ({ data, backToForm }: props) => {
 
-    const videoRef = useCamera();
+    const { videoRef } = useCamera();
 
     const [successMessage, setSuccessMessage] = useState<string | null>(null)
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
