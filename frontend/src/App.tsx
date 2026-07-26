@@ -5,6 +5,7 @@ import { UserRegister } from "./pages/mobile/UserRegister"
 import{ Intercom } from "./pages/Intercom"
 import { EditUser } from "./pages/mobile/UserEdit"
 import { MobileIntercom } from "./pages/mobile/MobileIntercom"
+import { AppIntro } from "./pages/mobile/AppIntro"
 
 function App() {
   return (
@@ -17,7 +18,7 @@ function App() {
         <Route path="/mobile/intercom" element={<MobileIntercom/>}/>
         <Route path="/intercom" element={<Intercom/>}/>
 
-        <Route path="/test" element={<Intercom />}/>
+        <Route path="/test" element={<AppIntro />}/>
       </Routes>
     </BrowserRouter>
   )

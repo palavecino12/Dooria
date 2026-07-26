@@ -1,13 +1,13 @@
 import { Request, Response } from "express"
 import { User, IUser } from "../models/User"
-import { UpdateUserDTO } from "../dtos/user.dto"
+import { UserResponseDTO } from "../dtos/userDto"
 
-//GET/usuarios (sirve para mosstrar todos los ususarios y tambien para filtrar)
+//GET/usuarios
 export const obtenerUsuarios = async (req: Request, res: Response) => {
   try {
     //Obtenemos solo lo necesario para mostrar a un usuario en una lista
-    const users: UpdateUserDTO[] = await User.find({},
-      { name: 1, lastName: 1, dni: 1, number: 1, address: 1, rol: 1, accessType: 1, allowedDates: 1, allowedDays: 1 }
+    const users: UserResponseDTO[] = await User.find({},
+      { name: 1, lastName: 1, dni: 1, number: 1, address: 1, rol: 1, allowedDates: 1, allowedDays: 1 }
     );
 
     return res.json(users)
@@ -70,7 +70,7 @@ export const editarUsuario = async (req: Request, res: Response) => {
       return res.status(400).json({ error: "ID requerido" })
     }
 
-    const data = req.body as UpdateUserDTO
+    const data = req.body as UserResponseDTO
 
     const result = await User.updateOne({ _id: id }, { $set: data })
 

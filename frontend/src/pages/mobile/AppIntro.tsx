@@ -1,18 +1,6 @@
 import { motion } from "framer-motion";
-import { useEffect } from "react";
 
-interface AppIntroProps {
-    onFinish: () => void;
-}
-
-export const AppIntro = ({ onFinish }: AppIntroProps) => {
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            onFinish();
-        }, 2600);
-
-        return () => clearTimeout(timer);
-    }, [onFinish]);
+export const AppIntro = () => {
 
     return (
         <motion.div

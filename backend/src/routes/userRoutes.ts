@@ -1,5 +1,5 @@
 import { Router } from "express"
-import { obtenerUsuarios, buscarRostro, registrarUsuario, eliminarUsuario, editarUsuario } from "../controllers/user.controller"
+import { obtenerUsuarios, buscarRostro, registrarUsuario, eliminarUsuario, editarUsuario } from "../controllers/UserController"
 
 const router = Router()
 
