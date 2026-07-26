@@ -6,7 +6,7 @@ export type User = {
         dni: string
         number: string
         address: string
-        rol: "local" | "visitante"
+        rol: "Local" | "Visitante"
         allowedDates?: string[]
         allowedDays?: number[]
         descriptor: number[]

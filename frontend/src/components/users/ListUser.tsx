@@ -40,7 +40,7 @@ export const ListUsers = ({ userSearch, selected }: ListUsersProps) => {
         }
     };
 
-    //Funcion para filtrar los usuarios segun el texto del buscador
+    //Funcion para filtrar los usuarios segun el texto del buscador 
     const matchesSearch = (user: UserWithoutDescriptor, search: string): boolean => {
 
         const terms = search.trim().toLowerCase().split(/\s+/);
@@ -56,7 +56,7 @@ export const ListUsers = ({ userSearch, selected }: ListUsersProps) => {
         return terms.every(term => name.includes(term) || lastName.includes(term));
     };
 
-    //Filtramos los usuarios segun el buscador y el filtro.
+    //Filtramos los usuarios segun el el filtro.
     const filteredUsers = users.filter(user => {
 
         const matchesFilter = selected === "Todos"

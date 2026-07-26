@@ -19,9 +19,9 @@ export const FormUserCreate=()=>{
     };
     
     //Si el usuario es local, lo redirigimos a CameraRegister ya que tendria acceso siempre
-    if (showCameraRegister && dataUser?.rol==="local") return <CameraRegister data={dataUser} backToForm={()=>setShowCameraRegister(false)} />
+    if (showCameraRegister && dataUser?.rol==="Local") return <CameraRegister data={dataUser} backToForm={()=>setShowCameraRegister(false)} />
     //Si el usuario es visitante lo redirigimos FormUserAccess
-    if (showCameraRegister && dataUser?.rol==="visitante") return <FormUserAccess data={dataUser} backToForm={()=>setShowCameraRegister(false)}/> 
+    if (showCameraRegister && dataUser?.rol==="Visitante") return <FormUserAccess data={dataUser} backToForm={()=>setShowCameraRegister(false)}/> 
     //Lo primero que renderizamos es el formulario de registro
     return <FormUser initialValues={dataUser ?? {}} onSubmit={handleSubmitUser} title="Añadir Usuario" closeForm={()=>navigate("/mobile")}/>
 }

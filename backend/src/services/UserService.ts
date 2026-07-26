@@ -9,7 +9,6 @@ export const getUsers = () => {
 
 //Registra un usuario.
 export const registerUser = (data: IUser) => {
-    //Falta la validacion por zod.
     return userRepository.createUser(data)
 }
 
@@ -83,12 +82,12 @@ export const findUserByDescriptor = async (descriptor: number[]) => {
         let tieneAcceso = false;
 
         //Si el rol es local, tiene acceso siempre.
-        if (mejorUsuario.rol === "local") {
+        if (mejorUsuario.rol === "Local") {
             tieneAcceso = true;
         }
 
         //Si el rol es visitante, validamos validamos el acceso.
-        if (mejorUsuario.rol === "visitante") {
+        if (mejorUsuario.rol === "Visitante") {
             //Validación de días (0-6)
             if (Array.isArray(mejorUsuario.allowedDays) && mejorUsuario.allowedDays.includes(currentDay)) {
                 tieneAcceso = true;

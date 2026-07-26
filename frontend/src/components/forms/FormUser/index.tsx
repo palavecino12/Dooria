@@ -20,7 +20,7 @@ export const FormUser = ({ title, initialValues, onSubmit, closeForm }: props) =
     const { control, handleSubmit, formState: { errors }, setError, watch } = useForm<FormValues>({
         resolver: zodResolver(schema),
         defaultValues: {
-            rol: initialValues?.rol ?? "local",
+            rol: initialValues?.rol ?? "Local",
             ...initialValues
         }//Los inputs apareceran rellenados con estos datos, asi el usuario los puede editar, si llega vacia los inputs estaran vacios para que los rellene el usuario
     })
@@ -52,13 +52,13 @@ export const FormUser = ({ title, initialValues, onSubmit, closeForm }: props) =
                     <InputForm name='dni' label='DNI' control={control} type='string' error={errors.dni} />
                     <InputForm name='number' label='Numero de telefono' control={control} type='text' error={errors.number} />
                     <InputForm name='address' label='Direccion' control={control} type='text' error={errors.address} />
-                    <InputForm name='rol' label='Rol' control={control} type='select' options={["local", "visitante"]} error={errors.address} />
+                    <InputForm name='rol' label='Rol' control={control} type='select' options={["Local", "Visitante"]} error={errors.address} />
                 </div>
 
                 {/* Botones */}
                 <div className="flex flex-row gap-10 bg-gray-200">
-                    <Button variant="secundario" type="button" onClick={closeForm}>Cancelar</Button>
-                    <Button type="submit">{rol === "local" ? "Confirmar" : "Siguiente"}</Button>
+                    <Button variant="secundario" onClick={closeForm}>Cancelar</Button>
+                    <Button type="submit">{rol === "Local" ? "Confirmar" : "Siguiente"}</Button>
                 </div>
 
                 {errors.root && <p className='message-error'>{errors.root.message}</p>}

@@ -49,7 +49,7 @@ export const CardUser = ({ user, userDelete }: CardUsersProps) => {
                 <p className="whitespace-nowrap m-1">{user.name} {user.lastName}</p>
 
                 {/* Informacion de rol */}
-                <p className={user.rol == "local"
+                <p className={user.rol == "Local"
                     ? "text-center bg-blue-200 rounded-sm p-0.5"
                     : "text-center bg-amber-200 rounded-sm p-0.5"}>
                     {user.rol}</p>
@@ -81,7 +81,7 @@ export const CardUser = ({ user, userDelete }: CardUsersProps) => {
                         <InfoItem label="Dirección" value={user.address} />
 
                         {/* Campos específicos de visitante */}
-                        {user.rol === "visitante" && (
+                        {user.rol === "Visitante" && (
                             <>
                                 <InfoItem label="Días permitidos" value={userDays} />
                                 <InfoItem label="Fechas permitidas" value={userDates} />

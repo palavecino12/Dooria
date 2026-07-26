@@ -9,6 +9,7 @@ import { Header } from "../common/Header";
 import { useRegisterUser } from "../../hooks/useRegisterUser";
 import { Loading } from "../feedback/Loading";
 import { ErrorFeedback } from "../feedback/ErrorFeedback";
+import { useUsers } from "../../hooks/useUsers";
 
 interface props {
     data: FormValues
@@ -18,6 +19,7 @@ interface props {
 export const CameraRegister = ({ data, backToForm }: props) => {
 
     const { videoRef } = useCamera();
+    const { refresh } = useUsers()
 
     const [successMessage, setSuccessMessage] = useState<string | null>(null)
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -34,6 +36,7 @@ export const CameraRegister = ({ data, backToForm }: props) => {
 
             const message = await createUser(data, latestDescriptorRef.current);
             setSuccessMessage(message);
+            refresh()
 
         } catch (err) {
             if (err instanceof Error) {

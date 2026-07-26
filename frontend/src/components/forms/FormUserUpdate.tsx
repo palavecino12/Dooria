@@ -29,7 +29,7 @@ export const FormUserUpdate = ({ user }: Props) => {
 
     const handleSubmitUser = async (data: FormValues) => {
 
-        if (data.rol === "local") {
+        if (data.rol === "Local") {
             try {
                 //Borramos los datos que tenia almacenado en el acceso para que si vuelve a ser visitante aparezca vacio.
                 const userToUpdate: FormValues = { ...data, allowedDays: [], allowedDates: [], };
