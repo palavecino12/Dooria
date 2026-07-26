@@ -1,181 +1,74 @@
 import { Request, Response } from "express"
 import { User, IUser } from "../models/User"
 import { UserResponseDTO } from "../dtos/userDto"
+import * as userService from "../services/UserService"
 
 //GET/usuarios
-export const obtenerUsuarios = async (req: Request, res: Response) => {
+export const getUsers = async (req: Request, res: Response) => {
   try {
-    //Obtenemos solo lo necesario para mostrar a un usuario en una lista
-    const users: UserResponseDTO[] = await User.find({},
-      { name: 1, lastName: 1, dni: 1, number: 1, address: 1, rol: 1, allowedDates: 1, allowedDays: 1 }
-    );
-
-    return res.json(users)
-
+    const users = await userService.getUsers();
+    return res.json(users);
   } catch (error) {
-    console.error("Error en obtenerUsuarios:", error)
-    res.status(500).json({ error: "Error al obtener usuarios" })
+    console.error("Error en getUsers:", error);
+    res.status(500).json({ error: "Error al obtener usuarios" });
   }
 }
 
 //POST/usuarios/registrar-usuario 
 //En caso de exito retorno un ok: true, actualizar que en caso de error devuelva tambien un ok:false
-export const registrarUsuario = async (req: Request, res: Response) => {
+export const registerUser = async (req: Request, res: Response) => {
   try {
-    const data = req.body as IUser
-    //Falta validar el resto de campos con zod
-    if (!data.descriptor || !Array.isArray(data.descriptor)) {
-      return res.status(400).json({ error: "Descriptor inválido" });
-    }
-
-    const nuevo = new User(data);
-    const saved = await nuevo.save();
-
+    const data = req.body as IUser;
+    const saved = await userService.registerUser(data);
     return res.json({ ok: true, usuario: saved, message: "Usuario creado con exito!" });
   } catch (err: any) {
     console.error(err);
+    if (err.message === "Descriptor inválido") {
+      return res.status(400).json({ error: err.message });
+    }
     return res.status(500).json({ error: "Error al registrar rostro", detail: err.message });
   }
 }
 
 //DELETE/usuarios/eliminar-usuario/:id
-export const eliminarUsuario = async (req: Request, res: Response) => {
+export const deleteUser = async (req: Request, res: Response) => {
   try {
-    const { id } = req.params
-
-    if (!id) {
-      return res.status(400).json({ error: "ID requerido" })
-    }
-
-    const result = await User.deleteOne({ _id: id })
-
-    if (result.deletedCount === 0) {
-      return res.status(404).json({ error: "Usuario no encontrado" })
-    }
-
-    return res.status(200).json({ message: "Usuario eliminado correctamente" })
-
-  } catch (error) {
-    console.error("Error en eliminarUsuario:", error)
-    return res.status(500).json({ error: "Error al eliminar usuario" })
+    const { id } = req.params;
+    await userService.deleteUser(id);
+    return res.status(200).json({ message: "Usuario eliminado correctamente" });
+  } catch (error: any) {
+    console.error("Error en deleteUser:", error);
+    if (error.message === "ID requerido") return res.status(400).json({ error: error.message });
+    if (error.message === "Usuario no encontrado") return res.status(404).json({ error: error.message });
+    return res.status(500).json({ error: "Error al eliminar usuario" });
   }
 }
 
 //UPDATE/usuarios/editar-usuario/:id
-export const editarUsuario = async (req: Request, res: Response) => {
+export const updateUser = async (req: Request, res: Response) => {
   try {
-    const { id } = req.params
-
-    if (!id) {
-      return res.status(400).json({ error: "ID requerido" })
-    }
-
-    const data = req.body as UserResponseDTO
-
-    const result = await User.updateOne({ _id: id }, { $set: data })
-
-    if (result.matchedCount === 0) {
-      return res.status(404).json({ error: "Usuario no encontrado" })
-    }
-
-    return res.status(200).json({ message: "Usuario editado correctamente" })
-  } catch (error) {
-    console.error("Error en editarUsuario:", error)
-    return res.status(500).json({ error: "Error al editar usuario" })
+    const { id } = req.params;
+    const data = req.body as UserResponseDTO;
+    await userService.updateUser(id, data);
+    return res.status(200).json({ message: "Usuario editado correctamente" });
+  } catch (error: any) {
+    console.error("Error en updateUser:", error);
+    if (error.message === "ID requerido") return res.status(400).json({ error: error.message });
+    if (error.message === "Usuario no encontrado") return res.status(404).json({ error: error.message });
+    return res.status(500).json({ error: "Error al editar usuario" });
   }
 }
 
-//Distancia euclidiana entre dos arrays numéricos (calculo para encontrar similitudes en rostros)
-const distanciaEuclidiana = (a: number[], b: number[]): number => {
-  let sum = 0;
-  for (let i = 0; i < a.length; i++) {
-    const diff = a[i] - b[i];
-    sum += diff * diff;
-  }
-  return Math.sqrt(sum);
-}
-
-//POST/usuarios/buscar-rostro
-export const buscarRostro = async (req: Request, res: Response) => {
+export const findUserByDescriptor = async (req: Request, res: Response) => {
   try {
     const { descriptor } = req.body as { descriptor: number[] };
-    if (!descriptor || !Array.isArray(descriptor)) {
-      return res.status(400).json({ error: "Descriptor invalido" });
-    }
-
-    //Traemos a todos los usuarios de la coleccion que tengan descriptor para buscar similitudes
-    const usuarios = await User.find({ descriptor: { $exists: true } }).lean<IUser[]>();
-
-    if (!usuarios.length) return res.json({ match: false, access: false });
-
-    let mejorUsuario: IUser | null = null;
-    let menorDistancia = Infinity;
-
-    //Con cada usuario almacenado, mide la distancia euclidiana entre el descriptor actual y el descriptor del usuario almacenado
-    //El usuario almacenado que tenga menor distancia euclidiana lo almacenamos como mejor usuario
-    //descriptor actual=usuario que esta colocando el rostro en este momento
-    for (const usuario of usuarios) {
-      if (!usuario.descriptor) continue;
-      const distancia = distanciaEuclidiana(descriptor, usuario.descriptor);
-      if (distancia < menorDistancia) {
-        menorDistancia = distancia;
-        mejorUsuario = usuario as IUser;
-      }
-    }
-
-    //Si la distancia del mejor usuario es menor a 0.5 quiere decir que es el mismo que el descriptor actual
-    const UMBRAL = 0.5;
-    if (menorDistancia < UMBRAL && mejorUsuario) {
-
-      const now = new Date();
-      const currentDay = now.getDay(); //Retorna el dia de la semana indicada del 0 al 6
-
-      //Almacenamos la fecha actual tipo YYYY-MM-DD
-      const currentDate = `${now.getFullYear()}-${(now.getMonth() + 1).toString().padStart(2, "0")}-${now.getDate().toString().padStart(2, "0")}`;
-      const userDates = mejorUsuario.allowedDates?.map(date => date.slice(0, 10));//Filtramos las fechas a solo YYYY-MM-DD
-
-      let tieneAcceso = false;
-
-      //Si el rol es local, tiene acceso siempre
-      if (mejorUsuario.rol === "local") {
-        tieneAcceso = true;
-      }
-
-      //Si el rol es visitante, validamos validamos el tipo de acceso
-      if (mejorUsuario.rol === "visitante") {
-
-        //Validación de días (0-6)
-        if (Array.isArray(mejorUsuario.allowedDays) && mejorUsuario.allowedDays.includes(currentDay)) {
-          tieneAcceso = true;
-        }
-        //Validación de fechas YYYY-MM-DD
-        if (Array.isArray(userDates) && userDates.includes(currentDate)) {
-          tieneAcceso = true;
-        }
-      }
-      //Respondemos según acceso
-      if (!tieneAcceso) {
-        return res.json({
-          match: true,
-          access: false,
-          user: mejorUsuario
-        });
-      }
-
-      return res.json({
-        match: true,
-        access: true,
-        user: mejorUsuario
-      });
-    }
-
-    return res.json({
-      match: false,
-      access: false
-    });
-  } catch (err) {
+    const resultado = await userService.findUserByDescriptor(descriptor);
+    return res.json(resultado);
+  } catch (err: any) {
     console.error(err);
+    if (err.message === "Descriptor invalido") {
+      return res.status(400).json({ error: err.message });
+    }
     return res.status(500).json({ error: "Error al buscar rostro" });
   }
 }
-
