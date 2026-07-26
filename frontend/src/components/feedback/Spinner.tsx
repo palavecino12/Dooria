@@ -5,7 +5,7 @@ interface SpinnerProps {
     message?: string
 }
 
-export const Spinner = ({ message = "Procesando..." }: SpinnerProps) => {
+export const Spinner = ({ message = "Cargando..." }: SpinnerProps) => {
     return (
 
         <div className="flex flex-col items-center justify-center gap-6">
@@ -24,7 +24,7 @@ export const Spinner = ({ message = "Procesando..." }: SpinnerProps) => {
                 />
             </motion.div>
 
-            <p className="text-lg font-medium">
+            <p className="text-lg font-medium text-black">
                 {message}
             </p>
         </div>

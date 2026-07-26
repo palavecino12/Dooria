@@ -1,18 +1,19 @@
 //Este hook gestiona la conexion WebRTC (transmisin de video) entre el intercom y los viewers.
 //Usa socket.io para manejar la señalización, intercambiando offers, answers y ice candidates entre ambas entidades.
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { socket } from "../services/socketServices";
 
 interface props {
     isMobile: boolean,
     streamRef: React.RefObject<MediaStream | null>,
     videoRef: React.RefObject<HTMLVideoElement | null>,
+    streamReady: boolean
 }
 
-export const useWebRTC = ({ isMobile, streamRef, videoRef }: props) => {
+export const useWebRTC = ({ isMobile, streamRef, videoRef, streamReady }: props) => {
 
     //Estado del video para poder avisar al usuario.
-    //const [connectionState, setConnectionState] = useState<"connecting" | "connected" | "no-intercom">("connecting");
+    const [connectionState, setConnectionState] = useState<"connecting" | "connected" | "no-intercom">("connecting");
 
     //REFS
 
@@ -152,6 +153,11 @@ export const useWebRTC = ({ isMobile, streamRef, videoRef }: props) => {
     //Crea una respuesta del viewer al intercom.
     const createAnswer = async (offer: RTCSessionDescriptionInit) => {
 
+        if (peerConnection.current) {
+            peerConnection.current.close();
+            peerConnection.current = null;
+        }
+
         const pc = createViewerPeerConnection();
 
         await pc.setRemoteDescription(offer);
@@ -196,8 +202,19 @@ export const useWebRTC = ({ isMobile, streamRef, videoRef }: props) => {
         });
     };
 
-    //Eventos del mobile.
+    //Eventos del viewer.
     const registerViewerEvents = () => {
+
+        socket.on("intercom-connected", () => {
+            setConnectionState("connected");
+        });
+
+        socket.on("no-intercom", () => {
+            peerConnection.current?.close();
+            peerConnection.current = null;
+
+            setConnectionState("no-intercom");
+        });
 
         socket.on("offer", ({ offer }) => {
             onOffer(offer);
@@ -211,6 +228,9 @@ export const useWebRTC = ({ isMobile, streamRef, videoRef }: props) => {
     //EFFECT
 
     useEffect(() => {
+
+        //Si es intercom y todavía no tiene el stream, no hacemos nada.
+        if (!isMobile && !streamReady) return;
 
         //Le identificamos al back cuando alguien represente el intercom
         //Y cuando alguien quiera verlo desde mobile.
@@ -231,6 +251,8 @@ export const useWebRTC = ({ isMobile, streamRef, videoRef }: props) => {
             socket.off("viewer-connected");
             socket.off("offer");
             socket.off("answer");
+            socket.off("intercom-connected");
+            socket.off("no-intercom");
 
             currentPeerConnections.forEach(pc => pc.close());
             currentPeerConnections.clear();
@@ -238,7 +260,7 @@ export const useWebRTC = ({ isMobile, streamRef, videoRef }: props) => {
             currentPeerConnection?.close();
         };
 
-    }, [isMobile]);
+    }, [isMobile, streamReady]);
 
-    return null;
+    return { connectionState };
 };

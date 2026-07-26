@@ -5,6 +5,7 @@ import { Button } from "../common/Button";
 import { Header } from "../common/Header";
 import { useWebRTC } from "../../hooks/useWebRTC";
 import { useFaceStateSocket } from "../../hooks/useFaceStateSocket";
+import { Spinner } from "../feedback/Spinner";
 
 interface CameraIntercomProps {
     isMobile?: boolean
@@ -15,11 +16,11 @@ export const CameraIntercom = ({ isMobile = false }: CameraIntercomProps) => {
     const navigate = useNavigate()
 
     //La camara solo se va a usar en el intercom.
-    const { videoRef, streamRef } = useCamera(!isMobile);
+    const { videoRef, streamRef, streamReady } = useCamera(!isMobile);
     //La deteccion de rostro solo se va a usar en el intercom.
     const faceDetection = useFaceDetection({ videoRef, enabled: !isMobile });
     //Gestiona la conexion WebRTC para transmitir el video del intercom hacia los viewers.
-    useWebRTC({ isMobile, streamRef, videoRef })
+    const { connectionState } = useWebRTC({ isMobile, streamRef, videoRef, streamReady })
     //Retransmite el estado del rostro del intercom hacia los viewers.
     const { remoteState } = useFaceStateSocket({ isMobile, faceDetection });
 
@@ -124,7 +125,20 @@ export const CameraIntercom = ({ isMobile = false }: CameraIntercomProps) => {
                 {/* Contenedor del video */}
                 <div className={`relative w-full aspect-video overflow-hidden rounded-2xl border-[5px] transition-all 
                 duration-300 ${currentScreen.videoBorder} ${currentScreen.glow}`}>
-                    <video ref={videoRef} autoPlay muted className="absolute inset-0 w-full h-full object-cover -scale-x-100"></video>
+                    <video ref={videoRef} autoPlay muted className="absolute inset-0 w-full h-full object-cover -scale-x-100" />
+
+                    {/* Estados del video del viewer */}
+                    {isMobile && connectionState === "connecting" && (
+                        <div className="absolute inset-0 flex items-center justify-center">
+                            <Spinner />
+                        </div>
+                    )}
+
+                    {isMobile && connectionState === "no-intercom" && (
+                        <div className="absolute inset-0 flex items-center justify-center bg-black">
+                            No hay intercom conectado.
+                        </div>
+                    )}
                 </div>
 
                 {/* Tarjeta de mensaje del estado del ususario */}
@@ -140,7 +154,6 @@ export const CameraIntercom = ({ isMobile = false }: CameraIntercomProps) => {
                             {currentScreen.message}
                         </p>
                     )}
-
                 </div>
 
                 {/* En caso de estar registrado pero no tener acceso, mostramos mensaje adicional */}
@@ -175,7 +188,6 @@ export const CameraIntercom = ({ isMobile = false }: CameraIntercomProps) => {
                                 </p>
                             </div>
                         )}
-
                     </div>
                 )}
 

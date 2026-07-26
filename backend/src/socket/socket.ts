@@ -12,7 +12,19 @@ export const configureSockets = (io: Server) => {
 
         //Identificamos quien funciona como intercom.
         socket.on("join-intercom", () => {
+
             intercom = socket;
+
+            viewers.forEach((viewer) => {
+
+                viewer.emit("intercom-connected");
+                if (!intercom) return
+
+                intercom.emit("viewer-connected", {
+                    viewerId: viewer.id
+                });
+
+            });
         });
 
         //Identificamos quien quiere ver el intercom.
@@ -20,10 +32,17 @@ export const configureSockets = (io: Server) => {
 
             viewers.set(socket.id, socket);
 
-            if (intercom) {
-                //Cuando entra un viewer le avisamos al intercom
-                intercom.emit("viewer-connected", { viewerId: socket.id });
+            //Mensajes para avisar al usuario el estado del video.
+            if (!intercom) {
+                socket.emit("no-intercom");
+                return;
             }
+            socket.emit("intercom-connected");
+
+            //Cuando entra un viewer le avisamos al intercom.
+            intercom.emit("viewer-connected", {
+                viewerId: socket.id
+            });
         });
 
         //Recibimos la oferta del intercom y la reenviamos al mobile.
@@ -41,11 +60,18 @@ export const configureSockets = (io: Server) => {
             }
         });
 
-        //Si el que hacia de intercom se sale, dejamos el intercom libre
+        //Si el que hacia de intercom se sale:
         socket.on("disconnect", () => {
+
             if (socket === intercom) {
+
+                //Le avisamos a los viewers que no hay intercom.
+                viewers.forEach((viewer) => {
+                    viewer.emit("no-intercom");
+                });
+
+                //Dejamos el intercom libre.
                 intercom = null;
-                viewers.clear();
             }
 
             viewers.delete(socket.id);

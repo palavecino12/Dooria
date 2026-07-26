@@ -1,9 +1,10 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export const useCamera = (enabled = true) => {
 
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
+  const [streamReady, setStreamReady] = useState(false);
 
   useEffect(() => {
 
@@ -23,6 +24,8 @@ export const useCamera = (enabled = true) => {
           videoRef.current.srcObject = streamRef.current;
         }
 
+        setStreamReady(true);
+
       } catch (err) {
         console.error("No se pudo acceder a la cámara:", err);
       }
@@ -33,9 +36,10 @@ export const useCamera = (enabled = true) => {
 
     return () => {
       streamRef.current?.getTracks().forEach(track => track.stop());
+      setStreamReady(false);
     };
 
   }, [enabled]);
 
-  return { videoRef, streamRef, };
+  return { videoRef, streamRef, streamReady };
 };
