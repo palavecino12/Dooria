@@ -24,7 +24,7 @@ export const UsersPage = () =>{
             {/* Lista de usuarios */}
             <ListUsers selected={selected} userSearch={userSearch}/>
 
-            <Button variant="secundario" onClick={()=>navigate("/mobile")}>Volver</Button>
+            <Button variant="secundario" onClick={()=>navigate("/app")}>Volver</Button>
         </div>
     )
 }

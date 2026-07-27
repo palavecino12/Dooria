@@ -37,7 +37,7 @@ export const FormUserUpdate = ({ user }: Props) => {
                 const message = await userUpdate(user._id, userToUpdate);
                 await refresh()
                 showToast({ variant: "success", message, });
-                navigate("/mobile/users");
+                navigate("/app/users");
 
             } catch (error) {
                 showToast({
@@ -63,7 +63,7 @@ export const FormUserUpdate = ({ user }: Props) => {
             {showAccessForm && dataUser ? (
                 <FormUserAccess backToForm={() => setShowAccessForm(false)} data={dataUser} initialValue={user} />
             ) : (
-                <FormUser closeForm={() => navigate("/mobile/users")} onSubmit={handleSubmitUser} title="Editar Usuario" initialValues={user} currentUserId={user._id} />
+                <FormUser closeForm={() => navigate("/app/users")} onSubmit={handleSubmitUser} title="Editar Usuario" initialValues={dataUser ?? user} currentUserId={user._id} />
             )}
         </>
     );

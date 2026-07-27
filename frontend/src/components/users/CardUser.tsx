@@ -57,7 +57,7 @@ export const CardUser = ({ user, userDelete }: CardUsersProps) => {
                 <div className="flex gap-1">
                     {/* Boton para editar */}
                     <button
-                        onClick={() => navigate(`/mobile/users/${user._id}/edit`, {
+                        onClick={() => navigate(`/app/users/${user._id}/edit`, {
                             state: { user }
                         })}
                         className="bg-black p-2 text-white rounded-lg shadow-lg transition-all duration-200

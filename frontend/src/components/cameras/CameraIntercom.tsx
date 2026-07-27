@@ -193,7 +193,7 @@ export const CameraIntercom = ({ isMobile = false }: CameraIntercomProps) => {
 
                 {isMobile && (
                     <div className={`flex justify-center w-full gap-10 ${screenState !== "denied" ? "mt-30" : "mt-1"}`}>
-                        <Button variant="secundario" onClick={() => navigate("/mobile")}>Volver</Button>
+                        <Button variant="secundario" onClick={() => navigate("/app")}>Volver</Button>
                         <Button>Permitir acceso</Button>
                     </div>
                 )}

@@ -48,7 +48,7 @@ export const FormUserAccess = ({ initialValue, backToForm, data }: props) => {
                 const message = await userUpdate(initialValue._id, { ...data, allowedDates: selectedMonths.map(d => d.toISOString()), allowedDays: selectedDays })
                 await refresh()
                 showToast({ message: message, variant: "success" })
-                navigate("/mobile/users");
+                navigate("/app/users");
 
             } catch (error) {
                 showToast({

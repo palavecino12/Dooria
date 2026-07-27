@@ -26,7 +26,7 @@ export const ConfirmModal = ({ open, children, onConfirm, onCancel, }: ConfirmMo
                 <TriangleAlert size={66} color='#b9911c' />
 
                 {/* Contenido dinámico (children) */}
-                <div className="my-10 text-center text-lg">
+                <div className="mb-10 mt-5 text-center text-lg">
                     {children}
                 </div>
 

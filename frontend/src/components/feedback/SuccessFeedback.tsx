@@ -34,7 +34,7 @@ export const SuccessFeedback = ({ message = "Operacion exitosa!" }: SuccessProps
             <p className="text-white w-full text-center text-2xl font-bold">{message}</p>
             {/* Boton con animacion para que aparezca todo a la vez */}
             <motion.button
-                onClick={() => navigate("/mobile")}
+                onClick={() => navigate("/app")}
                 className="mt-16 flex h-11 w-40 items-center justify-center rounded-lg text-lg
                 text-[#15803d] font-medium shadow-lg bg-white transition-all duration-150
                 active:scale-95 select-none"

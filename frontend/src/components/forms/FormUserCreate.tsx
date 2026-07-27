@@ -23,6 +23,6 @@ export const FormUserCreate=()=>{
     //Si el usuario es visitante lo redirigimos FormUserAccess
     if (showCameraRegister && dataUser?.rol==="Visitante") return <FormUserAccess data={dataUser} backToForm={()=>setShowCameraRegister(false)}/> 
     //Lo primero que renderizamos es el formulario de registro
-    return <FormUser initialValues={dataUser ?? {}} onSubmit={handleSubmitUser} title="Añadir Usuario" closeForm={()=>navigate("/mobile")}/>
+    return <FormUser initialValues={dataUser ?? {}} onSubmit={handleSubmitUser} title="Añadir Usuario" closeForm={()=>navigate("/app")}/>
 }
 

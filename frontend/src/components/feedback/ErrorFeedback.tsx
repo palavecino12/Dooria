@@ -36,7 +36,7 @@ export const ErrorFeedback = ({ message = "Ups..." }: ErrorProps) => {
             <p className="text-white">Lo sentimos, algo salio mal</p>
             {/* Boton con animacion para que aparezca todo a la vez */}
             <motion.button
-                onClick={() => navigate("/mobile")}
+                onClick={() => navigate("/app")}
                 className="mt-16 flex h-11 w-40 items-center justify-center rounded-lg text-lg
                 text-[#b91c1c] font-medium shadow-lg bg-white transition-all duration-150
                 active:scale-95 select-none"
