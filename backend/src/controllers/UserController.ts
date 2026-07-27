@@ -1,74 +1,60 @@
-import { Request, Response } from "express"
-import { User, IUser } from "../models/User"
+import { NextFunction, Request, Response } from "express"
 import { UserResponseDTO } from "../dtos/userDto"
 import * as userService from "../services/UserService"
+import { registerUserInput } from "../schemas/userSchema"
 
 //GET/usuarios
-export const getUsers = async (req: Request, res: Response) => {
+export const getUsers = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const users = await userService.getUsers();
     return res.json(users);
   } catch (error) {
-    console.error("Error en getUsers:", error);
-    res.status(500).json({ error: "Error al obtener usuarios" });
+    next(error)
   }
 }
 
 //POST/usuarios/registrar-usuario 
 //En caso de exito retorno un ok: true, actualizar que en caso de error devuelva tambien un ok:false
-export const registerUser = async (req: Request, res: Response) => {
+export const registerUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const data = req.body as IUser;
+    const data = req.body as registerUserInput;
     const saved = await userService.registerUser(data);
-    return res.json({ ok: true, usuario: saved, message: "Usuario creado con exito!" });
-  } catch (err: any) {
-    console.error(err);
-    if (err.message === "Descriptor inválido") {
-      return res.status(400).json({ error: err.message });
-    }
-    return res.status(500).json({ error: "Error al registrar rostro", detail: err.message });
+    return res.json({ usuario: saved, message: "Usuario creado con exito!" });
+  } catch (error) {
+    next(error)
   }
 }
 
 //DELETE/usuarios/eliminar-usuario/:id
-export const deleteUser = async (req: Request, res: Response) => {
+export const deleteUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { id } = req.params;
     await userService.deleteUser(id);
     return res.status(200).json({ message: "Usuario eliminado correctamente" });
-  } catch (error: any) {
-    console.error("Error en deleteUser:", error);
-    if (error.message === "ID requerido") return res.status(400).json({ error: error.message });
-    if (error.message === "Usuario no encontrado") return res.status(404).json({ error: error.message });
-    return res.status(500).json({ error: "Error al eliminar usuario" });
+  } catch (error) {
+    next(error)
   }
 }
 
 //UPDATE/usuarios/editar-usuario/:id
-export const updateUser = async (req: Request, res: Response) => {
+export const updateUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { id } = req.params;
     const data = req.body as UserResponseDTO;
     await userService.updateUser(id, data);
     return res.status(200).json({ message: "Usuario editado correctamente" });
-  } catch (error: any) {
-    console.error("Error en updateUser:", error);
-    if (error.message === "ID requerido") return res.status(400).json({ error: error.message });
-    if (error.message === "Usuario no encontrado") return res.status(404).json({ error: error.message });
-    return res.status(500).json({ error: "Error al editar usuario" });
+  } catch (error) {
+    next(error)
   }
 }
 
-export const findUserByDescriptor = async (req: Request, res: Response) => {
+//POST
+export const findUserByDescriptor = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { descriptor } = req.body as { descriptor: number[] };
     const resultado = await userService.findUserByDescriptor(descriptor);
     return res.json(resultado);
-  } catch (err: any) {
-    console.error(err);
-    if (err.message === "Descriptor invalido") {
-      return res.status(400).json({ error: err.message });
-    }
-    return res.status(500).json({ error: "Error al buscar rostro" });
+  } catch (error) {
+    next(error)
   }
 }

@@ -6,16 +6,20 @@ import userRoutes from "./routes/userRoutes";
 import { createServer } from "http";
 import { Server } from "socket.io";
 import { configureSockets } from "./socket/socket";
+import { errorHandler } from "./middlewares/errorHandleMiddleware";
 
 dotenv.config();
 const PORT = process.env.PORT || 3000;
 
 //Aplicación de Express que manejará las rutas HTTP de la API.
 const app = express();
-app.use(cors({origin: process.env.FRONTEND_URL}));
+app.use(cors({ origin: process.env.FRONTEND_URL }));
 app.use(express.json());
 
 app.use("/usuarios", userRoutes);
+
+//Error Handler
+app.use(errorHandler)
 
 //Creamos el servidor http de node asociado a express.
 const httpServer = createServer(app);

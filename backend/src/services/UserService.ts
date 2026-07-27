@@ -1,6 +1,8 @@
 import { UserResponseDTO } from "../dtos/userDto"
+import { AppError } from "../errors/AppError"
 import { IUser } from "../models/User"
 import * as userRepository from "../Repositories/UserRepository"
+import { registerUserInput } from "../schemas/userSchema"
 
 //Trae todos los usuarios.
 export const getUsers = () => {
@@ -8,28 +10,34 @@ export const getUsers = () => {
 }
 
 //Registra un usuario.
-export const registerUser = (data: IUser) => {
+export const registerUser = async (data: registerUserInput) => {
+    const existing = await userRepository.findUserByDni(data.dni);
+
+    if (existing) {
+        throw new AppError("Este DNI ya esta registrado", 409);
+    }
+
     return userRepository.createUser(data)
 }
 
 //Elimina un usuario por su id.
 export const deleteUser = async (id: string) => {
-    if (!id) throw new Error("ID requerido")
+    if (!id) throw new AppError("ID requerido", 400)
 
     const result = await userRepository.deleteUserById(id)
 
-    if (result.deletedCount === 0) throw new Error("Usuario no encontrado")
+    if (result.deletedCount === 0) throw new AppError("Usuario no encontrado", 404)
 
     return result
 }
 
 //Edita un usuario.
 export const updateUser = async (id: string, data: UserResponseDTO) => {
-    if (!id) throw new Error("ID requerido")
+    if (!id) throw new AppError("ID requerido", 400)
 
     const result = await userRepository.UpdateUserById(id, data)
 
-    if (result.matchedCount === 0) throw new Error("Usuario no encontrado")
+    if (result.matchedCount === 0) throw new AppError("Usuario no encontrado", 404)
 
     return result
 }
@@ -47,7 +55,7 @@ const distanciaEuclidiana = (a: number[], b: number[]): number => {
 //Busca un descriptor en la base de datos.
 export const findUserByDescriptor = async (descriptor: number[]) => {
     if (!descriptor || !Array.isArray(descriptor)) {
-        throw new Error("Descriptor invalido");
+        throw new AppError("Descriptor invalido", 400);
     }
 
     const usuarios = await userRepository.findUsersWithDescriptor();

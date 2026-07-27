@@ -4,24 +4,24 @@ export interface IUser {
     name: string;
     lastName: string;
     dni: string;
-    number:string;
-    address:string;
-    rol:string;
+    number: string;
+    address: string;
+    rol: string;
     allowedDays?: number[];
     allowedDates?: string[];
     descriptor?: number[];
 }
 
 const userSchema = new Schema<IUser>({
-    name:{type: String, required: true},
-    lastName:{type: String, required: true},
-    dni:{type: String, required: true, unique: true},
-    number:{type: String, required: true},
-    address:{type: String, required: true},
-    rol:{type: String,required:true},
-    allowedDays:{type: [Number]},
-    allowedDates:{type: [String]},
-    descriptor:{type: [Number]}
+    name: { type: String, required: true },
+    lastName: { type: String, required: true },
+    dni: { type: String, required: true, unique: true },
+    number: { type: String, required: true },
+    address: { type: String, required: true },
+    rol: { type: String, required: true },
+    allowedDays: { type: [Number] },
+    allowedDates: { type: [String] },
+    descriptor: { type: [Number], required: true }
 }, {
     timestamps: true
 });

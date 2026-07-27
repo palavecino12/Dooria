@@ -28,3 +28,8 @@ export const UpdateUserById = (id: string, data: UserResponseDTO) => {
 export const findUsersWithDescriptor = (): Promise<IUser[]> => {
     return User.find({ descriptor: { $exists: true } }).lean<IUser[]>()
 }
+
+//Buscamos un usuario por su dni.
+export const findUserByDni = (dni: string) => {
+    return User.findOne({ dni })
+}
