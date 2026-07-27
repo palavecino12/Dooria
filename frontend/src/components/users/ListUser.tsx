@@ -83,7 +83,7 @@ export const ListUsers = ({ userSearch, selected }: ListUsersProps) => {
                         </div>
                     ) : error ? (
                         <div className="h-full flex items-center justify-center">
-                            <ErrorState message="Error al traer los usuarios" />
+                            <ErrorState message={error?.message ?? "Error al traer los usuarios"} />
                         </div>
                     ) : filteredUsers.length > 0 ? (
                         filteredUsers.map(user => (

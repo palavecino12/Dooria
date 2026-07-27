@@ -1,4 +1,4 @@
-//Este componente muestra un mensaje de error dentro de la lista de usuarios.import { Loader } from "lucide-react";
+//Este componente muestra un mensaje de error dentro de la lista de usuarios.
 import { CircleX } from "lucide-react"
 
 interface ErrorStateProps {

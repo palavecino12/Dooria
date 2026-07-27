@@ -35,6 +35,14 @@ export const deleteUser = async (id: string) => {
 export const updateUser = async (id: string, data: UserResponseDTO) => {
     if (!id) throw new AppError("ID requerido", 400)
 
+    if (data.dni) {
+        const existing = await userRepository.findUserByDni(data.dni);
+
+        if (existing && existing._id.toString() !== id) {
+            throw new AppError("Este DNI ya esta registrado", 409);
+        }
+    }
+
     const result = await userRepository.UpdateUserById(id, data)
 
     if (result.matchedCount === 0) throw new AppError("Usuario no encontrado", 404)

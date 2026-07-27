@@ -63,7 +63,7 @@ export const FormUserUpdate = ({ user }: Props) => {
             {showAccessForm && dataUser ? (
                 <FormUserAccess backToForm={() => setShowAccessForm(false)} data={dataUser} initialValue={user} />
             ) : (
-                <FormUser closeForm={() => navigate("/mobile/users")} onSubmit={handleSubmitUser} title="Editar Usuario" initialValues={user} />
+                <FormUser closeForm={() => navigate("/mobile/users")} onSubmit={handleSubmitUser} title="Editar Usuario" initialValues={user} currentUserId={user._id} />
             )}
         </>
     );
