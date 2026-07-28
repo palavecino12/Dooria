@@ -1,7 +1,7 @@
 import { Controller, type Control, type FieldError } from 'react-hook-form';
 import { type FormValues } from '../../../schemas/schemaForm';
 
-type AllowedFields = "name"|"lastName"|"dni"|"number"|"address"|"rol";
+type AllowedFields = "name" | "lastName" | "dni" | "number" | "address" | "rol";
 
 interface props {
     name: AllowedFields;
@@ -13,6 +13,15 @@ interface props {
 }
 
 const InputFormUser = ({ name, label, control, type, error, options }: props) => {
+
+    //Colocamos el tipo de teclado correspondiente para dni y numero.
+    const inputMode =
+        name === "dni"
+            ? "numeric"
+            : name === "number"
+                ? "tel"
+                : undefined;
+
     return (
         <div className="w-full">
             <label className="block text-sm mb-1" htmlFor={name}>{label}</label>
@@ -25,15 +34,15 @@ const InputFormUser = ({ name, label, control, type, error, options }: props) =>
                                                                                 ${error ? 'border-red-700' : 'border-black/20'}`}>
                         {(options ?? []).map((opt) => (
                             <option key={opt} value={opt}>
-                            {opt}
+                                {opt}
                             </option>))}
                     </select>
                 ) : (
-                    <input id={name} type={type} {...field} value={field.value ?? ""} className={`w-full p-2 border border-gray-400 rounded-lg focus:ring-2 
+                    <input id={name} type={type} inputMode={inputMode} {...field} value={field.value ?? ""} className={`w-full p-2 border border-gray-400 rounded-lg focus:ring-2 
                                                                                         focus:border-transparent focus:-translate-y-1 bg-gray-100
                                                                                         focus:outline-none transition-all duration-200
-                                                                                        ${error ? 'border-red-700' : 'border-black/20'}`}/>
-                )}/>
+                                                                                        ${error ? 'border-red-700' : 'border-black/20'}`} />
+                )} />
 
             {error && <p className="text-red-700">{error.message}</p>}
         </div>
