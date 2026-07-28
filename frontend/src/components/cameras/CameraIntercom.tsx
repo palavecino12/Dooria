@@ -6,6 +6,8 @@ import { Header } from "../common/Header";
 import { useWebRTC } from "../../hooks/useWebRTC";
 import { useFaceStateSocket } from "../../hooks/useFaceStateSocket";
 import { Spinner } from "../feedback/Spinner";
+import { InfoItem } from "../users/InfoItem";
+import { useState } from "react";
 
 interface CameraIntercomProps {
     isMobile?: boolean
@@ -15,12 +17,14 @@ export const CameraIntercom = ({ isMobile = false }: CameraIntercomProps) => {
 
     const navigate = useNavigate()
 
+    //Estado del video (tanto en intercom como para el viewer) para poder avisar al usuario.
+    const [connectionState, setConnectionState] = useState<"connecting" | "connected" | "no-intercom" | "intercom-in-use">("connecting");
     //La camara solo se va a usar en el intercom.
-    const { videoRef, streamRef, streamReady } = useCamera(!isMobile);
+    const { videoRef, streamRef, streamReady } = useCamera(!isMobile && connectionState !== "intercom-in-use");
     //La deteccion de rostro solo se va a usar en el intercom.
     const faceDetection = useFaceDetection({ videoRef, enabled: !isMobile });
     //Gestiona la conexion WebRTC para transmitir el video del intercom hacia los viewers.
-    const { connectionState } = useWebRTC({ isMobile, streamRef, videoRef, streamReady })
+    useWebRTC({ isMobile, streamRef, videoRef, streamReady, setConnectionState })
     //Retransmite el estado del rostro del intercom hacia los viewers.
     const { remoteState } = useFaceStateSocket({ isMobile, faceDetection });
 
@@ -35,7 +39,9 @@ export const CameraIntercom = ({ isMobile = false }: CameraIntercomProps) => {
     //Convertimos de numero a dias de la semana
     const daysMap = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"];
     const userDays = currentState.user?.allowedDays
-        ? currentState.user.allowedDays.map(d => daysMap[d])
+        ? [...currentState.user.allowedDays]
+            .sort((a, b) => a - b) // Ordenamos los días
+            .map(d => daysMap[d])
         : [];
 
     //Usamos esta variable para identificar mas facil cuando un ususario esta registrado pero no tiene acceso
@@ -125,7 +131,15 @@ export const CameraIntercom = ({ isMobile = false }: CameraIntercomProps) => {
                 {/* Contenedor del video */}
                 <div className={`relative w-full aspect-video overflow-hidden rounded-2xl border-[5px] transition-all 
                 duration-300 ${currentScreen.videoBorder} ${currentScreen.glow}`}>
-                    <video ref={videoRef} autoPlay muted className="absolute inset-0 w-full h-full object-cover -scale-x-100" />
+                    
+                    {/* VIDEO: en caso de que quiera haber un segundo intercom, avisa que no puede */}
+                    {!isMobile && connectionState === "intercom-in-use" ? (
+                        <div className="absolute inset-0 flex items-center justify-center bg-black">
+                            Ya hay un intercom en uso.
+                        </div>
+                    ) : (
+                        <video ref={videoRef} autoPlay muted className="absolute inset-0 w-full h-full object-cover -scale-x-100" />
+                    )}
 
                     {/* Estados del video del viewer */}
                     {isMobile && connectionState === "connecting" && (
@@ -168,24 +182,14 @@ export const CameraIntercom = ({ isMobile = false }: CameraIntercomProps) => {
                         {/* Mostramos los dias permitidos si es que tiene */}
                         {userDays.length > 0 && (
                             <div className={`${layout.deniedSection}`}>
-                                <p className="font-semibold">
-                                    Días habilitados:
-                                </p>
-                                <p>
-                                    {userDays.join(", ")}
-                                </p>
+                                <InfoItem variant="stacked" label="Días permitidos" value={userDays} />
                             </div>
                         )}
 
                         {/* Mostramos las fechas permitidos si es que tiene */}
                         {userDates.length > 0 && (
                             <div className={`${layout.deniedSection}`}>
-                                <p className="font-semibold">
-                                    Fechas habilitadas:
-                                </p>
-                                <p>
-                                    {userDates.join(", ")}
-                                </p>
+                                <InfoItem variant="stacked" label="Fechas permitidas" value={userDates} />
                             </div>
                         )}
                     </div>

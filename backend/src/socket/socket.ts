@@ -13,17 +13,18 @@ export const configureSockets = (io: Server) => {
         //Identificamos quien funciona como intercom.
         socket.on("join-intercom", () => {
 
+            //Si ya hay un intercom conectado y no es este mismo socket, lo rechazamos.
+            if (intercom && intercom.connected && intercom.id !== socket.id) {
+                socket.emit("intercom-in-use");
+                return;
+            }
+
             intercom = socket;
 
             viewers.forEach((viewer) => {
-
                 viewer.emit("intercom-connected");
                 if (!intercom) return
-
-                intercom.emit("viewer-connected", {
-                    viewerId: viewer.id
-                });
-
+                intercom.emit("viewer-connected", { viewerId: viewer.id });
             });
         });
 
@@ -40,14 +41,11 @@ export const configureSockets = (io: Server) => {
             socket.emit("intercom-connected");
 
             //Cuando entra un viewer le avisamos al intercom.
-            intercom.emit("viewer-connected", {
-                viewerId: socket.id
-            });
+            intercom.emit("viewer-connected", {viewerId: socket.id});
         });
 
         //Recibimos la oferta del intercom y la reenviamos al mobile.
         socket.on("offer", ({ viewerId, offer }) => {
-
             io.to(viewerId).emit("offer", { offer });
         });
 
@@ -64,12 +62,8 @@ export const configureSockets = (io: Server) => {
         socket.on("disconnect", () => {
 
             if (socket === intercom) {
-
                 //Le avisamos a los viewers que no hay intercom.
-                viewers.forEach((viewer) => {
-                    viewer.emit("no-intercom");
-                });
-
+                viewers.forEach((viewer) => {viewer.emit("no-intercom");});
                 //Dejamos el intercom libre.
                 intercom = null;
             }
@@ -86,7 +80,6 @@ export const configureSockets = (io: Server) => {
 
         //Recibimos el ice del mobile.
         socket.on("ice-candidate-mobile", ({ viewerId, candidate }) => {
-
             if (!intercom) return;
             //LO reenviamos al intercom.
             intercom.emit("ice-candidate", { viewerId, candidate, });
@@ -94,14 +87,8 @@ export const configureSockets = (io: Server) => {
 
         //Recibimos y emitimos el estados del usuario.
         socket.on("face-state", ({ estadoRostro, estadoAcceso, user }) => {
-
             viewers.forEach((viewer) => {
-
-                viewer.emit("face-state", {
-                    estadoRostro,
-                    estadoAcceso,
-                    user,
-                });
+                viewer.emit("face-state", {estadoRostro,estadoAcceso,user,});
             });
         });
     });

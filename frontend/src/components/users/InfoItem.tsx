@@ -1,9 +1,10 @@
 interface Props {
     label: string;
     value: string | string[] | number | undefined;
+    variant?: "inline" | "stacked";
 }
 
-export const InfoItem = ({ label, value }: Props) => {
+export const InfoItem = ({ label, value, variant="inline" }: Props) => {
     // Validamos que el valor exista y que un array no esté vacío
     if (!value || (Array.isArray(value) && value.length === 0)) return null;
 
@@ -19,7 +20,22 @@ export const InfoItem = ({ label, value }: Props) => {
         return `${cleanValues.slice(0, -1).join(", ")} y ${cleanValues[cleanValues.length - 1]}`;
     };
 
-    return (
+    //Este layout se va a usar en el intercom.
+    if (variant === "stacked") {
+        return (
+            <div>
+                <p className="font-semibold text-slate-800">
+                    {label}:
+                </p>
+                <p className="text-slate-700">
+                    {Array.isArray(value) ? formatArray(value) : value}
+                </p>
+            </div>
+        );
+    }
+
+    //Este layout se va a usar en el mobile.
+    return (    
         <div className="bg-gray-200 rounded-md p-2 m-1 flex flex-wrap gap-1 text-sm">
             <span className="font-semibold text-slate-800">{label}:</span>
             <span className="text-slate-700">

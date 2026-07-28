@@ -1,19 +1,17 @@
 //Este hook gestiona la conexion WebRTC (transmisin de video) entre el intercom y los viewers.
 //Usa socket.io para manejar la señalización, intercambiando offers, answers y ice candidates entre ambas entidades.
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { socket } from "../services/socketServices";
 
 interface props {
     isMobile: boolean,
     streamRef: React.RefObject<MediaStream | null>,
     videoRef: React.RefObject<HTMLVideoElement | null>,
-    streamReady: boolean
+    streamReady: boolean,
+    setConnectionState: React.Dispatch<React.SetStateAction<"connecting" | "connected" | "no-intercom" | "intercom-in-use">>
 }
 
-export const useWebRTC = ({ isMobile, streamRef, videoRef, streamReady }: props) => {
-
-    //Estado del video para poder avisar al usuario.
-    const [connectionState, setConnectionState] = useState<"connecting" | "connected" | "no-intercom">("connecting");
+export const useWebRTC = ({ isMobile, streamRef, videoRef, streamReady, setConnectionState }: props) => {
 
     //REFS
 
@@ -27,7 +25,6 @@ export const useWebRTC = ({ isMobile, streamRef, videoRef, streamReady }: props)
     //Cuando el intercom detecta que un viewer se conectó:
     const onViewerConnected = async (viewerId: string) => {
         try {
-            console.log("Nuevo espectador:", viewerId);
             await createOffer(viewerId);
         } catch (error) {
             console.error("Error creando la oferta:", error);
@@ -200,6 +197,10 @@ export const useWebRTC = ({ isMobile, streamRef, videoRef, streamReady }: props)
         socket.on("ice-candidate", ({ viewerId, candidate }) => {
             onIceCandidateIntercom(viewerId, candidate);
         });
+
+        socket.on("intercom-in-use", () => {
+            setConnectionState("intercom-in-use");
+        });
     };
 
     //Eventos del viewer.
@@ -253,6 +254,7 @@ export const useWebRTC = ({ isMobile, streamRef, videoRef, streamReady }: props)
             socket.off("answer");
             socket.off("intercom-connected");
             socket.off("no-intercom");
+            socket.off("intercom-in-use");
 
             currentPeerConnections.forEach(pc => pc.close());
             currentPeerConnections.clear();
@@ -262,5 +264,5 @@ export const useWebRTC = ({ isMobile, streamRef, videoRef, streamReady }: props)
 
     }, [isMobile, streamReady]);
 
-    return { connectionState };
+    return null;
 };

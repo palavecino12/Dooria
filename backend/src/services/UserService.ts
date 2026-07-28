@@ -89,7 +89,7 @@ export const findUserByDescriptor = async (descriptor: number[]) => {
     if (menorDistancia < UMBRAL && mejorUsuario) {
 
         const now = new Date();
-        const currentDay = now.getDay();//Retorna el dia de la semana indicada del 0 al 6
+        const currentDay = (now.getDay() + 6) % 7;//Retorna el dia de la semana indicada del 0 al 6 (de lunes a domingo)
 
         //Almacena la fecha actual tipo YYYY-MM-DD
         const currentDate = `${now.getFullYear()}-${(now.getMonth() + 1).toString().padStart(2, "0")}-${now.getDate().toString().padStart(2, "0")}`;
