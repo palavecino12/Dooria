@@ -55,10 +55,14 @@ export const useWebRTC = ({ isMobile, streamRef, videoRef, streamReady, setConne
     const onIceCandidateIntercom = async (viewerId: string, candidate: RTCIceCandidateInit) => {
 
         const pc = peerConnections.current.get(viewerId)
-
         if (!pc) return
 
-        await pc.addIceCandidate(candidate);
+        try {
+            await pc.addIceCandidate(candidate);
+        } catch (error) {
+            //Para mejorar el mensaje de candidatos descartados.
+            console.warn("ICE candidate descartado (negociación obsoleta):", error);
+        }
     };
 
     //Recibimos un ice candidate del intercom y lo agregamos a la conexión webrtc.
@@ -103,8 +107,12 @@ export const useWebRTC = ({ isMobile, streamRef, videoRef, streamReady, setConne
 
     const createIntercomPeerConnection = (viewerId: string) => {
 
+        //Si ya había una conexión para este viewer, la cerramos (para evitar problemas)
         const existing = peerConnections.current.get(viewerId);
-        if (existing) return existing;
+        if (existing) {
+            existing.close();
+            peerConnections.current.delete(viewerId);
+        }
 
         //Creamos la conexion webrtc.
         const pc = new RTCPeerConnection({
