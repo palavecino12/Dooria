@@ -37,7 +37,6 @@ export const useFaceStateSocket = ({ isMobile, faceDetection }: Props) => {
         if (!isMobile) return;
 
         const handleFaceState = (state: typeof remoteState) => {
-            console.log("Estado recibido", state);
             setRemoteState(state);
         };
 

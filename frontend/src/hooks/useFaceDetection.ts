@@ -119,7 +119,6 @@ export function useFaceDetection({ videoRef, enabled = true }: props) {
           //Si el backend no esta pausado, consultamos si existe el rostro en la base de datos
           if (!detenerBackendRef.current) {
             const resultado: FaceMatchResult = await reconocerRostro(descriptorArray);
-            console.log("resultado backend:", resultado);
 
             //Si hubo march frenamos todo, colocamos como reconocido el rostro y guardamos el usuario
             if (resultado.match) {
