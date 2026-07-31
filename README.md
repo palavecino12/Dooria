@@ -4,9 +4,9 @@ Dooria es una aplicación web orientada a la gestión de accesos en entornos res
 
 La aplicación cuenta con dos interfaces principales:
 
-| Ruta | Descripción |
-|------|-------------|
-| `/app` | Interfaz Mobile First utilizada por los residentes y administradores para gestionar usuarios y permisos de acceso. |
+| Ruta        | Descripción                                                                                                             |
+| ----------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `/app`      | Interfaz Mobile First utilizada por los residentes y administradores para gestionar usuarios y permisos de acceso.      |
 | `/intercom` | Interfaz utilizada por el dispositivo de acceso para capturar video y realizar el reconocimiento facial en tiempo real. |
 
 ---
@@ -47,7 +47,7 @@ Cada capa tiene una única responsabilidad:
 - **Hook:** contiene la lógica de negocio del frontend.
 - **Service:** realiza la comunicación con la API.
 
-React Context se utiliza para compartir el estado global de la aplicación (principalmente la lista de usuarios), reduciendo solicitudes innecesarias al backend y evitando *prop drilling* para la función de refresh. Tambien se usa para el uso global de toast con el fin de notificar feedback al usuario.
+React Context se utiliza para compartir el estado global de la aplicación (principalmente la lista de usuarios), reduciendo solicitudes innecesarias al backend y evitando prop drilling para la función de refresh. Tambien se usa para el uso global de toast con el fin de notificar feedback al usuario.
 
 ### Backend
 
@@ -56,6 +56,15 @@ Routes → Controller → Service → Repository → MongoDB Atlas
 ```
 
 Cada capa encapsula una responsabilidad específica, facilitando el mantenimiento y la escalabilidad del proyecto.
+
+---
+
+## Detección de rostro
+
+Se utiliza face-api.js como motor de reconocimiento facial en ambas interfaces, con un rol distinto en cada una:
+
+- **`/intercom`:** captura el rostro desde el video en tiempo real, genera su descriptor facial y lo compara contra los usuarios registrados para validar el estado de acceso (permitido, denegado o desconocido).
+- **`/app`:** al registrar un usuario, se procesa su imagen para extraer y almacenar el descriptor facial correspondiente, que luego es utilizado por el `/intercom` como referencia para el reconocimiento.
 
 ---
 
