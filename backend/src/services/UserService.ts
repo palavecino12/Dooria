@@ -89,10 +89,25 @@ export const findUserByDescriptor = async (descriptor: number[]) => {
     if (menorDistancia < UMBRAL && mejorUsuario) {
 
         const now = new Date();
-        const currentDay = (now.getDay() + 6) % 7;//Retorna el dia de la semana indicada del 0 al 6 (de lunes a domingo)
+        const TIMEZONE = "America/Argentina/Buenos_Aires";
 
-        //Almacena la fecha actual tipo YYYY-MM-DD
-        const currentDate = `${now.getFullYear()}-${(now.getMonth() + 1).toString().padStart(2, "0")}-${now.getDate().toString().padStart(2, "0")}`;
+        //Fecha actual en Argentina, formato YYYY-MM-DD (para resolver la zona horaria del servidor)
+        const currentDate = new Intl.DateTimeFormat("en-CA", {
+            timeZone: TIMEZONE,
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+        }).format(now);
+
+        //Día de la semana en Argentina, convertido a 0-6 (0=Lunes hasta 6=Domingo)
+        const weekdayName = new Intl.DateTimeFormat("en-US", {
+            timeZone: TIMEZONE,
+            weekday: "long",
+        }).format(now);
+
+        const diasSemana = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+        const currentDay = diasSemana.indexOf(weekdayName);
+
         const userDates = mejorUsuario.allowedDates?.map(date => date.slice(0, 10));
 
         let tieneAcceso = false;
