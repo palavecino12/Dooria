@@ -1,6 +1,6 @@
 import { UserResponseDTO } from "../dtos/userDto"
 import { AppError } from "../errors/AppError"
-import { IUser } from "../models/User"
+import { IUser, IUserDocument } from "../models/User"
 import * as userRepository from "../Repositories/UserRepository"
 import { registerUserInput } from "../schemas/userSchema"
 
@@ -70,7 +70,7 @@ export const findUserByDescriptor = async (descriptor: number[]) => {
 
     if (!usuarios.length) return { match: false, access: false };
 
-    let mejorUsuario: IUser | null = null;
+    let mejorUsuario: IUserDocument | null = null;
     let menorDistancia = Infinity;
 
     //Mide la distancia euclidiana entre el descriptor actual y el descriptor de los usuarios almacenados.
@@ -80,7 +80,7 @@ export const findUserByDescriptor = async (descriptor: number[]) => {
         const distancia = distanciaEuclidiana(descriptor, usuario.descriptor);
         if (distancia < menorDistancia) {
             menorDistancia = distancia;
-            mejorUsuario = usuario as IUser;
+            mejorUsuario = usuario;
         }
     }
 

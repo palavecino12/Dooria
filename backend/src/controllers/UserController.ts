@@ -14,12 +14,12 @@ export const getUsers = async (req: Request, res: Response, next: NextFunction) 
 }
 
 //POST/usuarios/registrar-usuario 
-//En caso de exito retorno un ok: true, actualizar que en caso de error devuelva tambien un ok:false
 export const registerUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const data = req.body as registerUserInput;
     const saved = await userService.registerUser(data);
-    return res.json({ usuario: saved, message: "Usuario creado con exito!" });
+    const { descriptor, __v, ...userWithoutDescriptor } = saved.toObject();
+    return res.json({ usuario: userWithoutDescriptor, message: "Usuario creado con exito!" });
   } catch (error) {
     next(error)
   }
@@ -48,7 +48,7 @@ export const updateUser = async (req: Request, res: Response, next: NextFunction
   }
 }
 
-//POST
+//POST/usuarios/buscar-rostro
 export const findUserByDescriptor = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { descriptor } = req.body as { descriptor: number[] };

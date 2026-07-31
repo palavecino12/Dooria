@@ -6,7 +6,9 @@ export const registerUserSchema = z.object({
     dni: z.string().min(1, "El DNI es obligatorio"),
     number: z.string().min(1, "El número es obligatorio"),
     address: z.string().min(1, "La dirección es obligatoria"),
-    rol: z.string().min(1, "El rol es obligatorio"),
+    rol: z.enum(["Local", "Visitante"], {
+        message: "El rol debe ser 'Local' o 'Visitante'"
+    }),
     allowedDays: z.array(z.number()).optional(),
     allowedDates: z.array(z.string()).optional(),
     descriptor: z.array(z.number()).nonempty(),

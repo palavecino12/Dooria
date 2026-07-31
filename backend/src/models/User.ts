@@ -6,10 +6,17 @@ export interface IUser {
     dni: string;
     number: string;
     address: string;
-    rol: string;
+    rol: "Local" | "Visitante";
     allowedDays?: number[];
     allowedDates?: string[];
-    descriptor?: number[];
+    descriptor: number[];
+}
+
+//Documento tal como existe en la base de datos
+export interface IUserDocument extends IUser {
+    _id: string;
+    createdAt: Date;
+    updatedAt: Date;
 }
 
 const userSchema = new Schema<IUser>({

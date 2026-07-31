@@ -1,4 +1,4 @@
-import { User, IUser } from "../models/User"
+import { User, IUser, IUserDocument } from "../models/User"
 import { UserResponseDTO } from "../dtos/userDto"
 
 //Trae todos los usuarios.
@@ -25,8 +25,8 @@ export const UpdateUserById = (id: string, data: UserResponseDTO) => {
 }
 
 //Trae todos los usuarios que tengan un descriptor.
-export const findUsersWithDescriptor = (): Promise<IUser[]> => {
-    return User.find({ descriptor: { $exists: true } }).lean<IUser[]>()
+export const findUsersWithDescriptor = (): Promise<IUserDocument[]> => {
+    return User.find({ descriptor: { $exists: true } }).lean<IUserDocument[]>()
 }
 
 //Buscamos un usuario por su dni.

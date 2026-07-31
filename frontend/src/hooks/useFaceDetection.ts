@@ -1,7 +1,8 @@
 //GOD HOOK (Fucnional pero falta modularizar y mejorar)
 import { useEffect, useRef, useState, type RefObject } from "react";
 import * as faceapi from "face-api.js";
-import { type FormValues } from "../schemas/schemaForm";
+import type { User } from "../types/userType";
+import { findUserByDescriptor, type FindUserByDescriptorResponse } from "../services/userServices";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 if (!apiUrl) {
@@ -16,17 +17,11 @@ interface props {
   enabled?: boolean
 }
 
-interface FaceMatchResult {
-  match: boolean,
-  access: boolean,
-  user?: FormValues
-}
-
 export function useFaceDetection({ videoRef, enabled = true }: props) {
 
   const [estadoRostro, setEstadoRostro] = useState<EstadoRostro>("ninguno");
   const [estadoAcceso, setEstadoAcceso] = useState<EstadoAcceso>("denegado");
-  const [user, setUser] = useState<FormValues | null>(null);
+  const [user, setUser] = useState<User | null>(null);
 
   //refs
   const estadoRostroRef = useRef<EstadoRostro>("ninguno");
@@ -61,17 +56,12 @@ export function useFaceDetection({ videoRef, enabled = true }: props) {
     };
 
     //Funcion donde le mandamos un descriptor y lo busca en la base de datos
-    const reconocerRostro = async (descriptor: number[]) => {
+    const reconocerRostro = async (descriptor: number[]): Promise<FindUserByDescriptorResponse> => {
       try {
-        const resp = await fetch(`${apiUrl}/usuarios/buscar-rostro`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ descriptor }),
-        });
-        return resp.json();
+        return await findUserByDescriptor(descriptor);
       } catch (err) {
-        console.error("Error fetch buscar-rostro:", err);
-        return { match: false };
+        console.error("Error en buscar-rostro:", err);
+        return { match: false, access: false };
       }
     };
 
@@ -118,13 +108,13 @@ export function useFaceDetection({ videoRef, enabled = true }: props) {
 
           //Si el backend no esta pausado, consultamos si existe el rostro en la base de datos
           if (!detenerBackendRef.current) {
-            const resultado: FaceMatchResult = await reconocerRostro(descriptorArray);
+            const resultado = await reconocerRostro(descriptorArray);
 
             //Si hubo march frenamos todo, colocamos como reconocido el rostro y guardamos el usuario
             if (resultado.match) {
 
               //Almacenamos el ususario que se encontro
-              if (resultado.user) setUser(resultado.user)
+              setUser(resultado.user)
               setEstadoRostro("reconocido");
 
               if (resultado.access) {

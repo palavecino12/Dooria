@@ -1,4 +1,4 @@
-//Type del usuario desde la base de datos
+//Type del usuario que vamos a usar en el front
 export type User = {
         _id: string
         name: string
