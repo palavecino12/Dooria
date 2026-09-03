@@ -1,6 +1,6 @@
 import { UserResponseDTO } from "../dtos/userDto"
 import { AppError } from "../errors/AppError"
-import { IUser, IUserDocument } from "../models/User"
+import { IUserDocument } from "../models/User"
 import * as userRepository from "../Repositories/UserRepository"
 import { registerUserInput } from "../schemas/userSchema"
 

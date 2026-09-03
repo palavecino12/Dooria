@@ -6,7 +6,7 @@ import userRoutes from "./routes/userRoutes";
 import { createServer } from "http";
 import { Server } from "socket.io";
 import { configureSockets } from "./socket/socket";
-import { errorHandler } from "./middlewares/errorHandleMiddleware";
+import { errorHandler } from "./middlewares/errorHandleMiddlerware";
 
 dotenv.config();
 const PORT = process.env.PORT || 3000;
@@ -18,7 +18,7 @@ app.use(express.json());
 
 app.use("/usuarios", userRoutes);
 
-//Error Handler
+//ErrorHandler
 app.use(errorHandler)
 
 //Creamos el servidor http de node asociado a express.

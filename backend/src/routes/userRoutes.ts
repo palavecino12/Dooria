@@ -1,6 +1,6 @@
 import { Router } from "express"
 import { getUsers, findUserByDescriptor, registerUser, deleteUser, updateUser } from "../controllers/UserController"
-import { validate } from "../middlewares/validateMiddleware";
+import { validate } from "../middlewares/validateZodMiddleware";
 import { registerUserSchema } from "../schemas/userSchema";
 
 const router = Router()
