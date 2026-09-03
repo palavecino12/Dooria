@@ -1,24 +1,28 @@
-import { BrowserRouter,Routes,Route } from "react-router-dom"
-import { Home } from "./pages/app/Home"
+import { BrowserRouter, Routes, Route,Navigate } from "react-router-dom"
 import { UsersList } from "./pages/app/UserList"
 import { UserRegister } from "./pages/app/UserRegister"
-import{ Intercom } from "./pages/Intercom"
+import { Intercom } from "./pages/Intercom"
 import { EditUser } from "./pages/app/UserEdit"
 import { AppIntercom } from "./pages/app/AppIntercom"
-import { AppIntro } from "./pages/app/AppIntro"
+import { NavBar } from "./components/common/NavBat"
+import { AppLayout } from "./layouts/AppLayouts"
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/app" element={<Home/>}/>
-        <Route path="/app/register" element={<UserRegister/>}/>
-        <Route path="/app/users" element={<UsersList/>}/>
-        <Route path="/app/users/:id/edit" element={<EditUser/>}/>
-        <Route path="/app/intercom" element={<AppIntercom/>}/>
-        <Route path="/intercom" element={<Intercom/>}/>
 
-        <Route path="/test" element={<AppIntro />}/>
+        <Route element={<AppLayout/>}>
+          <Route path="/app/register" element={<UserRegister />} />
+          <Route path="/app/users" element={<UsersList />} />
+          <Route path="/app/intercom" element={<AppIntercom />} />
+        </Route>
+
+        <Route path="/app" element={<Navigate to="/app/users" replace />}/>
+        <Route path="/app/users/:id/edit" element={<EditUser />} />
+        <Route path="/intercom" element={<Intercom />} />
+
+        <Route path="/test" element={<NavBar />} />
       </Routes>
     </BrowserRouter>
   )
