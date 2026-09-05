@@ -4,7 +4,7 @@ import { UsersRound, UserRoundPlus, Video } from 'lucide-react';
 export const NavBar = () => {
     return (
         <div className="fixed bottom-1 left-1/2 -translate-x-1/2 z-50">
-            <div className="flex flex-row items-center gap-5 mb-10 border px-5 py-1 rounded-3xl bg-black">
+            <div className="flex flex-row items-center gap-5 mb-10 border px-5 py-1 rounded-3xl bg-black shadow-2xl">
                 <NavLink
                     className={({ isActive }) =>
                         `py-2 px-5 ${isActive ? "bg-white rounded-2xl" : ""}`

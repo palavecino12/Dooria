@@ -78,7 +78,7 @@ export const FormUser = ({ title, initialValues, onSubmit, closeForm, currentUse
                 </div>
 
                 {/* Botones */}
-                <div className="flex flex-row gap-10 bg-gray-200">
+                <div className="flex flex-row gap-5 bg-gray-200">
                     <Button variant="secundario" onClick={closeForm}>Cancelar</Button>
                     <Button type="submit">{rol === "Local" ? "Confirmar" : "Siguiente"}</Button>
                 </div>

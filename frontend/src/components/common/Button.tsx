@@ -7,7 +7,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 export const Button = ({ children, variant = "primario", onClick, type = "button", }: ButtonProps) => {
-    const baseStyles = "flex h-11 w-40 items-center justify-center rounded-lg text-lg font-medium shadow-lg transition-all duration-150 active:scale-95 select-none";
+    const baseStyles = "flex h-11 w-45 items-center justify-center rounded-lg text-lg font-medium shadow-lg transition-all duration-150 active:scale-95 select-none";
 
     const variants = {
         primario: "bg-black text-white hover:bg-neutral-900 active:bg-neutral-800 active:shadow-md",

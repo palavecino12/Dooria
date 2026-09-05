@@ -1,13 +1,10 @@
 //Index que contiene el renderizado del componente ListUsers, SearchUsers, UserFilterButton y la comunicacion entre si
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { ListUsers } from "./ListUser";
 import { SearchUsers } from "./SearchUser";
 import { UserFilterButtons } from "./UserFilterButtons";
-import { Button } from "../common/Button";
 
 export const UsersPage = () =>{
-    const navigate = useNavigate()
     //Almacenamos lo que ingresa el usuario
     const [userSearch, setUserSearch] = useState("")
     //Almacenamos el filtro que aplica el usuario
@@ -23,8 +20,6 @@ export const UsersPage = () =>{
 
             {/* Lista de usuarios */}
             <ListUsers selected={selected} userSearch={userSearch}/>
-
-            <Button variant="secundario" onClick={()=>navigate("/app")}>Volver</Button>
         </div>
     )
 }

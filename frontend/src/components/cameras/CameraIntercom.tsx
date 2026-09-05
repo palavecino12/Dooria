@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 import { useCamera } from "../../hooks/useCamera";
 import { useFaceDetection } from "../../hooks/useFaceDetection";
 import { Button } from "../common/Button";
@@ -15,7 +14,6 @@ interface CameraIntercomProps {
 
 export const CameraIntercom = ({ isMobile = false }: CameraIntercomProps) => {
 
-    const navigate = useNavigate()
 
     //Estado del video (tanto en intercom como para el viewer) para poder avisar al usuario.
     const [connectionState, setConnectionState] = useState<"connecting" | "connected" | "no-intercom" | "intercom-in-use">("connecting");
@@ -197,8 +195,7 @@ export const CameraIntercom = ({ isMobile = false }: CameraIntercomProps) => {
 
                 {isMobile && (
                     <div className={`flex justify-center w-full gap-10 ${screenState !== "denied" ? "mt-30" : "mt-1"}`}>
-                        <Button variant="secundario" onClick={() => navigate("/app")}>Volver</Button>
-                        <Button>Permitir acceso</Button>
+                        <Button>Abrir Porton</Button>
                     </div>
                 )}
             </main>
