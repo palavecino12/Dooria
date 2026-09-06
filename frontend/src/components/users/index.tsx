@@ -11,7 +11,7 @@ export const UsersPage = () =>{
     const [selected, setSelected] = useState("Todos");
 
     return(
-        <div className="h-dvh flex flex-col items-center justify-center gap-5 bg-gray-200">
+        <div className="h-full flex flex-col items-center justify-center gap-5 bg-gray-300">
             {/* Buscador de usuarios */}
             <SearchUsers setUserSearch={setUserSearch}/>
 

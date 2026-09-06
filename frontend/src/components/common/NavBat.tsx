@@ -1,41 +1,124 @@
-import { NavLink } from "react-router-dom"
-import { UsersRound, UserRoundPlus, Video } from 'lucide-react';
+import { NavLink } from "react-router-dom";
+import { UsersRound, UserRoundPlus, Video } from "lucide-react";
+import { motion } from "framer-motion";
 
 export const NavBar = () => {
     return (
-        <div className="fixed bottom-1 left-1/2 -translate-x-1/2 z-50">
-            <div className="flex flex-row items-center gap-5 mb-10 border px-5 py-1 rounded-3xl bg-black shadow-2xl">
+        <nav className="w-full flex justify-center pb-4">
+            <div className="flex items-center gap-2 p-1.5 px-3 rounded-2xl bg-black/95 shadow-[0_8px_30px_rgba(0,0,0,0.35)] backdrop-blur-sm">
+
+                {/* Usuarios */}
                 <NavLink
-                    className={({ isActive }) =>
-                        `py-2 px-5 ${isActive ? "bg-white rounded-2xl" : ""}`
-                    }
-                    to={"/app/users"}>
+                    to="/app/users"
+                    className="relative p-2.5 px-5 rounded-xl transition-colors duration-200 hover:bg-white/10"
+                >
                     {({ isActive }) => (
-                        <UsersRound color={isActive ? "black" : "white"} />
+                        <>
+                            {isActive && (
+                                <motion.div
+                                    layoutId="active-navbar"
+                                    className="absolute inset-0 rounded-xl bg-white shadow-[0_0_20px_rgba(255,255,255,0.12)]"
+                                    transition={{
+                                        type: "spring",
+                                        stiffness: 600,
+                                        damping: 30,
+                                    }}
+                                />
+                            )}
+
+                            <motion.div
+                                animate={{
+                                    scale: isActive ? 1.05 : 1,
+                                }}
+                                transition={{
+                                    duration: 0.2,
+                                }}
+                                className="relative z-10"
+                            >
+                                <UsersRound
+                                    size={26}
+                                    color={isActive ? "black" : "white"}
+                                />
+                            </motion.div>
+                        </>
                     )}
                 </NavLink>
 
+                {/* Agregar usuario */}
                 <NavLink
-                    className={({ isActive }) =>
-                        `py-2 px-5 ${isActive ? "bg-white rounded-2xl" : ""}`
-                    }
-                    to={"app/register"}>
+                    to="/app/register"
+                    className="relative p-2.5 px-5 rounded-xl transition-colors duration-200 hover:bg-white/10"
+                >
                     {({ isActive }) => (
-                        <UserRoundPlus color={isActive ? "black" : "white"} />
+                        <>
+                            {isActive && (
+                                <motion.div
+                                    layoutId="active-navbar"
+                                    className="absolute inset-0 rounded-xl bg-white shadow-[0_0_20px_rgba(255,255,255,0.12)]"
+                                    transition={{
+                                        type: "spring",
+                                        stiffness: 600,
+                                        damping: 30,
+                                    }}
+                                />
+                            )}
+
+                            <motion.div
+                                animate={{
+                                    scale: isActive ? 1.05 : 1,
+                                }}
+                                transition={{
+                                    duration: 0.2,
+                                }}
+                                className="relative z-10"
+                            >
+                                <UserRoundPlus
+                                    size={26}
+                                    color={isActive ? "black" : "white"}
+                                />
+                            </motion.div>
+                        </>
                     )}
                 </NavLink>
 
+                {/* Portero */}
                 <NavLink
-                    className={({ isActive }) =>
-                        `py-2 px-5 ${isActive ? "bg-white rounded-2xl" : ""}`
-                    }
-                    to={"/app/intercom"}>
+                    to="/app/intercom"
+                    className="relative p-2.5 px-5 rounded-xl transition-colors duration-200 hover:bg-white/10"
+                >
                     {({ isActive }) => (
-                        <Video color={isActive ? "black" : "white"} />
+                        <>
+                            {isActive && (
+                                <motion.div
+                                    layoutId="active-navbar"
+                                    className="absolute inset-0 rounded-xl bg-white shadow-[0_0_20px_rgba(255,255,255,0.12)]"
+                                    transition={{
+                                        type: "spring",
+                                        stiffness: 600,
+                                        damping: 30,
+                                    }}
+                                />
+                            )}
+
+                            <motion.div
+                                animate={{
+                                    scale: isActive ? 1.05 : 1,
+                                }}
+                                transition={{
+                                    duration: 0.2,
+                                }}
+                                className="relative z-10"
+                            >
+                                <Video
+                                    size={26}
+                                    color={isActive ? "black" : "white"}
+                                />
+                            </motion.div>
+                        </>
                     )}
                 </NavLink>
+
             </div>
-        </div>
-
-    )
-}
+        </nav>
+    );
+};

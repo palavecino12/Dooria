@@ -61,7 +61,7 @@ export const FormUser = ({ title, initialValues, onSubmit, closeForm, currentUse
     }
 
     return (
-        <div className="flex h-dvh flex-col items-center gap-6 bg-gray-200">
+        <div className="flex h-dvh flex-col items-center gap-6 bg-gray-300">
 
             <Header title={title} />
 

@@ -57,7 +57,7 @@ export const CameraIntercom = ({ isMobile = false }: CameraIntercomProps) => {
     //Estilos del video y de la tarjeta con los mensajes que vamos a mostrar
     const screenUI = {
         idle: {
-            videoBorder: "border-gray-300",
+            videoBorder: "border-gray-400",
             glow: "",
             bg: "bg-gray-900",
             text: "text-white text-center",
@@ -121,7 +121,7 @@ export const CameraIntercom = ({ isMobile = false }: CameraIntercomProps) => {
         };
 
     return (
-        <div className="w-full h-dvh bg-gray-200 text-white flex flex-col">
+        <div className="w-full h-full bg-gray-300 text-white flex flex-col">
 
             {isMobile && <Header title="Portero" />}
 
