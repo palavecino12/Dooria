@@ -24,11 +24,11 @@ const InputFormUser = ({ name, label, control, type, error, options }: props) =>
 
     return (
         <div className="w-full">
-            <label className="block text-sm mb-1" htmlFor={name}>{label}</label>
+            <label className="block text-sm mb-1 ml-1" htmlFor={name}>{label}</label>
 
             <Controller name={name} control={control} render={({ field }) =>
                 type === 'select' ? (
-                    <select id={name} {...field} value={field.value ?? ""} className={`w-full p-2 border border-gray-400 rounded-lg focus:ring-2 
+                    <select id={name} {...field} value={field.value ?? ""} className={`w-full p-2 border border-gray-400 rounded-xl focus:ring-2 
                                                                                 focus:border-transparent focus:-translate-y-1  
                                                                                 focus:outline-none transition-all duration-200 bg-gray-100
                                                                                 ${error ? 'border-red-700' : 'border-black/20'}`}>
@@ -38,7 +38,7 @@ const InputFormUser = ({ name, label, control, type, error, options }: props) =>
                             </option>))}
                     </select>
                 ) : (
-                    <input id={name} type={type} inputMode={inputMode} {...field} value={field.value ?? ""} className={`w-full p-2 border border-gray-400 rounded-lg focus:ring-2 
+                    <input id={name} type={type} inputMode={inputMode} {...field} value={field.value ?? ""} className={`w-full p-1.5 border border-gray-400 rounded-xl focus:ring-2 
                                                                                         focus:border-transparent focus:-translate-y-1 bg-gray-100
                                                                                         focus:outline-none transition-all duration-200
                                                                                         ${error ? 'border-red-700' : 'border-black/20'}`} />

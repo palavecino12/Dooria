@@ -72,9 +72,8 @@ export const ListUsers = ({ userSearch, selected }: ListUsersProps) => {
             {deletingUser && <Loading />}
 
             {/* Lista de usuarios */}
-            <div className="border-t border-b border-gray-400 pb-3 pt-3 bg-white
-                        shadow-[0_4px_10px_rgba(0,0,0,0.15),0_-4px_10px_rgba(0,0,0,0.15)] w-full">
-                <div className="divide-y overflow-auto h-100">
+            <div className="w-full">
+                <div className="overflow-auto h-100 w-full">
 
                     {/* Validamos en caso de loading, error y si hay o no usuarios */}
                     {loadingUsers ? (

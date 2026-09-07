@@ -6,13 +6,13 @@ interface props{
 
 export const SearchUsers = ({setUserSearch}:props) =>{
     return(
-        <div className="relative w-88">
+        <div className="relative w-full">
 
             {/* La razon por la que esta primero el input es para poder usar peer para cuando se hace foco en el input */}
             <input
                 type="text"
                 placeholder="Buscar usuario..."
-                className="peer w-full h-12 pl-10 p-2 border border-gray-300 rounded-lg shadow-lg
+                className="peer w-full h-12 pl-10 p-2 border border-gray-300 rounded-2xl shadow-lg
                     focus:ring-2 focus:border-transparent focus:outline-none focus:shadow-inner
                     transition-all duration-200 bg-white active:scale-95"
                 onChange={(e) => {

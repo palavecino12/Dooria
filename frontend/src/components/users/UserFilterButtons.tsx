@@ -13,23 +13,16 @@ export const UserFilterButtons = ({ setSelected, selected }: props) => {
     ];
 
     return (
-        <div className="flex">
+        <div className="flex gap-1">
             {filters.map((filter) => {
-                //Codigo para redondear solo las esquinas exteriores de los botones exteriores
-                const rounded =
-                    filter.value === "Todos"
-                        ? "rounded-tl-lg rounded-bl-lg"
-                        : filter.value === "Local"
-                            ? "rounded-none"
-                            : "rounded-tr-lg rounded-br-lg";
                 return (
                     <button
                         key={filter.value}
                         onClick={() => setSelected(filter.value)}
-                        className={`transition-all duration-200 w-29 h-11 text-lg font-medium ${rounded}
+                        className={`transition-all duration-200 w-29 h-11 text-lg font-medium rounded-2xl
                             ${selected === filter.value
-                                ? "bg-black text-white"
-                                : "bg-white border border-black/20 text-black shadow-lg"
+                                ? "bg-[#2c2c28] text-white"
+                                : "bg-white text-black shadow-lg"
                             }
                         active:scale-95 active:shadow-inner`}>
                         {filter.label}

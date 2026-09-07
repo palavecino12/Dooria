@@ -24,8 +24,8 @@ export const WeeklySelector = ({toggleDay,selectedDays }: props) => {
                                 className="hidden peer"
                             />
                             <div
-                                className="bg-white border border-black/30 w-50 h-11 text-black rounded-lg shadow-lg font-semibold 
-                                    transition-all duration-200 flex justify-center items-center peer-checked:bg-black 
+                                className="bg-white border border-black/30 w-50 h-11 text-black rounded-2xl shadow-lg font-semibold 
+                                    transition-all duration-200 flex justify-center items-center peer-checked:bg-[#2c2c28]
                                     peer-checked:shadow-inner peer-checked:text-white">
                                 {day}
                             </div>

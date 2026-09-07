@@ -71,44 +71,41 @@ export const FormUserAccess = ({ initialValue, backToForm, data }: props) => {
             {/* Pantalla loading, esta dentro para que se vea sobre la interfaz */}
             {loading && <Loading />}
 
-            <div className="flex h-dvh flex-col bg-gray-200">
+            <div className="flex h-dvh flex-col">
 
                 <Header title="Acceso del Visitante" />
 
                 <main className="flex flex-col flex-1">
                     {/* Botones de mensual y semanal */}
-                    <div className="flex justify-center py-6">
+                    <div className="flex justify-center py-6 gap-1">
                         <button
                             onClick={() => setOption("semanal")}
-                            className={`w-34 h-11 rounded-tl-lg rounded-bl-lg shadow-lg transition-all duration-100
+                            className={`w-34 h-11 rounded-2xl shadow-lg transition-all duration-100
                         ${option === "semanal"
-                                    ? "bg-black text-white"
+                                    ? "bg-[#2c2c28] text-white"
                                     : "bg-white text-black border border-black/20"
                                 } active:scale-95 active:shadow-inner`}>Semanal
                         </button>
                         <button
                             onClick={() => setOption("calendario")}
-                            className={`w-34 h-11 rounded-tr-lg rounded-br-lg shadow-lg transition-all duration-100
+                            className={`w-34 h-11 rounded-2xl shadow-lg transition-all duration-100
                         ${option === "calendario"
-                                    ? "bg-black text-white"
+                                    ? "bg-[#2c2c28] text-white"
                                     : "bg-white text-black border border-black/20"
                                 } active:scale-95 active:shadow-inner`}>Calendario
                         </button>
                     </div>
 
                     {/* Componente mensual y semanal */}
-                    <div className="flex-1 flex items-center justify-center">
-                        <div className="bg-white flex justify-center w-full p-4
-                    shadow-[0_4px_10px_rgba(0,0,0,0.15),0_-4px_10px_rgba(0,0,0,0.15)]">
-
+                    <div className="flex-1 flex items-center justify-center p-3">
+                        <div className="bg-white rounded-3xl shadow-md border border-gray-100 flex justify-center w-full p-10">
                             {option === "semanal" && (<WeeklySelector selectedDays={selectedDays} toggleDay={toggleDay} />)}
                             {option === "calendario" && (<MonthlySelector selectedMonths={selectedMonths} setSelectedMonths={setSelectedMonths} />)}
-
                         </div>
                     </div>
 
                     {/* Boton aceptr y volver */}
-                    <div className="flex justify-center gap-10 py-6">
+                    <div className="flex justify-center gap-3 py-6">
                         <Button variant="secundario" onClick={backToForm}>
                             Volver
                         </Button>

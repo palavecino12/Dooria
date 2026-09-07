@@ -15,7 +15,7 @@ export const MonthlySelector = ({selectedMonths,setSelectedMonths}: props) => {
                 classNames={{
                     day: "text-xl",
                     today: "text-black border border-black/20",
-                    selected: "bg-black text-white rounded-md",
+                    selected: "bg-[#2c2c28] text-white rounded-xl",
                     month_grid: "mt-11",
                     weekday: "text-xl",
                 }}/>

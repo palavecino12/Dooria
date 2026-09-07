@@ -7,7 +7,7 @@ import { useState } from "react"
 
 interface CardUsersProps {
     user: UserWithoutDescriptor
-    userDelete:(id:string)=>Promise<void>
+    userDelete: (id: string) => Promise<void>
 }
 export const CardUser = ({ user, userDelete }: CardUsersProps) => {
 
@@ -15,6 +15,8 @@ export const CardUser = ({ user, userDelete }: CardUsersProps) => {
 
     //Estado para abrir y cerrar el modal de confirmacion al eliminar un usuario
     const [openModal, setOpenModal] = useState(false);
+
+    const [showFullCard, setShowFullCard] = useState(false);
 
     //Funcion del boton para eliminar usuario
     const handleDelete = async () => {
@@ -32,11 +34,10 @@ export const CardUser = ({ user, userDelete }: CardUsersProps) => {
             .map(d => daysMap[d])
         : [];
 
-    const [showFullCard, setShowFullCard] = useState(false);
 
     return (
         <>
-            <div className="border-b first:border-t border-black/20 p-3 text-black 
+            <div className="p-2 mb-1 text-black bg-white rounded-2xl w-full
                 grid grid-cols-[5px_1fr_80px_auto] items-center gap-x-4">
 
                 {/* Boton para desplegar tarjeta completa */}
@@ -49,10 +50,12 @@ export const CardUser = ({ user, userDelete }: CardUsersProps) => {
                 <p className="whitespace-nowrap m-1">{user.name} {user.lastName}</p>
 
                 {/* Informacion de rol */}
-                <p className={user.rol == "Local"
-                    ? "text-center bg-blue-200 rounded-sm p-0.5"
-                    : "text-center bg-amber-200 rounded-sm p-0.5"}>
-                    {user.rol}</p>
+                <p className={`text-center rounded-sm truncate min-w-0 ${user.rol === "Local"
+                    ? "bg-blue-100 text-blue-800"
+                    : "bg-amber-100 text-amber-800"
+                    }`}>
+                    {user.rol}
+                </p>
 
                 <div className="flex gap-1">
                     {/* Boton para editar */}
@@ -60,13 +63,13 @@ export const CardUser = ({ user, userDelete }: CardUsersProps) => {
                         onClick={() => navigate(`/app/users/${user._id}/edit`, {
                             state: { user }
                         })}
-                        className="bg-black p-2 text-white rounded-lg shadow-lg transition-all duration-200
+                        className="bg-[#2c2c28] p-2 text-white rounded-xl shadow-lg transition-all duration-200
                             active:bg-gray-200 active:shadow-inner"><Pencil /></button>
 
                     {/* Boton para eliminar */}
                     <button
                         onClick={() => setOpenModal(true)}
-                        className="bg-black p-2 text-white rounded-lg shadow-lg transition-all duration-200
+                        className="bg-[#a82a2a] p-2 text-white rounded-xl shadow-lg transition-all duration-200
                             active:bg-gray-200 active:shadow-inner"><Trash2 /></button>
                 </div>
 
@@ -96,7 +99,7 @@ export const CardUser = ({ user, userDelete }: CardUsersProps) => {
                 <h1>¿Está seguro que desea eliminar a <strong>{user.name}</strong>?</h1>
             </ConfirmModal>
 
-            
+
         </>
 
     )

@@ -19,11 +19,11 @@ export const ConfirmModal = ({ open, children, onConfirm, onCancel, }: ConfirmMo
     return createPortal(
         <div className="h-dvh fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
             {/* Contenedor del modal */}
-            <div className="rounded-lg bg-white p-5 shadow-2xl animate-in fade-in zoom-in-95 duration-200 
+            <div className="rounded-3xl bg-white p-5 shadow-2xl animate-in fade-in zoom-in-95 duration-200 
             flex flex-col justify-center items-center">
 
                 {/* Icono de advertencia */}
-                <TriangleAlert size={66} color='#b9911c' />
+                <TriangleAlert size={66} color='#d97706' />
 
                 {/* Contenido dinámico (children) */}
                 <div className="mb-10 mt-5 text-center text-lg">

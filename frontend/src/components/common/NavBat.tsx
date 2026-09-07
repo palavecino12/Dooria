@@ -5,19 +5,19 @@ import { motion } from "framer-motion";
 export const NavBar = () => {
     return (
         <nav className="w-full flex justify-center pb-4">
-            <div className="flex items-center gap-2 p-1.5 px-3 rounded-2xl bg-black/95 shadow-[0_8px_30px_rgba(0,0,0,0.35)] backdrop-blur-sm">
+            <div className="flex items-center gap-2 p-1.5 px-3 rounded-3xl bg-white shadow-[0_8px_30px_rgba(0,0,0,0.35)]">
 
                 {/* Usuarios */}
                 <NavLink
                     to="/app/users"
-                    className="relative p-2.5 px-5 rounded-xl transition-colors duration-200 hover:bg-white/10"
+                    className="relative p-2.5 px-5 transition-colors duration-200"
                 >
                     {({ isActive }) => (
                         <>
                             {isActive && (
                                 <motion.div
                                     layoutId="active-navbar"
-                                    className="absolute inset-0 rounded-xl bg-white shadow-[0_0_20px_rgba(255,255,255,0.12)]"
+                                    className="absolute inset-0 rounded-2xl bg-[#2c2c28] shadow-[0_0_20px_rgba(255,255,255,0.12)]"
                                     transition={{
                                         type: "spring",
                                         stiffness: 600,
@@ -37,7 +37,7 @@ export const NavBar = () => {
                             >
                                 <UsersRound
                                     size={26}
-                                    color={isActive ? "black" : "white"}
+                                    color={isActive ? "white" : "black"}
                                 />
                             </motion.div>
                         </>
@@ -47,14 +47,14 @@ export const NavBar = () => {
                 {/* Agregar usuario */}
                 <NavLink
                     to="/app/register"
-                    className="relative p-2.5 px-5 rounded-xl transition-colors duration-200 hover:bg-white/10"
+                    className="relative p-2.5 px-5 transition-colors duration-200"
                 >
                     {({ isActive }) => (
                         <>
                             {isActive && (
                                 <motion.div
                                     layoutId="active-navbar"
-                                    className="absolute inset-0 rounded-xl bg-white shadow-[0_0_20px_rgba(255,255,255,0.12)]"
+                                    className="absolute inset-0 rounded-2xl bg-[#2c2c28] shadow-[0_0_20px_rgba(255,255,255,0.12)]"
                                     transition={{
                                         type: "spring",
                                         stiffness: 600,
@@ -74,7 +74,7 @@ export const NavBar = () => {
                             >
                                 <UserRoundPlus
                                     size={26}
-                                    color={isActive ? "black" : "white"}
+                                    color={isActive ? "white" : "black"}
                                 />
                             </motion.div>
                         </>
@@ -84,14 +84,14 @@ export const NavBar = () => {
                 {/* Portero */}
                 <NavLink
                     to="/app/intercom"
-                    className="relative p-2.5 px-5 rounded-xl transition-colors duration-200 hover:bg-white/10"
+                    className="relative p-2.5 px-5 transition-colors duration-200"
                 >
                     {({ isActive }) => (
                         <>
                             {isActive && (
                                 <motion.div
                                     layoutId="active-navbar"
-                                    className="absolute inset-0 rounded-xl bg-white shadow-[0_0_20px_rgba(255,255,255,0.12)]"
+                                    className="absolute inset-0 rounded-2xl bg-[#2c2c28] shadow-[0_0_20px_rgba(255,255,255,0.12)]"
                                     transition={{
                                         type: "spring",
                                         stiffness: 600,
@@ -111,7 +111,7 @@ export const NavBar = () => {
                             >
                                 <Video
                                     size={26}
-                                    color={isActive ? "black" : "white"}
+                                    color={isActive ? "white" : "black"}
                                 />
                             </motion.div>
                         </>

@@ -121,7 +121,7 @@ export const CameraIntercom = ({ isMobile = false }: CameraIntercomProps) => {
         };
 
     return (
-        <div className="w-full h-full bg-gray-300 text-white flex flex-col">
+        <div className="w-full h-full text-white flex flex-col">
 
             {isMobile && <Header title="Portero" />}
 
@@ -129,7 +129,7 @@ export const CameraIntercom = ({ isMobile = false }: CameraIntercomProps) => {
                 {/* Contenedor del video */}
                 <div className={`relative w-full aspect-video overflow-hidden rounded-2xl border-[5px] transition-all 
                 duration-300 ${currentScreen.videoBorder} ${currentScreen.glow}`}>
-                    
+
                     {/* VIDEO: en caso de que quiera haber un segundo intercom, avisa que no puede */}
                     {!isMobile && connectionState === "intercom-in-use" ? (
                         <div className="absolute inset-0 flex items-center justify-center bg-black">
@@ -164,6 +164,11 @@ export const CameraIntercom = ({ isMobile = false }: CameraIntercomProps) => {
                     {(!isMobile || screenState === "denied") && (
                         <p className={`${layout.statusMessage} font-medium`}>
                             {currentScreen.message}
+                        </p>
+                    )}
+                    {(isMobile && screenState === "granted") && (
+                        <p className={`${layout.statusMessage} font-medium`}>
+                            {`${currentState.user?.name} ${currentState.user?.lastName}`}
                         </p>
                     )}
                 </div>
