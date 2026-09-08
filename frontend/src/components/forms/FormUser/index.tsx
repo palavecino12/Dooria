@@ -80,11 +80,11 @@ export const FormUser = ({ title, initialValues, onSubmit, closeForm, currentUse
                     )}
 
                     {/* Botones de acción */}
-                    <div className="flex items-center justify-center gap-3 w-full">
-                        <Button variant="secundario" onClick={closeForm} className="flex-1 py-3">
+                    <div className="flex items-center justify-center gap-3 w-full pb-5">
+                        <Button variant="secundario" onClick={closeForm}>
                             Cancelar
                         </Button>
-                        <Button type="submit" className="flex-1 py-3">
+                        <Button type="submit">
                             {rol === "Local" ? "Confirmar" : "Siguiente"}
                         </Button>
                     </div>

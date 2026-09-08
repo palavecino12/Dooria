@@ -77,7 +77,7 @@ export const FormUserAccess = ({ initialValue, backToForm, data }: props) => {
 
                 <main className="flex flex-col flex-1">
                     {/* Botones de mensual y semanal */}
-                    <div className="flex justify-center py-6 gap-1">
+                    <div className="flex justify-center pt-4 gap-1">
                         <button
                             onClick={() => setOption("semanal")}
                             className={`w-34 h-11 rounded-2xl shadow-lg transition-all duration-100
@@ -97,15 +97,15 @@ export const FormUserAccess = ({ initialValue, backToForm, data }: props) => {
                     </div>
 
                     {/* Componente mensual y semanal */}
-                    <div className="flex-1 flex items-center justify-center p-3">
-                        <div className="bg-white rounded-3xl shadow-md border border-gray-100 flex justify-center w-full p-10">
+                    <div className="flex-1 flex items-center justify-center p-3 ">
+                        <div className="bg-white rounded-3xl shadow-md border border-gray-100 flex justify-center items-center w-full h-105">
                             {option === "semanal" && (<WeeklySelector selectedDays={selectedDays} toggleDay={toggleDay} />)}
                             {option === "calendario" && (<MonthlySelector selectedMonths={selectedMonths} setSelectedMonths={setSelectedMonths} />)}
                         </div>
                     </div>
 
                     {/* Boton aceptr y volver */}
-                    <div className="flex justify-center gap-3 py-6">
+                    <div className="flex justify-center gap-3 pb-5">
                         <Button variant="secundario" onClick={backToForm}>
                             Volver
                         </Button>

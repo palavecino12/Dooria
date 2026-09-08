@@ -10,6 +10,7 @@ import { useRegisterUser } from "../../hooks/useRegisterUser";
 import { Loading } from "../feedback/Loading";
 import { ErrorFeedback } from "../feedback/ErrorFeedback";
 import { useUsers } from "../../hooks/useUsers";
+import { Button } from "../common/Button";
 
 interface props {
     data: FormValues
@@ -89,7 +90,7 @@ export const CameraRegister = ({ data, backToForm }: props) => {
             {/* Componente loading */}
             {loading && <Loading />}
 
-            <div className="w-full h-dvh bg-gray-200 text-white flex flex-col">
+            <div className="w-full h-dvh text-white flex flex-col">
 
                 <Header title="Escaneo de Rostro"></Header>
 
@@ -107,7 +108,7 @@ export const CameraRegister = ({ data, backToForm }: props) => {
                         disabled={estadoRostro !== "desconocido" || loading}
                         className={`font-medium text-lg transition-all duration-300 ${currentUI.messageBg} ${currentUI.messageText}
                 ${estadoRostro === "desconocido"
-                                ? "h-11 w-40 rounded-lg font-medium shadow-lg transition-all duration-150 active:scale-95 select-none"
+                                ? "h-11 w-40 rounded-2xl font-medium shadow-lg transition-all duration-150 active:scale-95 select-none"
                                 : "px-6 py-2 rounded-3xl cursor-default"
                             }`}>
                         {currentUI.message}
@@ -116,12 +117,11 @@ export const CameraRegister = ({ data, backToForm }: props) => {
                     {/* Botones */}
                     <div className="flex transition-all duration-300">
                         {estadoRostro !== "desconocido" && (
-                            <button
-                                onClick={backToForm}
-                                className="bg-white border border-black/20 w-40 h-11 text-black rounded-lg shadow-lg transition-all 
-                        duration-200 active:bg-gray-200 active:shadow-inner">
+                            <Button
+                                variant="secundario"
+                                onClick={backToForm}>
                                 Volver
-                            </button>)
+                            </Button>)
                         }
                     </div>
                 </main>

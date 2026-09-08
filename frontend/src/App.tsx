@@ -7,7 +7,19 @@ import { AppIntercom } from "./pages/app/AppIntercom"
 import { AppLayout } from "./layouts/AppLayouts"
 import { UserRegisterMethod } from "./pages/app/UserRegisterMethod"
 import { ComingSoon } from "./pages/app/ComingSoon"
-import { ErrorFeedback } from "./components/feedback/ErrorFeedback"
+import { FormUserAccess } from "./components/forms/FormUserAccess"
+import type { FormValues } from "./schemas/schemaForm"
+
+const testData: FormValues = {
+  name: "Juan",
+  lastName: "Pérez",
+  dni: "12345678",
+  number: "2611234567",
+  address: "Av. San Martín 123",
+  rol: "Visitante",
+  allowedDays: [1, 3, 5],
+  allowedDates: [],
+};
 
 function App() {
   return (
@@ -26,7 +38,7 @@ function App() {
         <Route path="/app/users/:id/edit" element={<EditUser />} />
         <Route path="/intercom" element={<Intercom />} />
 
-        <Route path="/test" element={<ErrorFeedback />} />
+        <Route path="/test" element={<FormUserAccess data={testData} backToForm={() => console.log("Volver")} />} />
       </Routes>
     </BrowserRouter>
   )
