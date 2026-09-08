@@ -31,7 +31,7 @@ export const ConfirmModal = ({ open, children, onConfirm, onCancel, }: ConfirmMo
                 </div>
 
                 {/* Botones de acción */}
-                <div className="flex justify-center gap-5">
+                <div className="flex justify-center gap-3">
                     <Button variant='secundario' onClick={onCancel}>
                         Cancelar
                     </Button>
