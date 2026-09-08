@@ -14,7 +14,7 @@ export const ErrorFeedback = ({ message = "Ups..." }: ErrorProps) => {
         <motion.div
             className="h-dvh flex flex-col justify-center items-center gap-3"
             initial={{ backgroundColor: "#ffffff" }}
-            animate={{ backgroundColor: "#b91c1c" }}
+            animate={{ backgroundColor: "#b42c2c" }}
             transition={{ duration: 0.6, delay: 0.8 }}
         >
             <motion.div

@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 export const NavBar = () => {
     return (
         <nav className="w-full flex justify-center pb-4">
-            <div className="flex items-center gap-2 p-1.5 px-3 rounded-3xl bg-white shadow-[0_8px_30px_rgba(0,0,0,0.35)]">
+            <div className="flex items-center gap-2 p-1 px-3 rounded-3xl bg-white shadow-[0_8px_30px_rgba(0,0,0,0.35)]">
 
                 {/* Usuarios */}
                 <NavLink
@@ -36,7 +36,7 @@ export const NavBar = () => {
                                 className="relative z-10"
                             >
                                 <UsersRound
-                                    size={26}
+                                    size={22}
                                     color={isActive ? "white" : "black"}
                                 />
                             </motion.div>
@@ -73,7 +73,7 @@ export const NavBar = () => {
                                 className="relative z-10"
                             >
                                 <UserRoundPlus
-                                    size={26}
+                                    size={22}
                                     color={isActive ? "white" : "black"}
                                 />
                             </motion.div>
@@ -110,7 +110,7 @@ export const NavBar = () => {
                                 className="relative z-10"
                             >
                                 <Video
-                                    size={26}
+                                    size={22}
                                     color={isActive ? "white" : "black"}
                                 />
                             </motion.div>

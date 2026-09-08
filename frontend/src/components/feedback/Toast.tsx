@@ -42,7 +42,7 @@ export const Toast = ({ open, variant, message, onClose, }: ToastProps) => {
                         className={`flex items-center justify-center gap-3 rounded-xl px-5 py-3 shadow-xl text-white 
                         ${variant === "success"
                                 ? "bg-[#15803d]"
-                                : "bg-[#b91c1c]"
+                                : "bg-[#b42c2c]"
                             }`}
                     >
                         {variant === "success" ? (

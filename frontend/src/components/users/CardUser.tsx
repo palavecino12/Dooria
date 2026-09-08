@@ -69,7 +69,7 @@ export const CardUser = ({ user, userDelete }: CardUsersProps) => {
                     {/* Boton para eliminar */}
                     <button
                         onClick={() => setOpenModal(true)}
-                        className="bg-[#a82a2a] p-2 text-white rounded-xl shadow-lg transition-all duration-200
+                        className="bg-[#b42c2c] p-2 text-white rounded-xl shadow-lg transition-all duration-200
                             active:bg-gray-200 active:shadow-inner"><Trash2 /></button>
                 </div>
 

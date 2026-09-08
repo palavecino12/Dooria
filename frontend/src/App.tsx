@@ -4,10 +4,10 @@ import { UserRegister } from "./pages/app/UserRegister"
 import { Intercom } from "./pages/Intercom"
 import { EditUser } from "./pages/app/UserEdit"
 import { AppIntercom } from "./pages/app/AppIntercom"
-import { NavBar } from "./components/common/NavBat"
 import { AppLayout } from "./layouts/AppLayouts"
 import { UserRegisterMethod } from "./pages/app/UserRegisterMethod"
 import { ComingSoon } from "./pages/app/ComingSoon"
+import { ErrorFeedback } from "./components/feedback/ErrorFeedback"
 
 function App() {
   return (
@@ -26,7 +26,7 @@ function App() {
         <Route path="/app/users/:id/edit" element={<EditUser />} />
         <Route path="/intercom" element={<Intercom />} />
 
-        <Route path="/test" element={<NavBar />} />
+        <Route path="/test" element={<ErrorFeedback />} />
       </Routes>
     </BrowserRouter>
   )
