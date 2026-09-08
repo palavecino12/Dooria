@@ -47,7 +47,7 @@ export const CardUser = ({ user, userDelete }: CardUsersProps) => {
                 </button>
 
                 {/* Informacion general */}
-                <p className="whitespace-nowrap m-1">{user.name} {user.lastName}</p>
+                <p className="truncate m-1 min-w-0">{user.name} {user.lastName}</p>
 
                 {/* Informacion de rol */}
                 <p className={`text-center rounded-sm truncate min-w-0 ${user.rol === "Local"

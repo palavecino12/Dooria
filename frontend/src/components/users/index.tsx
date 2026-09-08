@@ -1,25 +1,24 @@
-//Index que contiene el renderizado del componente ListUsers, SearchUsers, UserFilterButton y la comunicacion entre si
 import { useState } from "react";
 import { ListUsers } from "./ListUser";
 import { SearchUsers } from "./SearchUser";
 import { UserFilterButtons } from "./UserFilterButtons";
 
-export const UsersPage = () =>{
-    //Almacenamos lo que ingresa el usuario
+export const UsersPage = () => {
     const [userSearch, setUserSearch] = useState("")
-    //Almacenamos el filtro que aplica el usuario
     const [selected, setSelected] = useState("Todos");
 
-    return(
-        <div className="px-3 w-full h-full flex flex-col items-center justify-center gap-5">
+    return (
+        <div className="px-3 pt-3 w-full h-full flex flex-col items-center gap-5">
             {/* Buscador de usuarios */}
-            <SearchUsers setUserSearch={setUserSearch}/>
+            <SearchUsers setUserSearch={setUserSearch} />
 
             {/* Botones de filtro */}
-            <UserFilterButtons selected={selected} setSelected={setSelected}/>
+            <UserFilterButtons selected={selected} setSelected={setSelected} />
 
-            {/* Lista de usuarios */}
-            <ListUsers selected={selected} userSearch={userSearch}/>
+            {/* Lista de usuarios: ocupa todo el espacio restante */}
+            <div className="w-full flex-1 min-h-0">
+                <ListUsers selected={selected} userSearch={userSearch} />
+            </div>
         </div>
     )
 }
