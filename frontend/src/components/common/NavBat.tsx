@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import { UsersRound, UserRoundPlus, Video } from "lucide-react";
+import { Users, UserPlus, Video } from "lucide-react";
 import { motion } from "framer-motion";
 
 export const NavBar = () => {
@@ -35,7 +35,7 @@ export const NavBar = () => {
                                 }}
                                 className="relative z-10"
                             >
-                                <UsersRound
+                                <Users
                                     size={22}
                                     color={isActive ? "white" : "black"}
                                 />
@@ -72,7 +72,7 @@ export const NavBar = () => {
                                 }}
                                 className="relative z-10"
                             >
-                                <UserRoundPlus
+                                <UserPlus
                                     size={22}
                                     color={isActive ? "white" : "black"}
                                 />
