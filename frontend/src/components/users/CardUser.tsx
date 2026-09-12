@@ -47,7 +47,7 @@ export const CardUser = ({ user, userDelete }: CardUsersProps) => {
                 </button>
 
                 {/* Informacion general */}
-                <p className="truncate m-1 min-w-0">{user.name} {user.lastName}</p>
+                <p className="truncate m-1 min-w-0 font-semibold">{user.name} {user.lastName}</p>
 
                 {/* Informacion de rol */}
                 <p className={`text-center rounded-lg truncate min-w-0 ${user.rol === "Local"
@@ -63,7 +63,7 @@ export const CardUser = ({ user, userDelete }: CardUsersProps) => {
                         onClick={() => navigate(`/app/users/${user._id}/edit`, {
                             state: { user }
                         })}
-                        className="bg-gray-200 p-2 text-black rounded-xl shadow-lg transition-all duration-200
+                        className="bg-gray-200 p-2 text-[#2c2c28] rounded-xl shadow-lg transition-all duration-200
                             active:bg-[#747470] active:text-white active:shadow-inner"><Pencil /></button>
 
                     {/* Boton para eliminar */}
