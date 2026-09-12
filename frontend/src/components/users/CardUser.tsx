@@ -50,9 +50,9 @@ export const CardUser = ({ user, userDelete }: CardUsersProps) => {
                 <p className="truncate m-1 min-w-0">{user.name} {user.lastName}</p>
 
                 {/* Informacion de rol */}
-                <p className={`text-center rounded-sm truncate min-w-0 ${user.rol === "Local"
-                    ? "bg-blue-100 text-blue-800"
-                    : "bg-amber-100 text-amber-800"
+                <p className={`text-center rounded-lg truncate min-w-0 ${user.rol === "Local"
+                    ? "bg-blue-100/70 text-blue-700"
+                    : "bg-amber-100/70 text-amber-700"
                     }`}>
                     {user.rol}
                 </p>
@@ -63,14 +63,14 @@ export const CardUser = ({ user, userDelete }: CardUsersProps) => {
                         onClick={() => navigate(`/app/users/${user._id}/edit`, {
                             state: { user }
                         })}
-                        className="bg-[#2c2c28] p-2 text-white rounded-xl shadow-lg transition-all duration-200
-                            active:bg-gray-200 active:shadow-inner"><Pencil /></button>
+                        className="bg-gray-300 p-2 text-black rounded-xl shadow-lg transition-all duration-200
+                            active:bg-[#444440] active:text-white active:shadow-inner"><Pencil /></button>
 
                     {/* Boton para eliminar */}
                     <button
                         onClick={() => setOpenModal(true)}
-                        className="bg-[#b42c2c] p-2 text-white rounded-xl shadow-lg transition-all duration-200
-                            active:bg-gray-200 active:shadow-inner"><Trash2 /></button>
+                        className="bg-[#f1b6b6] p-2 text-[#b42c2c] rounded-xl shadow-lg transition-all duration-200
+                            active:bg-[#b14f4f] active:text-white active:shadow-inner"><Trash2/></button>
                 </div>
 
                 {/* Informacion de los usuarios */}
