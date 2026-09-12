@@ -33,10 +33,9 @@ export const NavBar = () => {
                                 transition={{
                                     duration: 0.2,
                                 }}
-                                className="relative z-10 flex flex-col items-center gap-1"
+                                className="relative z-10"
                             >
                                 <Users size={22} color={isActive ? "white" : "black"}/>
-                                <p className={`text-xs text-${isActive?"white":"black"}`}>Usuarios</p>
                             </motion.div>
                         </>
                     )}
@@ -68,10 +67,9 @@ export const NavBar = () => {
                                 transition={{
                                     duration: 0.2,
                                 }}
-                                className="relative z-10 flex flex-col items-center gap-1"
+                                className="relative z-10"
                             >
                                 <UserPlus size={22} color={isActive ? "white" : "black"}/>
-                                <p className={`text-xs text-${isActive?"white":"black"}`}>Añadir</p>
                             </motion.div>
                         </>
                     )}
@@ -103,10 +101,9 @@ export const NavBar = () => {
                                 transition={{
                                     duration: 0.2,
                                 }}
-                                className="relative z-10 flex flex-col items-center gap-1"
+                                className="relative z-10"
                             >
                                 <Video size={22} color={isActive ? "white" : "black"}/>
-                                <p className={`text-xs text-${isActive?"white":"black"}`}>Portero</p>
                             </motion.div>
                         </>
                     )}
