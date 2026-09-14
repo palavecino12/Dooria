@@ -64,13 +64,13 @@ export const CardUser = ({ user, userDelete }: CardUsersProps) => {
                             state: { user }
                         })}
                         className="bg-gray-200 p-2 text-[#2c2c28] rounded-xl shadow-lg transition-all duration-200
-                            active:bg-[#747470] active:text-white active:shadow-inner"><Pencil size={21}/></button>
+                            active:bg-[#747470] active:text-white active:shadow-inner"><Pencil size={22}/></button>
 
                     {/* Boton para eliminar */}
                     <button
                         onClick={() => setOpenModal(true)}
                         className="bg-[#f8d6d6] p-2 text-[#b42c2c] rounded-xl shadow-lg transition-all duration-200
-                            active:bg-[#cf7777] active:text-white active:shadow-inner"><Trash2 size={21}/></button>
+                            active:bg-[#cf7777] active:text-white active:shadow-inner"><Trash2 size={22}/></button>
                 </div>
 
                 {/* Informacion de los usuarios */}
