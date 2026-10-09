@@ -51,8 +51,8 @@ export const CardUser = ({ user, userDelete }: CardUsersProps) => {
 
                 {/* Informacion de rol */}
                 <p className={`text-center rounded-lg truncate min-w-0 ${user.rol === "Local"
-                    ? "bg-blue-100/50 text-blue-500"
-                    : "bg-amber-100/50 text-amber-500"
+                    ? "bg-blue-100/50 text-blue-700"
+                    : "bg-amber-100/50 text-amber-700"
                     }`}>
                     {user.rol}
                 </p>
